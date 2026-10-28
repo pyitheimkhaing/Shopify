@@ -1,0 +1,40 @@
+{
+  "layout": "fabulous-collection",
+  "sections": {
+    "fabulous_header": {
+      "type": "fabulous-collection-header",
+      "settings": {
+        "menu": "main-menu",
+        "announcement": "Create something personal with SwiftBay Prints"
+      }
+    },
+    "fabulous_main": {
+      "type": "fabulous-collection-main",
+      "settings": {
+        "heading": "Personalized Blankets for Kids",
+        "about_heading": "About Personalized Blankets for Kids",
+        "about_text": "<p>Explore personalized blankets for kids. Choose a design and add your photos on its product page.</p>"
+      },
+      "blocks": {
+        "one_photo": {"type": "preview_card", "settings": {"product": "swiftbay-personalized-spiderman-blanket", "expected_handle": "swiftbay-personalized-spiderman-blanket", "title": "1 Photo Personalized Blanket", "asset_image": "1 Photos-01.jpg"}},
+        "two_photos": {"type": "preview_card", "settings": {"expected_handle": "swiftbay-riding-unicorn-custom-blanket", "title": "2 Photos Collage Blanket", "asset_image": "2 Photos-01.jpg"}},
+        "three_photos": {"type": "preview_card", "settings": {"expected_handle": "swiftbay-riding-dinosaur-custom-blanket", "title": "3 Photos Collage Blanket", "asset_image": "3 Photos-01.jpg"}},
+        "style_six": {"type": "preview_card", "settings": {"expected_handle": "swiftbay-princess-elsa-custom-blanket", "title": "Custom Photo Blanket - Style 06", "asset_image": "Style 06-01.jpg"}},
+        "pet": {"type": "preview_card", "settings": {"expected_handle": "swiftbay-dino-chaos-custom-blanket", "title": "Personalized Pet Photo Blanket", "asset_image": "Pet-01.jpg"}}
+      },
+      "block_order": ["one_photo", "two_photos", "three_photos", "style_six", "pet"]
+    },
+    "fabulous_footer": {
+      "type": "fabulous-collection-footer",
+      "settings": {
+        "newsletter_heading": "Subscribe to our emails",
+        "contact_phone": "650-339-6766",
+        "hours_weekdays": "Mon - Fri, 9am - 8pm PST",
+        "hours_weekends": "Weekends, 9am - 5pm PST",
+        "navigate_menu": "navigate",
+        "company_menu": "footer"
+      }
+    }
+  },
+  "order": ["fabulous_header", "fabulous_main", "fabulous_footer"]
+}

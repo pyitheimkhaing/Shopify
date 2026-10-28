@@ -1,0 +1,11 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="fp-section steps">
+  <div class="fp-wrap">
+    <p class="fp-kicker">How it works</p><h2 class="fp-sec">From photo to <em>masterpiece</em></h2>
+    <div class="fp-how">
+      {% for block in section.blocks %}<article class="fp-step"><h3>{{ block.settings.title }}</h3><p>{{ block.settings.copy }}</p></article>{% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}{"name":"How it works","blocks":[{"type":"step","name":"Step","settings":[{"type":"text","id":"title","label":"Title","default":"Upload a photo"},{"type":"textarea","id":"copy","label":"Copy","default":"One clear photo is enough. Our studio checks it fits the world you picked."}]}],"presets":[{"name":"How it works","blocks":[{"type":"step"},{"type":"step","settings":{"title":"See the magic in 60 seconds","copy":"Watch the free preview appear with their real face, eyes and smile."}},{"type":"step","settings":{"title":"You approve, we perfect","copy":"Our designers finish every detail by hand. Nothing is printed until you say it is perfect."}}]}]}{% endschema %}

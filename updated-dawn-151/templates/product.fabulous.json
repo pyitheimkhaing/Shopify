@@ -1,0 +1,62 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-main",
+      "settings": {}
+    },
+    "worlds": {
+      "type": "worlds",
+      "settings": {
+        "eyebrow": "More worlds",
+        "heading": "Or try another world",
+        "copy": "Same instant preview, a different adventure. Every world works for one person, two, or the whole family.",
+        "button_label": "See all worlds",
+        "note": "Adding a second canvas? It's 20% off. Grandkids come in sets, we know.",
+        "link": "/collections/all"
+      },
+      "blocks": {
+        "witch": {
+          "type": "world",
+          "settings": {
+            "title": "The Witch & Wizard",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_cec0a07f-be03-4e50-bf99-ff3820729d2f.jpg?v=1790172170&width=600",
+            "link": "/products/the-witch-and-wizard"
+          }
+        },
+        "pumpkin": {
+          "type": "world",
+          "settings": {
+            "title": "The Pumpkin Patch",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_2a866532-1561-4fd0-bf5e-1cb32e7b1997.jpg?v=1790173366&width=600",
+            "link": "/products/the-pumpkin-patch"
+          }
+        },
+        "royal": {
+          "type": "world",
+          "settings": {
+            "title": "The Autumn Harvest",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230&width=600"
+          }
+        },
+        "dragon": {
+          "type": "world",
+          "settings": {
+            "title": "The Dragon Tamer",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_ff3ba1a4-13da-4f44-972c-53eb26905f2c.jpg?v=1790172188&width=600",
+            "link": "/products/the-dragon-tamer"
+          }
+        }
+      },
+      "block_order": [
+        "witch",
+        "pumpkin",
+        "royal",
+        "dragon"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "worlds"
+  ]
+}

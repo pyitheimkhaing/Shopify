@@ -1,0 +1,16 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fab-theme.js' | asset_url }}" defer></script>
+{% assign mock_names = 'The Princess|The Dinosaur Rider|The Unicorn Rider|The Little Astronaut|The Schoolmaster|The Police Officer|The Little Rascal|The Little Royal|The Pirate Captain|The Mermaid|The Cowboy|The Dragon Tamer' | split: '|' %}
+{% assign mock_images = 'princess-ugc-oma.jpg?v=1786220881|flhsdk70hssyu0uzpauj_ff3ba1a4-13da-4f44-972c-53eb26905f2c.jpg?v=1790172188|flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230' | split: '|' %}
+<section class="collection-page">
+  <header class="collection-hero"><h1><span>Collection:</span> {{ collection.title | default: 'All Designs' }}</h1></header>
+  <div class="collection-shell">
+    <div class="collection-toolbar"><div class="collection-toolbar__filter">☷ <span>Filter and sort</span></div><label>Sort by: <select><option>Featured</option><option>Best selling</option><option>Price, low to high</option><option>Price, high to low</option></select></label><span>{{ collection.products_count | default: 271 }} products</span></div>
+    <div class="collection-grid">
+      {% for product in collection.products %}{% render 'product-card', product: product %}
+      {% else %}{% for name in mock_names %}{% assign image_index = forloop.index0 | modulo: 3 %}{% assign image_name = mock_images[image_index] %}{% assign mock_url = 'https://fabulousportrait.com/cdn/shop/files/' | append: image_name | append: '&width=900' %}{% render 'product-card', title: name, image_url: mock_url %}{% endfor %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% schema %}{"name":"Collection products","settings":[]} {% endschema %}

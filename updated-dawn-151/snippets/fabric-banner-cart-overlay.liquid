@@ -1,0 +1,15 @@
+<div class="fb-cart-icon-overlay" data-fb-cart-overlay data-currency="{{ cart.currency.iso_code | default: shop.currency | escape }}" hidden>
+  <div class="fb-cart-icon-overlay__backdrop" data-fb-overlay-close></div>
+  <section class="fb-cart-icon-overlay__panel" role="dialog" aria-modal="true" aria-labelledby="fb-cart-overlay-title" tabindex="-1">
+    <header class="fb-cart-icon-overlay__header">
+      <h2 id="fb-cart-overlay-title">Other items in the Cart</h2>
+      <button type="button" aria-label="Close cart" data-fb-overlay-close>{{ 'icon-close.svg' | inline_asset_content }}</button>
+    </header>
+    <div class="fb-cart-icon-overlay__items" data-fb-overlay-items aria-live="polite"></div>
+    <p class="fb-cart-icon-overlay__error" data-fb-overlay-error role="alert" hidden></p>
+    <footer class="fb-cart-icon-overlay__footer">
+      <button type="button" data-fb-overlay-close>Continue Shopping</button>
+      <a href="{{ routes.cart_url }}">Go To Cart</a>
+    </footer>
+  </section>
+</div>

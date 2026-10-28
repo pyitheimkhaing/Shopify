@@ -1,0 +1,1417 @@
+/* ==========================================================================
+   SwiftBay Prints - T-Shirt Hub Styles
+   Matches Custom Ink Layout, Visual Hierarchy & Exact Component Specifications
+   ========================================================================== */
+
+.tshirt-hub {
+  padding: 16px 0 64px;
+  color: #202427;
+  font-family: SharpSans, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #ffffff;
+  overflow-x: hidden;
+}
+
+.tshirt-hub .sb-Wrapper,
+.tshirt-hub .page-width {
+  width: 100%;
+  max-width: 1252px;
+  margin: 0 auto;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   A. Breadcrumb & Page Toolbar
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-Header {
+  margin-bottom: 20px;
+}
+
+.tshirt-hub .pc-Breadcrumbs {
+  margin-bottom: 12px;
+}
+
+.tshirt-hub .pc-Breadcrumbs-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #5c656a;
+}
+
+.tshirt-hub .pc-BreadcrumbItem {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tshirt-hub .pc-BreadcrumbItem:not(:last-child)::after {
+  content: '/';
+  color: #9aa1a6;
+  margin: 0 8px;
+}
+
+.tshirt-hub .pc-BreadcrumbItem a {
+  color: #1e39d2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.tshirt-hub .pc-BreadcrumbItem a:hover {
+  text-decoration: underline;
+  color: #132486;
+}
+
+.tshirt-hub .pc-Breadcrumbs-title {
+  color: #202427;
+  font-weight: 600;
+}
+
+.tshirt-hub .pc-ToolBar {
+  margin-bottom: 24px;
+}
+
+.tshirt-hub .pc-ToolBar-section {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.tshirt-hub .pc-ToolBar-header {
+  flex: 1;
+}
+
+.tshirt-hub .pc-ToolBar-header-title {
+  font-family: inherit;
+  font-size: 32px;
+  font-weight: 800;
+  color: #111111;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   B. Category Promotional Hero Banner
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-Subcategories-CatHero {
+  margin-bottom: 32px;
+}
+
+.tshirt-hub .pc-PromoBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: var(--cat-promo-bg, #C67DBC);
+  color: #111111;
+  height: 300px;
+  min-height: 300px;
+  padding: 48px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.tshirt-hub .pc-PromoBanner-copy {
+  flex: 1 1 auto;
+  max-width: 700px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  z-index: 2;
+}
+
+.tshirt-hub .pc-PromoBanner-copy h2 {
+  font-family: inherit;
+  font-size: 50px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: #111111;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.02em;
+  max-width: 700px;
+  text-align: left;
+}
+
+.tshirt-hub .desktop-br {
+  display: inline;
+}
+
+.tshirt-hub .pc-PromoBanner-copy p {
+  display: none;
+}
+
+.tshirt-hub .pc-PromoBanner-copy .button-promo {
+  width: 202px;
+  height: 56px;
+  min-width: 202px;
+  min-height: 56px;
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #202124;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tshirt-hub .pc-PromoBanner-copy .button-promo:hover {
+  transform: translateY(-1px);
+  background-color: #000000;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.tshirt-hub .pc-PromoBanner-copy .button-promo-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.tshirt-hub .pc-PromoBanner-copy .button-promo:hover .button-promo-arrow {
+  transform: translateX(3px);
+}
+
+.tshirt-hub .pc-PromoBanner-imageWrap {
+  flex: 0 0 auto;
+  position: relative;
+  overflow: visible;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tshirt-hub .pc-PromoBanner-picture {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.tshirt-hub .pc-PromoBanner-image {
+  max-height: 250px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.12));
+}
+
+
+/* --------------------------------------------------------------------------
+   C & E. Category Grids (Shop By Style, Fabric, Fit, Collection)
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-CatCards--grouped {
+  margin-bottom: 36px;
+}
+
+.tshirt-hub .pc-CatCards--grouped-style {
+  margin-bottom: 36px;
+}
+
+.tshirt-hub .pc-CatCards-group {
+  margin-bottom: 36px;
+}
+
+.tshirt-hub .pc-CatCards-group-label {
+  font-family: inherit;
+  font-size: 28px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.86);
+  margin: 0 0 16px 0;
+  letter-spacing: -0.015em;
+}
+
+.tshirt-hub .pc-CatCards-group-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.tshirt-hub .pc-CatCards-group-tiles--3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 900px;
+  gap: 24px;
+}
+
+.tshirt-hub .pc-CatCards-group-tiles--5 {
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.tshirt-hub .pc-CatCard--V2 {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background-color: #ffffff;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.tshirt-hub .pc-CatCard--V2:hover {
+  border-color: rgba(0, 0, 0, 0.16);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.tshirt-hub .pc-CatCard--V2-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.tshirt-hub .pc-CatCard--V2-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  height: 100%;
+}
+
+.tshirt-hub .pc-CatCard--V2-image {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.375 / 1;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.tshirt-hub .pc-CatCard--V2-image .pc-CatCard--V2-img,
+.tshirt-hub .pc-CatCard--V2-image > img:not(.pc-CatCards-group-sustainable) {
+  width: 100%;
+  height: 100%;
+  max-width: 275px;
+  max-height: 185px;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  display: block;
+}
+
+.tshirt-hub .pc-CatCard--V2-name {
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: #111111;
+  margin: 0;
+  padding: 8px 10px 14px;
+  text-align: center;
+  line-height: 1.3;
+  transition: color 0.15s ease;
+}
+
+.tshirt-hub .pc-CatCard--V2:hover .pc-CatCard--V2-name {
+  color: #1e39d2;
+}
+
+/* Category Badges & Flags (Desktop baseline) */
+.tshirt-hub .pc-CatCards-group-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background-color: #fa3c00;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1.2;
+  border-radius: 999px;
+  padding: 3px 10px;
+  box-shadow: 0 2px 6px rgba(250, 60, 0, 0.35);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.tshirt-hub .pc-CatCard--V2-image .pc-CatCards-group-sustainable,
+.tshirt-hub img.pc-CatCards-group-sustainable {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+  width: 26px !important;
+  height: 26px !important;
+  max-width: 26px !important;
+  max-height: 26px !important;
+  pointer-events: none;
+  z-index: 2;
+  object-fit: contain;
+  mix-blend-mode: normal;
+}
+
+.tshirt-hub .pc-CatCard--V2-flag {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  width: 44px;
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  display: block;
+  z-index: 2;
+}
+
+.tshirt-hub .pc-CatCard--V2-flag svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+@media (min-width: 1025px) {
+  .tshirt-hub .pc-CatCards-group-badge {
+    bottom: 12px;
+    left: 12px;
+    font-size: 13px;
+    padding: 4px 12px;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-image .pc-CatCards-group-sustainable,
+  .tshirt-hub img.pc-CatCards-group-sustainable {
+    bottom: 8px;
+    left: 8px;
+    width: 28px !important;
+    height: 28px !important;
+    max-width: 28px !important;
+    max-height: 28px !important;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-flag {
+    bottom: 12px;
+    left: 12px;
+    width: 48px;
+    height: 24px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   E. Trending Products Carousel
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-TrendingSection {
+  margin-bottom: 48px;
+}
+
+.tshirt-hub .pc-TrendingHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tshirt-hub .pc-TrendingTitle {
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0;
+  letter-spacing: -0.015em;
+}
+
+.tshirt-hub .pc-TrendingNav {
+  display: flex;
+  gap: 8px;
+}
+
+.tshirt-hub .pc-Carousel-arrow {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  color: #202427;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.tshirt-hub .pc-Carousel-arrow:hover {
+  background-color: #1e39d2;
+  color: #ffffff;
+  border-color: #1e39d2;
+  box-shadow: 0 2px 8px rgba(30, 57, 210, 0.3);
+}
+
+.tshirt-hub .pc-Carousel-arrow svg {
+  width: 18px;
+  height: 18px;
+}
+
+.tshirt-hub .pc-TrendingTrack {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 14px;
+}
+
+.tshirt-hub .pc-TrendingTrack::-webkit-scrollbar {
+  display: none;
+}
+
+.tshirt-hub .pc-TrendingCard {
+  flex: 0 0 calc(25% - 12px);
+  min-width: 220px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background-color: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tshirt-hub .pc-TrendingCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.tshirt-hub .pc-TrendingCard-imageWrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.tshirt-hub .pc-TrendingCard-imageWrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.2s ease;
+}
+
+.tshirt-hub .pc-TrendingCard:hover .pc-TrendingCard-imageWrap img {
+  transform: scale(1.04);
+}
+
+.tshirt-hub .pc-TrendingCard-info {
+  padding: 14px 14px 8px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tshirt-hub .pc-TrendingCard-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111111;
+  text-decoration: none;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tshirt-hub .pc-TrendingCard-title:hover {
+  color: #1e39d2;
+}
+
+.tshirt-hub .pc-TrendingCard-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 12px;
+}
+
+.tshirt-hub .pc-TrendingCard-price {
+  font-weight: 700;
+  color: #111111;
+}
+
+.tshirt-hub .pc-TrendingCard-noMin {
+  color: #555555;
+  background-color: #f1f3f5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.tshirt-hub .pc-TrendingCard-actions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px 14px;
+}
+
+.tshirt-hub .pc-TrendingCard-btn {
+  flex: 1;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 8px 10px;
+  border-radius: 999px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.tshirt-hub .pc-TrendingCard-btn--design {
+  background-color: #1e39d2;
+  color: #ffffff;
+}
+
+.tshirt-hub .pc-TrendingCard-btn--design:hover {
+  background-color: #132486;
+}
+
+.tshirt-hub .pc-TrendingCard-btn--details {
+  background-color: transparent;
+  color: #333333;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.tshirt-hub .pc-TrendingCard-btn--details:hover {
+  background-color: #f8f9fa;
+  border-color: #111111;
+  color: #111111;
+}
+
+/* --------------------------------------------------------------------------
+   F. Advice & Inspiration
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-BlogStories {
+  margin-bottom: 48px;
+}
+
+.tshirt-hub .pc-BlogStories-title {
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.015em;
+}
+
+.tshirt-hub .pc-BlogStories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.tshirt-hub .pc-BlogStoryCard {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  background-color: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.tshirt-hub .pc-BlogStoryCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.tshirt-hub .pc-BlogStoryCard-imageWrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  display: block;
+}
+
+.tshirt-hub .pc-BlogStoryCard-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.tshirt-hub .pc-BlogStoryCard:hover .pc-BlogStoryCard-image {
+  transform: scale(1.05);
+}
+
+.tshirt-hub .pc-BlogStoryCard-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.tshirt-hub .pc-BlogStoryCard-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #111111;
+  text-decoration: none;
+  line-height: 1.35;
+  margin-bottom: 10px;
+}
+
+.tshirt-hub .pc-BlogStoryCard-title:hover {
+  color: #1e39d2;
+}
+
+.tshirt-hub .pc-BlogStoryCard-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #555555;
+  margin: 0 0 16px 0;
+  flex: 1;
+}
+
+.tshirt-hub .pc-BlogStoryCard-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1e39d2;
+  text-decoration: none;
+  margin-top: auto;
+}
+
+.tshirt-hub .pc-BlogStoryCard-link:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   G. Product Experts Card
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-CatCard--experts {
+  margin-bottom: 48px;
+}
+
+.tshirt-hub .pc-ExpertsCard {
+  display: flex;
+  align-items: stretch;
+  background-color: #f7f9fa;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.tshirt-hub .pc-ExpertsCard-image {
+  flex: 0 0 260px;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  min-height: 180px;
+}
+
+.tshirt-hub .pc-ExpertsCard-content {
+  flex: 1;
+  padding: 28px 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tshirt-hub .pc-ExpertsCard-header {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.tshirt-hub .pc-ExpertsCard-copy {
+  font-size: 14px;
+  color: #555555;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.tshirt-hub .pc-ExpertsCard-cta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.tshirt-hub .pc-ExpertsCard-phoneLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1e39d2;
+  text-decoration: none;
+}
+
+.tshirt-hub .pc-ExpertsCard-phoneLink svg {
+  width: 18px;
+  height: 18px;
+}
+
+.tshirt-hub .pc-ExpertsCard-phoneLink:hover {
+  text-decoration: underline;
+}
+
+.tshirt-hub .button-experts-chat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111111;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 10px 22px;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.tshirt-hub .button-experts-chat:hover {
+  background-color: #000000;
+}
+
+.tshirt-hub .pc-ExpertsCard-hours {
+  font-size: 12px;
+  color: #777777;
+}
+
+/* --------------------------------------------------------------------------
+   H. SEO Buying Guide Content & Mobile Read More / Read Less
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-SeoContent {
+  margin-bottom: 48px;
+  padding: 36px 0;
+  border-top: 1px solid #e8e8e8;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.tshirt-hub .pc-SeoContent-title {
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.tshirt-hub .pc-SeoContent-intro {
+  font-size: 15px;
+  line-height: 1.65;
+  color: #444444;
+  margin: 0 0 20px 0;
+}
+
+.tshirt-hub .pc-SeoContent-subheading {
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  color: #111111;
+  margin: 30px 0 12px 0;
+  letter-spacing: -0.01em;
+}
+
+.tshirt-hub .pc-SeoContent-section p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #444444;
+  margin: 0 0 14px 0;
+}
+
+.tshirt-hub .pc-SeoContent-list {
+  margin: 0 0 20px 0;
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.tshirt-hub .pc-SeoContent-list li {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #444444;
+  margin-bottom: 10px;
+}
+
+.tshirt-hub .pc-SeoContent-list li strong {
+  color: #111111;
+  font-weight: 700;
+}
+
+.tshirt-hub .pc-SeoContent-note {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #555555;
+  font-style: italic;
+  margin: 8px 0 16px 0;
+}
+
+.tshirt-hub .pc-SeoContent-toggleWrapper {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   J. How to Order Custom T-Shirts
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-HowToOrder {
+  margin-bottom: 48px;
+}
+
+.tshirt-hub .pc-HowToOrder-title {
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 22px 0;
+  letter-spacing: -0.01em;
+}
+
+.tshirt-hub .pc-HowToOrder-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tshirt-hub .pc-HowToOrder-tile {
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.11);
+  border-radius: 10px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tshirt-hub .pc-HowToOrder-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+}
+
+.tshirt-hub .pc-HowToOrder-tile-number {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #5ccfc2;
+  color: #111111;
+  font-weight: 800;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.tshirt-hub .pc-HowToOrder-tile-title {
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.tshirt-hub .pc-HowToOrder-tile-desc {
+  font-size: 13px;
+  line-height: 1.55;
+  color: #555555;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   K. FAQs Section (Accordion)
+   -------------------------------------------------------------------------- */
+.tshirt-hub .pc-Faqs {
+  margin-bottom: 32px;
+}
+
+.tshirt-hub .pc-Faqs-title {
+  font-family: inherit;
+  font-size: 24px;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.01em;
+}
+
+.tshirt-hub .pc-Faqs-faq {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.tshirt-hub .pc-Faqs-faq:hover {
+  background-color: #f1f3f5;
+  border-color: #dee2e6;
+}
+
+.tshirt-hub .pc-Faqs-faq-question {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 18px 22px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111111;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  outline: none;
+}
+
+.tshirt-hub .pc-Faqs-faq-question::after {
+  content: '+';
+  font-size: 22px;
+  font-weight: 700;
+  color: #6c757d;
+  margin-left: 14px;
+  transition: transform 0.2s ease;
+}
+
+.tshirt-hub .pc-Faqs-faq-question.isOpened::after {
+  content: '−';
+  font-size: 22px;
+  color: #111111;
+}
+
+.tshirt-hub .pc-Faqs-faq-answer {
+  padding: 0 22px 18px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: #444444;
+}
+
+.tshirt-hub .pc-Faqs-faq-answer p {
+  margin: 0 0 10px 0;
+}
+
+.tshirt-hub .pc-Faqs-faq-answer p:last-child {
+  margin-bottom: 0;
+}
+
+.tshirt-hub .pc-Faqs-faq-answer ul {
+  margin: 8px 0 10px 0;
+  padding-left: 20px;
+}
+
+.tshirt-hub .pc-Faqs-faq-answer li {
+  margin-bottom: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive Layout & Breakpoints
+   -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .tshirt-hub .pc-CatCards-group-tiles--5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .tshirt-hub .pc-CatCards-group-tiles,
+  .tshirt-hub .pc-CatCards-group-tiles--3 {
+    max-width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .tshirt-hub .pc-TrendingCard {
+    flex: 0 0 calc(33.333% - 11px);
+  }
+
+  .tshirt-hub .pc-HowToOrder-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .tshirt-hub .pc-BlogStories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .tshirt-hub .pc-PromoBanner {
+    padding: 36px 32px;
+    height: auto;
+    min-height: 280px;
+    gap: 24px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy h2 {
+    font-size: 38px;
+    margin-bottom: 20px;
+    max-width: 520px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy .button-promo {
+    width: 190px;
+    height: 52px;
+    min-width: 190px;
+    min-height: 52px;
+    font-size: 15px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-image {
+    max-height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .tshirt-hub .desktop-br {
+    display: none;
+  }
+
+  .tshirt-hub {
+    padding-top: 8px;
+  }
+
+  .tshirt-hub .pc-ToolBar-section {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tshirt-hub .pc-ToolBar-header-title {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .tshirt-hub .pc-PromoBanner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    height: auto;
+    min-height: 170px;
+    border-radius: 10px;
+    align-items: center;
+    padding: 24px 18px;
+    background-color: var(--cat-promo-bg, #C67DBC);
+    gap: 12px;
+    box-sizing: border-box;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy {
+    max-width: 100%;
+    padding: 0;
+    align-items: flex-start;
+    text-align: left;
+    box-sizing: border-box;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy h2 {
+    font-size: 21px;
+    line-height: 1.18;
+    font-weight: 800;
+    color: #111111;
+    max-width: 100%;
+    margin: 0 0 14px 0;
+    letter-spacing: -0.015em;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy p {
+    display: none;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy .button-promo {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+    height: 42px;
+    min-height: 42px;
+    padding: 0 18px;
+    font-size: 13px;
+    font-weight: 700;
+    gap: 6px;
+    white-space: nowrap;
+    border-radius: 999px;
+    background-color: #202124;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy .button-promo-arrow {
+    width: 14px;
+    height: 14px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-imageWrap {
+    height: 100%;
+    width: 100%;
+    max-height: 155px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  .tshirt-hub .pc-PromoBanner-picture {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .tshirt-hub .pc-PromoBanner-image {
+    max-width: 100%;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  }
+
+  /* Category Tiles 2 Columns on Mobile (Task 1: 375px, 390px, 400px) */
+  .tshirt-hub .pc-CatCards-group-tiles,
+  .tshirt-hub .pc-CatCards-group-tiles--3,
+  .tshirt-hub .pc-CatCards-group-tiles--5 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .tshirt-hub .pc-CatCards-group {
+    margin-bottom: 24px;
+  }
+
+  .tshirt-hub .pc-CatCard--V2 {
+    border-radius: 10px;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-image {
+    aspect-ratio: 1.375 / 1;
+    border-radius: 8px;
+    padding: 5px;
+    margin-bottom: 0;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-image .pc-CatCard--V2-img,
+  .tshirt-hub .pc-CatCard--V2-image > img:not(.pc-CatCards-group-sustainable) {
+    max-height: 120px;
+    mix-blend-mode: multiply;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-name {
+    font-size: 13px;
+    line-height: 1.25;
+    padding: 6px 6px 10px;
+    text-align: center;
+    min-height: 33px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  /* Scaled badges proportionally on mobile (prevent image obstruction) */
+  .tshirt-hub .pc-CatCard--V2-image .pc-CatCards-group-sustainable,
+  .tshirt-hub img.pc-CatCards-group-sustainable {
+    bottom: 6px;
+    left: 6px;
+    width: 20px !important;
+    height: 20px !important;
+    max-width: 20px !important;
+    max-height: 20px !important;
+    mix-blend-mode: normal;
+  }
+
+  .tshirt-hub .pc-CatCards-group-badge {
+    bottom: 6px;
+    left: 6px;
+    font-size: 10px;
+    padding: 2px 7px;
+  }
+
+  .tshirt-hub .pc-CatCard--V2-flag {
+    bottom: 6px;
+    left: 6px;
+    width: 28px;
+    height: 14px;
+  }
+
+  .tshirt-hub .pc-TrendingCard {
+    flex: 0 0 calc(50% - 8px);
+    min-width: 180px;
+  }
+
+  .tshirt-hub .pc-BlogStories-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tshirt-hub .pc-CatCards-group-label,
+  .tshirt-hub .pc-TrendingTitle,
+  .tshirt-hub .pc-BlogStories-title,
+  .tshirt-hub .pc-HowToOrder-title,
+  .tshirt-hub .pc-Faqs-title {
+    font-size: 21px;
+  }
+
+  .tshirt-hub .pc-ExpertsCard {
+    flex-direction: column;
+  }
+
+  .tshirt-hub .pc-ExpertsCard-image {
+    height: 160px;
+    width: 100%;
+    flex: none;
+  }
+
+  .tshirt-hub .pc-ExpertsCard-content {
+    padding: 20px 16px;
+  }
+
+  .tshirt-hub .pc-HowToOrder-tiles {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* SEO / Buying Guide Mobile Read more / Read less Collapsible */
+  .tshirt-hub .pc-SeoContent {
+    padding: 24px 0 28px;
+    margin-bottom: 32px;
+  }
+
+  .tshirt-hub .pc-SeoContent-title {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .tshirt-hub .pc-SeoContent-intro {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .tshirt-hub .pc-SeoContent-collapsible {
+    display: none;
+  }
+
+  .tshirt-hub .pc-SeoContent-collapsible.is-expanded {
+    display: block;
+    animation: fadeInContent 0.25s ease-in-out;
+  }
+
+  @keyframes fadeInContent {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .tshirt-hub .pc-SeoContent-toggleWrapper {
+    display: block;
+    margin-top: 14px;
+    text-align: left;
+  }
+
+  .tshirt-hub .pc-SeoContent-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f3f5;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e39d2;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    outline: none;
+  }
+
+  .tshirt-hub .pc-SeoContent-toggle:hover {
+    background: #e9ecef;
+    color: #132486;
+  }
+
+  .tshirt-hub .pc-SeoContent-toggleIcon {
+    transition: transform 0.2s ease;
+  }
+
+  .tshirt-hub .pc-SeoContent-toggle[aria-expanded="true"] .pc-SeoContent-toggleIcon {
+    transform: rotate(180deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .tshirt-hub .pc-ToolBar-header-title {
+    font-size: 22px;
+  }
+
+  .tshirt-hub .pc-PromoBanner {
+    padding: 18px 14px;
+    gap: 8px;
+    min-height: 155px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy h2 {
+    font-size: 17px;
+    line-height: 1.18;
+    margin-bottom: 12px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy .button-promo {
+    height: 38px;
+    min-height: 38px;
+    padding: 0 14px;
+    font-size: 12px;
+    gap: 5px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-copy .button-promo-arrow {
+    width: 12px;
+    height: 12px;
+  }
+
+  .tshirt-hub .pc-PromoBanner-image {
+    max-height: 130px;
+  }
+
+  .tshirt-hub .pc-TrendingCard {
+    flex: 0 0 calc(80% - 8px);
+  }
+
+  .tshirt-hub .pc-CatCard--V2-name {
+    font-size: 13px;
+  }
+
+  .tshirt-hub .pc-HowToOrder-tiles {
+    grid-template-columns: 1fr;
+  }
+}

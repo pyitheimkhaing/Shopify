@@ -1,0 +1,47 @@
+{%- comment -%}
+  Star rating for T-shirt hub product cards.
+  Params: product (optional), default_count (optional text such as 1028+).
+  Uses the product's reviews.rating data when present, otherwise the 4.7 default.
+  Stars are rounded to the nearest half. Phones show one solid star (see tshirt-hub-design.css).
+{%- endcomment -%}
+{%- liquid
+  assign hr_display = 4.7
+  assign hr_max = 5
+  assign hr_halves = 9
+  assign hr_count = default_count
+  assign hr_meta = product.metafields.reviews.rating.value
+  if hr_meta != blank and hr_meta.scale_max > 0
+    assign hr_display = hr_meta.rating | round: 1
+    assign hr_max = hr_meta.scale_max
+    assign hr_scaled = hr_meta.rating | times: 5.0 | divided_by: hr_meta.scale_max
+    assign hr_halves = hr_scaled | times: 2 | round
+    if hr_halves > 10
+      assign hr_halves = 10
+    elsif hr_halves < 0
+      assign hr_halves = 0
+    endif
+    assign hr_review_count = product.metafields.reviews.rating_count | plus: 0
+    if hr_review_count > 0
+      assign hr_count = hr_review_count
+    endif
+  endif
+-%}
+<div class="pc-Rating">
+  <span class="pc-Rating-stars" role="img" aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: hr_display, rating_max: hr_max }}">
+    {%- for i in (1..5) -%}
+      {%- assign star_pos = i | times: 2 -%}
+      {%- assign star_pos_half = star_pos | minus: 1 -%}
+      {%- if hr_halves >= star_pos -%}
+        <span class="pc-Rating-star is-full" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9L12 2.6z"/></svg></span>
+      {%- elsif hr_halves >= star_pos_half -%}
+        <span class="pc-Rating-star is-half" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9L12 2.6z"/></svg><span class="pc-Rating-starfill"><svg viewBox="0 0 24 24" width="16" height="16" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9L12 2.6z"/></svg></span></span>
+      {%- else -%}
+        <span class="pc-Rating-star is-empty" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9L12 2.6z"/></svg></span>
+      {%- endif -%}
+    {%- endfor -%}
+  </span>
+  <span class="pc-Rating-score">{{ hr_display }}</span>
+  {%- if hr_count != blank -%}
+    <span class="pc-Rating-count">({{ hr_count }})</span>
+  {%- endif -%}
+</div>

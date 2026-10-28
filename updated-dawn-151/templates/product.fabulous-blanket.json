@@ -1,0 +1,64 @@
+{
+  "layout": "fabulous-collection",
+  "sections": {
+    "fabulous_header": {
+      "type": "fabulous-collection-header",
+      "settings": {
+        "menu": "main-menu",
+        "announcement": "Create something personal with SwiftBay Prints"
+      }
+    },
+    "main": {
+      "type": "fabulous-blanket-product",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "shipping_heading": "Shipping & delivery times",
+        "materials_heading": "Materials & quality",
+        "native_personalization": true,
+        "promise_1": "Personalize it",
+        "promise_1_description": "Enter a name and choose a photo for this blanket.",
+        "promise_2": "Choose a size",
+        "promise_2_description": "Pick from the sizes available for this product.",
+        "promise_3": "Optional extras",
+        "promise_3_description": "Add extra products only if you want them.",
+        "promise_4": "Review your cart",
+        "promise_4_description": "Check your selections before checkout."
+      }
+    },
+    "reviews": {
+      "type": "apps",
+      "blocks": {},
+      "block_order": [],
+      "settings": {"include_margins": true}
+    },
+    "blanket_reviews": {
+      "type": "fabulous-blanket-reviews",
+      "blocks": {
+        "example_one": {"type":"review","settings":{"demonstration":true,"reviewer_name":"Example customer A","rating":4,"review_date":"Sample date","review_text":"Example review for layout preview. Replace this text with an authorized customer review before publishing."}},
+        "example_two": {"type":"review","settings":{"demonstration":true,"reviewer_name":"Example customer B","rating":5,"review_date":"Sample date","review_text":"Example review. A shorter card helps preview the mixed-height layout."}},
+        "example_three": {"type":"review","settings":{"demonstration":true,"reviewer_name":"Example customer C","rating":5,"review_date":"Sample date","review_text":"Example review for layout preview. Add an authorized customer photo here to preview a photo review card."}},
+        "example_four": {"type":"review","settings":{"demonstration":true,"reviewer_name":"Example customer D","rating":5,"review_date":"Sample date","review_text":"Example review. Replace with genuine feedback."}},
+        "example_five": {"type":"review","settings":{"demonstration":true,"reviewer_name":"Example customer E","rating":4,"review_date":"Sample date","review_text":"Example review for a second card in the masonry layout. Replace with authorized customer feedback."}}
+      },
+      "block_order": ["example_one","example_two","example_three","example_four","example_five"],
+      "settings": {}
+    },
+    "related": {
+      "type": "fabulous-blanket-related",
+      "settings": {"related_heading": "More worlds they will love"}
+    },
+    "fabulous_footer": {
+      "type": "fabulous-collection-footer",
+      "settings": {
+        "newsletter_heading": "Subscribe to our emails",
+        "contact_phone": "650-339-6766",
+        "hours_weekdays": "Mon - Fri, 9am - 8pm PST",
+        "hours_weekends": "Weekends, 9am - 5pm PST",
+        "navigate_menu": "navigate",
+        "company_menu": "footer"
+      }
+    }
+  },
+  "order": ["fabulous_header", "main", "reviews", "blanket_reviews", "related", "fabulous_footer"]
+}

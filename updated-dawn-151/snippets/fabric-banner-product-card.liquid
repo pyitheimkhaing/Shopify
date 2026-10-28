@@ -1,0 +1,21 @@
+{% assign card_title = title %}
+{% assign card_price = price %}
+{% assign card_image = image %}
+{% assign card_url = url | default: '#' %}
+{% assign card_rating = rating %}
+{% assign card_reviews = reviews %}
+
+<a class="fb-card" href="{{ card_url }}">
+  <div class="fb-card__img">
+    <img src="{{ card_image }}" alt="{{ card_title | escape }}" width="214" height="160" loading="lazy">
+  </div>
+  <div class="fb-card__body">
+    <h3 class="fb-card__name">{{ card_title }}</h3>
+    {% if card_price != blank %}
+      <p class="fb-card__price">{{ card_price }}</p>
+    {% endif %}
+    {% if card_rating != blank %}
+      <p class="fb-card__meta">{{ card_rating }} &#9733; {% if card_reviews != blank %}({{ card_reviews }}){% endif %}</p>
+    {% endif %}
+  </div>
+</a>

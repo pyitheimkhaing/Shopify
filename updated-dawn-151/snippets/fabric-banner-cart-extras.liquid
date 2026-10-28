@@ -1,0 +1,140 @@
+{%- if mode == 'controls' -%}
+  <div class="fb-cart-tools" data-fb-cart-tools>
+{%- endif -%}
+
+{%- if mode == 'controls' or mode == 'proof' -%}
+  <section class="fb-cart-tool-card fb-cart-proof">
+    <label for="{{ form_id }}-design-proof">
+      <input
+        id="{{ form_id }}-design-proof"
+        type="checkbox"
+        name="attributes[Free Design Proof]"
+        value="Requested"
+        form="{{ form_id }}"
+        data-fb-proof
+        {% if cart.attributes['Free Design Proof'] == 'Requested' %}checked{% endif %}
+      >
+      <span>
+        <strong>Free Design Proof</strong>
+        <small>Request a proof with your order. This does not create an automated approval workflow.</small>
+      </span>
+    </label>
+    <p class="fb-cart-proof__status" data-fb-proof-status aria-live="polite"></p>
+  </section>
+{%- endif -%}
+
+{%- if mode == 'controls' or mode == 'coupon' -%}
+  <section class="fb-cart-tool-card fb-cart-coupon">
+    <details>
+      <summary>
+        <span class="fb-cart-tool-icon" aria-hidden="true">{{ 'icon-discount.svg' | inline_asset_content }}</span>
+        <span class="fb-cart-tool-heading"><strong>Coupon Code</strong><small>Enter a discount code</small></span>
+        <span class="fb-cart-tool-chevron" aria-hidden="true">›</span>
+      </summary>
+      <div class="fb-cart-coupon__content">
+        <div class="fb-cart-coupon__entry">
+          <label class="visually-hidden" for="{{ form_id }}-coupon-code">Coupon code</label>
+          <input id="{{ form_id }}-coupon-code" type="text" autocomplete="off" data-fb-discount-code>
+          <button type="button" class="button button--secondary" data-fb-apply-discount>Apply</button>
+        </div>
+        <small>Shopify validates discounts and shows eligible savings in the cart.</small>
+        <p class="fb-cart-coupon__status" data-fb-discount-status aria-live="polite"></p>
+      </div>
+    </details>
+  </section>
+{%- endif -%}
+
+{%- if mode == 'controls' or mode == 'delivery' -%}
+  {%- liquid
+    assign fb_delivery_choice = cart.attributes['Fabric Banner Delivery Preference'] | downcase
+    unless fb_delivery_choice == 'standard' or fb_delivery_choice == 'express' or fb_delivery_choice == 'overnight'
+      assign fb_delivery_choice = blank
+      assign fb_delivery_conflict = false
+      for cart_item in cart.items
+        if cart_item.product.template_suffix == 'fabric-banner' or cart_item.product.handle == 'custom-farbric-banner'
+          assign saved_delivery = cart_item.properties['Delivery Option'] | downcase
+          assign item_delivery_choice = blank
+          if saved_delivery contains 'overnight'
+            assign item_delivery_choice = 'overnight'
+          elsif saved_delivery contains 'express'
+            assign item_delivery_choice = 'express'
+          elsif saved_delivery contains 'standard'
+            assign item_delivery_choice = 'standard'
+          endif
+          if item_delivery_choice != blank
+            if fb_delivery_choice == blank
+              assign fb_delivery_choice = item_delivery_choice
+            elsif fb_delivery_choice != item_delivery_choice
+              assign fb_delivery_conflict = true
+            endif
+          endif
+        endif
+      endfor
+      if fb_delivery_conflict
+        assign fb_delivery_choice = blank
+      endif
+    endunless
+    assign fb_delivery_options = 'Standard,Express,Overnight' | split: ','
+  -%}
+  <section class="fb-cart-tool-card fb-cart-delivery" data-fb-delivery-saved="{{ fb_delivery_choice | capitalize | escape }}">
+    <h3>
+      <span class="fb-cart-tool-icon" aria-hidden="true">{{ 'icon-truck.svg' | inline_asset_content }}</span>
+      Delivery Options
+    </h3>
+    <p class="fb-cart-delivery__scope">Fabric Banner preference only</p>
+    <div class="fb-cart-delivery__options">
+      {%- for delivery_option in fb_delivery_options -%}
+        {%- assign delivery_value = delivery_option | downcase -%}
+        <label class="fb-cart-delivery__choice">
+          <input
+            type="radio"
+            name="attributes[Fabric Banner Delivery Preference]"
+            value="{{ delivery_option }}"
+            form="{{ form_id }}"
+            data-fb-delivery-option
+            {% if fb_delivery_choice == delivery_value %}checked{% endif %}
+          >
+          <span><strong>{{ delivery_option }}</strong><small>Preference saved with this cart</small></span>
+        </label>
+      {%- endfor -%}
+    </div>
+    <p class="fb-cart-delivery__checkout">Final services and rates are confirmed at checkout. Individual item preferences remain attached to each Fabric Banner.</p>
+    <details class="fb-cart-delivery__saved">
+      <summary>View saved item preferences</summary>
+      <ul>
+        {%- for cart_item in cart.items -%}
+          {%- if cart_item.product.template_suffix == 'fabric-banner' or cart_item.product.handle == 'custom-farbric-banner' -%}
+            {%- if cart_item.properties['Delivery Option'] != blank -%}
+              <li>{{ cart_item.product.title | escape }}: {{ cart_item.properties['Delivery Option'] | escape }}</li>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+    </details>
+    <p class="fb-cart-delivery__status" data-fb-delivery-status aria-live="polite"></p>
+  </section>
+{%- endif -%}
+
+{%- if mode == 'controls' -%}
+  </div>
+{%- endif -%}
+
+{%- if mode == 'trust' -%}
+  <div class="fb-cart-trust">
+    <p>Secure checkout with SwiftBay Prints</p>
+    {%- if shop.enabled_payment_types.size > 0 -%}
+      <ul class="fb-cart-payment-icons list-unstyled" role="list" aria-label="Accepted payment methods">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'icon icon--full-color' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+    {%- if context == 'page' -%}
+      <ul class="fb-cart-trust__indicators list-unstyled" role="list">
+        <li><span class="fb-cart-trust__circle" aria-hidden="true">$</span><span>Product price shown</span></li>
+        <li><span class="fb-cart-trust__circle" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M4 9h15v14H4V9Zm15 5h5l4 5v4h-9v-9ZM8 25a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm16 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><span>Delivery at checkout</span></li>
+        <li><span class="fb-cart-trust__circle" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M9 4h10l6 6v17H9V4Zm10 0v7h6M13 17h8m-8 4h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Artwork options</span></li>
+      </ul>
+    {%- endif -%}
+  </div>
+{%- endif -%}

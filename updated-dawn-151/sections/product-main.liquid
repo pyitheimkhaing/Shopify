@@ -1,0 +1,45 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fab-theme.js' | asset_url }}" defer></script>
+{% assign royal_1 = 'https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230&width=1200' %}
+{% assign royal_2 = 'https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_fce46e0d-50ce-46cb-b9b0-7b0d6af894a5.jpg?v=1784378230&width=900' %}
+{% assign royal_3 = 'https://fabulousportrait.com/cdn/shop/files/hiz3l6wdc3eu2dpxqezr_4fb0db32-199f-46ed-9344-ccc5022ab2ce.jpg?v=1784378230&width=900' %}
+{% assign mock_sizes = section.settings.sizes | split: ',' %}
+{% assign photo_states = 'Works well: Close and sharp|Avoid: Too far away|Avoid: Too dark|Avoid: Blurry' | split: '|' %}
+<section class="pdp"><div class="pdp__grid">
+  <div class="pdp-gallery" data-product-gallery>
+    <div class="pdp-gallery__main"><img src="{{ royal_1 }}" alt="Personalized royal portrait artwork shown on canvas" width="1200" height="1200" data-gallery-main></div>
+    <div class="pdp-gallery__grid">
+      {% assign gallery_urls = royal_1 | append: '|' | append: royal_2 | append: '|' | append: royal_3 | append: '|' | append: 'https://fabulousportrait.com/cdn/shop/files/nwr85d7ykuvmfksek8mo.jpg?v=1784378230&width=900' | split: '|' %}
+      {% for url in gallery_urls %}<button type="button" class="pdp-gallery__item" data-gallery-src="{{ url }}"><img src="{{ url }}" alt="Royal portrait gallery image {{ forloop.index }}" width="900" height="900" loading="lazy"></button>{% endfor %}
+    </div>
+  </div>
+  <div class="pdp-info">
+    <h1>{{ product.title | default: 'The Little Royal' }}</h1>
+    <div class="pdp-price"><span>{% if product != blank %}{{ product.price | money }}{% else %}$59.95 USD{% endif %}</span><b>✓ Free shipping</b></div>
+    <div class="fp-upload" data-upload-wrap>
+      <label class="fp-upload__pick"><span>Upload their photo</span><strong>▣ &nbsp; Choose a photo</strong><input type="file" data-upload-demo accept="image/jpeg,image/png,image/webp"></label>
+      <p>◷ &nbsp; Free preview in about 30 seconds.</p>
+      <div class="fp-upload__trust">★ Rated <b>4.7 Excellent</b> on Trustpilot · 12,500+ happy families</div>
+      <button type="button" class="fp-upload__tips" data-photo-tips>Tips for the best photo</button>
+    </div>
+    <p class="fp-upload__privacy">Your photo is only used to create your artwork.</p>
+    <form class="pdp-form" action="{{ routes.cart_add_url }}" method="post">
+      <fieldset><legend>Canvas Size</legend><div class="pdp-pills">{% for size in mock_sizes %}<button type="button" class="{% if forloop.first %}is-selected{% endif %}" data-choice="size">{{ size }}</button>{% endfor %}</div></fieldset>
+      <div class="fp-delivery">You see and approve your artwork before you order. Delivered in 5–8 days.</div>
+      <button class="pdp-atc" type="button" data-open-preview>Add to cart</button>
+      <label class="fp-addon"><input type="checkbox"><span><b>Add digital file</b> <em>+$12.50</em></span></label>
+    </form>
+    <div class="fp-pdp-guarantees"><div><i>✦</i><b>You approve the proof</b><span>Unlimited free revisions before we print.</span></div><div><i>✦</i><b>We answer within 24 hours</b><span>Also when something goes wrong. Especially then.</span></div><div><i>✦</i><b>On time or we make it right</b><span>Clear order deadlines for every occasion.</span></div><div><i>✦</i><b>Damaged? Replaced free</b><span>No discussions, no forms. We just fix it.</span></div></div>
+    <div class="pdp-description"><p><strong>Their face. Their royal portrait. Ready in 30 seconds.</strong></p><p>Upload a photo and watch them become royalty in velvet and gold, straight out of an enchanted kingdom. You see the full artwork before you order.</p><ul><li>Instant free preview, no account needed</li><li>Premium canvas, fade-resistant inks, hand-stretched frame</li><li>The perfect gift for little kings and queens</li></ul><p>Your photo is only used to create your artwork.</p></div>
+    <div class="pdp-accordions"><details><summary>▱ <span>Shipping &amp; delivery times</span>⌄</summary><p>Production starts right after your order. Delivery in 5–8 days. Around the holidays we publish clear order deadlines per country.</p></details><details><summary>♡ <span>Materials &amp; quality</span>⌄</summary><p>Printed on premium canvas with fade-resistant inks, hand-stretched on a wooden frame.</p></details></div>
+  </div>
+</div></section>
+
+<dialog class="photo-tips" data-photo-tips-modal><button type="button" data-modal-close>×</button><h2>Which photo works best?</h2><ul><li>✓ Face close up and sharp</li><li>✓ Looking at the camera</li><li>✓ Good daylight</li></ul><div class="photo-tips__grid">{% for state in photo_states %}<figure><img src="https://fabulousportrait.com/cdn/shop/t/40/assets/fp-ai-example-single.jpg" alt="" width="240" height="240"><figcaption>{{ state }}</figcaption></figure>{% endfor %}</div><label class="fp-btn fp-btn--navy">Choose a photo<input type="file" hidden></label></dialog>
+
+<dialog class="preview-modal" data-preview-modal><button class="preview-modal__close" type="button" data-modal-close>×</button><div class="preview-modal__inner"><div class="preview-stage" data-preview-stage>
+  <div class="preview-loading"><div class="preview-skeleton"></div><div class="preview-progress"><span></span></div><p>Painting the scene…</p><small>Usually about 30 seconds.</small></div>
+  <div class="preview-complete" hidden data-tabs><div class="preview-views"><img data-tab-panel="artwork" src="{{ royal_1 }}" alt="Artwork preview" width="900" height="1350"><img data-tab-panel="canvas" hidden src="{{ royal_2 }}" alt="Canvas preview" width="900" height="1350"><img data-tab-panel="room" hidden src="{{ royal_3 }}" alt="Room preview" width="1200" height="900"></div><div class="preview-tabs"><button class="is-active" data-tab="artwork">Artwork</button><button data-tab="canvas">On canvas</button><button data-tab="room">In a room</button></div><p>Your print has no watermark.</p><button class="preview-retry" type="button" data-retry-toggle>Try again</button><div class="preview-retry-panel" hidden><button type="button" data-new-version>Same photo, new version</button><label>Start over with a new photo<input type="file" hidden></label><small>Each new version changes the pose, expression or light a little.</small></div></div>
+</div><aside class="preview-buy"><h2>The Little Royal</h2><p>Select a canvas size and order your portrait.</p><div class="pdp-pills">{% for size in mock_sizes %}<button type="button" class="{% if forloop.first %}is-selected{% endif %}" data-choice="modal-size">{{ size }}</button>{% endfor %}</div><button class="pdp-atc">Add to cart · $59.95</button></aside></div></dialog>
+{% schema %}{"name":"Product main","settings":[{"type":"text","id":"sizes","label":"Mock sizes","default":"8\" x 12\",12\" x 18\",16\" x 24\",24\" x 36\",Digital"}]} {% endschema %}

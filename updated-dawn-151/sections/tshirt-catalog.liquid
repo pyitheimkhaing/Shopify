@@ -1,0 +1,841 @@
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'component-facets.css' | asset_url | stylesheet_tag }}
+{{ 'tshirt-catalog.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
+
+<div class="tshirt-catalog{% if section.settings.wide_photo_fit == 'fill' %} tshirt-catalog--wide-fill{% endif %}">
+  <div class="tshirt-catalog__shell">
+    {%- liquid
+      assign page_heading = section.settings.page_heading | default: collection.title
+      assign page_short_title = section.settings.page_short_title | default: collection.title
+    -%}
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      <div class="tshirt-catalog__layout">
+        <aside class="tshirt-catalog__sidebar">
+          <nav class="tshirt-catalog__nav" aria-label="T-shirt categories">
+            <a
+              href="{{ routes.collections_url }}/t-shirts"
+              class="tshirt-catalog__nav-parent{% if collection.handle == 't-shirts' %} is-current{% endif %}"
+              {% if collection.handle == 't-shirts' %}
+                aria-current="page"
+              {% endif %}
+            >
+              T-shirts
+            </a>
+            <ul class="tshirt-catalog__nav-list">
+              <li>
+                <a
+                  href="{{ routes.collections_url }}/shortsleeve-t-shirts"
+                  class="tshirt-catalog__nav-link{% if collection.handle == 'shortsleeve-t-shirts' %} is-current{% endif %}"
+                  {% if collection.handle == 'shortsleeve-t-shirts' %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  Short Sleeve T-shirts
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ routes.collections_url }}/tank-tops"
+                  class="tshirt-catalog__nav-link{% if collection.handle == 'tank-tops' %} is-current{% endif %}"
+                  {% if collection.handle == 'tank-tops' %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  Tank Tops &amp; Sleeveless
+                </a>
+              </li>
+              <li>
+                <a
+                  href="{{ all_products['youth-t-shirts'].url }}"
+                  class="tshirt-catalog__nav-link{% if request.path contains '/products/youth-t-shirts' %} is-current{% endif %}"
+                  {% if request.path contains '/products/youth-t-shirts' %}
+                    aria-current="page"
+                  {% endif %}
+                >
+                  Youth T-shirts
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+          <div
+            class="facets-wrapper"
+            id="main-collection-filters"
+            data-id="{{ section.id }}"
+          >
+            {% render 'facets',
+              results: collection,
+              enable_filtering: true,
+              enable_sorting: true,
+              filter_type: 'vertical',
+              paginate: paginate
+            %}
+          </div>
+        </aside>
+
+        <div class="tshirt-catalog__main">
+          <div class="tshirt-catalog-intro">
+            <nav class="tshirt-crumb" aria-label="Breadcrumb">
+              <a href="{{ routes.all_products_collection_url }}">All Products</a>
+              <span class="tshirt-crumb__sep" aria-hidden="true">&rsaquo;</span>
+              <a href="/products/t-shirt-hub">T-shirts</a>
+              <span class="tshirt-crumb__sep" aria-hidden="true">&rsaquo;</span>
+              <span class="tshirt-crumb__current" aria-current="page">{{ page_short_title | escape }}</span>
+            </nav>
+            <h1>{{ page_heading | escape }}</h1>
+            <div class="tshirt-chips" role="toolbar" aria-label="Filters">
+              <button type="button" class="tshirt-chip tshirt-chip--filters" data-tshirt-chip="filter">
+                <span class="tshirt-chip__icon" aria-hidden="true">
+                  {{- 'icon-filter.svg' | inline_asset_content -}}
+                </span>
+                Filters
+              </button>
+              {%- for filter in collection.filters -%}
+                {%- liquid
+                  assign chip_on = false
+                  if filter.active_values.size > 0
+                    assign chip_on = true
+                  endif
+                  if filter.min_value.value != blank or filter.max_value.value != blank
+                    assign chip_on = true
+                  endif
+                -%}
+                <button
+                  type="button"
+                  class="tshirt-chip{% if chip_on %} is-active{% endif %}"
+                  data-tshirt-chip="{{ filter.param_name | escape }}"
+                >
+                  {{ filter.label | escape }}
+                  <span class="tshirt-chip__caret" aria-hidden="true">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </button>
+              {%- endfor -%}
+            </div>
+          </div>
+
+          <facet-filters-form class="facets facets-vertical-sort small-hide">
+            <form class="facets-vertical-form" id="FacetSortForm">
+              <div class="facets_right">
+                <div class="product-count-vertical light" role="status">
+                  <h2 class="product-count__text text-body">
+                    <span id="ProductCountDesktop">
+                      {%- if collection.results_count -%}
+                        {{
+                          'templates.search.results_with_count'
+                          | t: terms: collection.terms, count: collection.results_count
+                        }}
+                      {%- else -%}
+                        {{ collection.products_count }} {% if collection.products_count == 1 %}item{% else %}items{% endif %} in {{ page_heading | escape }}
+                      {%- endif -%}
+                    </span>
+                  </h2>
+                  {%- render 'loading-spinner' -%}
+                </div>
+                <div class="facet-filters sorting caption">
+                  <div class="facet-filters__field">
+                    <h2 class="facet-filters__label caption-large text-body">
+                      <label for="SortBy">Sort By:</label>
+                    </h2>
+                    <div class="select">
+                      {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+                      <select
+                        name="sort_by"
+                        class="facet-filters__sort select__select caption-large"
+                        id="SortBy"
+                        aria-describedby="a11y-refresh-page-message"
+                      >
+                        {%- for option in collection.sort_options -%}
+                          <option
+                            value="{{ option.value | escape }}"
+                            {% if option.value == sort_by %}
+                              selected="selected"
+                            {% endif %}
+                          >
+                            {%- if option.value == 'manual' %}Recommended{% else %}{{ option.name | escape }}{% endif -%}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      <span class="svg-wrapper">
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </facet-filters-form>
+
+          <div class="product-grid-container" id="ProductGridContainer">
+            {%- if collection.products.size == 0 -%}
+              <div class="collection collection--empty" id="product-grid" data-id="{{ section.id }}">
+                <div class="loading-overlay gradient"></div>
+                <div class="title-wrapper center">
+                  <h2 class="title title--primary">
+                    {{ 'sections.collection_template.empty' | t -}}
+                    <br>
+                    {{
+                      'sections.collection_template.use_fewer_filters_html'
+                      | t: link: collection.url, class: 'underlined-link link'
+                    }}
+                  </h2>
+                </div>
+              </div>
+            {%- else -%}
+              <div class="collection">
+                <div class="loading-overlay gradient"></div>
+                <ul
+                  id="product-grid"
+                  data-id="{{ section.id }}"
+                  class="grid product-grid grid--1-col-tablet-down grid--3-col-desktop"
+                >
+                  {%- for product in collection.products -%}
+                    {% assign lazy_load = false %}
+                    {%- if forloop.index > 2 -%}
+                      {%- assign lazy_load = true -%}
+                    {%- endif -%}
+                    {%- assign demo_badge = '' -%}
+                    {%- comment -%}Fixed badges: cards 1-3 always show Best Seller / Staff Pick / Top Rated (a product's own badge wins).{%- endcomment -%}
+                    {%- liquid
+                      case forloop.index
+                        when 1
+                          assign demo_badge = 'Best Seller'
+                        when 2
+                          assign demo_badge = 'Staff Pick'
+                        when 3
+                          assign demo_badge = 'Top Rated'
+                      endcase
+                    -%}
+                    <li class="grid__item">
+                      {% render 'tshirt-card',
+                        card_product: product,
+                        price_break_quantity: section.settings.price_break_quantity,
+                        pricing_heading: section.settings.pricing_heading,
+                        pricing_footer: section.settings.pricing_footer,
+                        hover_image: section.settings.hover_image,
+                        sample_photos: section.settings.sample_photos,
+                        sample_index: forloop.index0,
+                        demo_badge: demo_badge,
+                        fallback_delivery: section.settings.fallback_delivery,
+                        fallback_no_minimum: section.settings.fallback_no_minimum,
+                        fallback_rating: section.settings.fallback_rating,
+                        fallback_rating_count: section.settings.fallback_rating_count,
+                        lazy_load: lazy_load,
+                        section_id: section.id
+                      %}
+                    </li>
+                  {%- endfor -%}
+
+                  {%- comment -%}
+                    Preview only: repeats the products on the first page until the grid holds
+                    "demo_fill_cards" cards, so a draft theme with few products still looks full.
+                  {%- endcomment -%}
+                  {%- if section.settings.demo_fill_cards > collection.products.size and paginate.current_page == 1 and collection.products.size > 0 -%}
+                    {%- assign fill_needed = section.settings.demo_fill_cards | minus: collection.products.size -%}
+                    {%- for fill_i in (1..fill_needed) -%}
+                      {%- assign fill_pos = fill_i | minus: 1 | modulo: collection.products.size -%}
+                      {%- assign fill_product = collection.products[fill_pos] -%}
+                      {%- assign fill_index = collection.products.size | plus: fill_i | minus: 1 -%}
+                      {%- assign fill_section_id = section.id | append: '-copy-' | append: fill_i -%}
+                      {%- assign fill_titles = 'Classic Cotton Tee|Youth Cotton Tee|Heavyweight Tee|Soft Ringspun Tee|Lightweight Summer Tee|Relaxed Fit Tee|Garment-Dyed Tee|Vintage Wash Tee|Tri-Blend Tee|Everyday Crew Tee|Premium Combed Tee|Long Fit Tee|Pocket Tee|Washed Cotton Tee|Ultra Soft Tee|Tall Cotton Tee|Value Cotton Tee|Short Sleeve Crew Tee' | split: '|' -%}
+                      {%- assign fill_title_pos = fill_i | minus: 1 | modulo: fill_titles.size -%}
+                      {%- assign fill_title = fill_titles[fill_title_pos] -%}
+                      {%- assign fill_badge = '' -%}
+                      {%- assign fill_mod = fill_i | modulo: 4 -%}
+                      {%- assign fill_six = fill_i | modulo: 6 -%}
+                      {%- if fill_six == 0 -%}
+                        {%- assign fill_badge = 'New!' -%}
+                      {%- elsif fill_mod == 1 -%}
+                        {%- assign fill_badge = 'Best Seller' -%}
+                      {%- elsif fill_mod == 2 -%}
+                        {%- assign fill_badge = 'Staff Pick' -%}
+                      {%- elsif fill_mod == 3 -%}
+                        {%- assign fill_badge = 'Top Rated' -%}
+                      {%- endif -%}
+                      <li class="grid__item">
+                        {% render 'tshirt-card',
+                          card_product: fill_product,
+                          title_override: fill_title,
+                          price_break_quantity: section.settings.price_break_quantity,
+                          pricing_heading: section.settings.pricing_heading,
+                          pricing_footer: section.settings.pricing_footer,
+                          hover_image: section.settings.hover_image,
+                          sample_photos: section.settings.sample_photos,
+                          sample_index: fill_index,
+                          demo_badge: fill_badge,
+                          fallback_delivery: section.settings.fallback_delivery,
+                          fallback_no_minimum: section.settings.fallback_no_minimum,
+                          fallback_rating: section.settings.fallback_rating,
+                          fallback_rating_count: section.settings.fallback_rating_count,
+                          lazy_load: true,
+                          section_id: fill_section_id
+                        %}
+                      </li>
+                    {%- endfor -%}
+                  {%- endif -%}
+                </ul>
+
+                {%- if paginate.pages > 1 -%}
+                  {% render 'pagination', paginate: paginate, anchor: '' %}
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endpaginate -%}
+
+    {%- assign about_features = section.blocks | where: 'type', 'feature' -%}
+    {%- assign about_faqs = section.blocks | where: 'type', 'faq' -%}
+    {%- if section.settings.about_heading != blank or about_features.size > 0 or about_faqs.size > 0 -%}
+      <div class="tshirt-about">
+        {%- if section.settings.about_heading != blank or section.settings.about_text != blank -%}
+          <div class="tshirt-about__intro">
+            {%- if section.settings.about_heading != blank -%}
+              <h2 class="tshirt-about__title">{{ section.settings.about_heading | escape }}</h2>
+            {%- endif -%}
+            {%- if section.settings.about_text != blank -%}
+              <div class="tshirt-about__text rte">{{ section.settings.about_text }}</div>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        {%- if about_features.size > 0 -%}
+          <ul class="tshirt-about__features" role="list">
+            {%- for block in about_features -%}
+              <li class="tshirt-about__feature" {{ block.shopify_attributes }}>
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="tshirt-about__feature-title">{{ block.settings.heading | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}
+                  <p class="tshirt-about__feature-text">{{ block.settings.text | escape }}</p>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+
+        {%- if about_faqs.size > 0 -%}
+          <section class="tshirt-faq">
+            {%- if section.settings.faq_heading != blank -%}
+              <h2 class="tshirt-faq__title">{{ section.settings.faq_heading | escape }}</h2>
+            {%- endif -%}
+            {%- for block in about_faqs -%}
+              <details class="tshirt-faq__item" {{ block.shopify_attributes }}>
+                <summary class="tshirt-faq__question">
+                  <span>{{ block.settings.question | escape }}</span>
+                  <span class="tshirt-faq__icon" aria-hidden="true">
+                    {{- 'icon-caret.svg' | inline_asset_content -}}
+                  </span>
+                </summary>
+                <div class="tshirt-faq__answer rte">{{ block.settings.answer }}</div>
+              </details>
+            {%- endfor -%}
+          </section>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+
+  document.documentElement.classList.add('tshirt-catalog-page');
+  document.body.classList.add('tshirt-catalog-page');
+  (function () {
+    var key = 'sb-favorites';
+    function read() {
+      try { var v = JSON.parse(window.localStorage.getItem(key) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+    }
+    function write(list) {
+      try { window.localStorage.setItem(key, JSON.stringify(list)); } catch (e) {}
+    }
+    function paint(btn, on) {
+      btn.classList.toggle('is-active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    }
+    function paintAll() {
+      var saved = read();
+      document.querySelectorAll('.tshirt-catalog [data-tshirt-fav]').forEach(function (btn) {
+        paint(btn, saved.indexOf(btn.getAttribute('data-tshirt-fav')) !== -1);
+      });
+    }
+    document.addEventListener('click', function (event) {
+      var fav = event.target.closest('[data-tshirt-fav]');
+      if (!fav || !fav.closest('.tshirt-catalog')) return;
+      var list = read();
+      var id = fav.getAttribute('data-tshirt-fav');
+      var at = list.indexOf(id);
+      if (at === -1) list.push(id); else list.splice(at, 1);
+      write(list);
+      paint(fav, at === -1);
+    });
+    paintAll();
+
+    /* The chips above the grid are not re-rendered by the filter script, so mirror the
+       applied filters (taken from the page URL) onto them after every change. */
+    function syncChips() {
+      var params;
+      try { params = new URLSearchParams(window.location.search); } catch (e) { return; }
+      var applied = [];
+      params.forEach(function (value, name) {
+        if (value !== '' && name.indexOf('filter.') === 0) applied.push(name);
+      });
+      document.querySelectorAll('.tshirt-catalog [data-tshirt-chip]').forEach(function (chip) {
+        var chipKey = chip.getAttribute('data-tshirt-chip');
+        if (chipKey === 'filter') return;
+        var on = applied.some(function (name) {
+          return name === chipKey || name.indexOf(chipKey + '.') === 0;
+        });
+        chip.classList.toggle('is-active', on);
+      });
+    }
+
+    /* Colour dots on a card: pointing at a dot (or tapping it) switches the shirt photo to that
+       colour straight away and keeps it; the card links then open that colour. */
+    var canHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+    function cardOf(el) {
+      return el.closest('.tshirt-card');
+    }
+    function mainImage(card) {
+      return card.querySelector('.tshirt-card__image:not(.tshirt-card__image--secondary)');
+    }
+    /* every colour photo is fetched (and decoded) ahead of time, so pointing at a dot switches at once */
+    var photoCache = {};
+    var photoReady = {};
+    function loadPhoto(src) {
+      if (photoCache[src]) return photoCache[src];
+      var pre = new Image();
+      photoCache[src] = pre;
+      pre.decoding = 'async';
+      pre.src = src;
+      if (pre.decode) {
+        pre.decode().then(function () { photoReady[src] = true; }, function () {});
+      }
+      return pre;
+    }
+    function preloadCard(card) {
+      if (card.getAttribute('data-preloaded')) return;
+      card.setAttribute('data-preloaded', 'true');
+      card.querySelectorAll('[data-tshirt-swatch][data-img]').forEach(function (dot) {
+        loadPhoto(dot.getAttribute('data-img'));
+      });
+    }
+    /* start loading a card's colour photos shortly before it scrolls into view */
+    var preloadWatcher = null;
+    function watchCards() {
+      var cards = document.querySelectorAll('.tshirt-catalog .tshirt-card:not([data-preloaded])');
+      if (!('IntersectionObserver' in window)) {
+        cards.forEach(preloadCard);
+        return;
+      }
+      preloadWatcher = preloadWatcher || new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          preloadWatcher.unobserve(entry.target);
+          preloadCard(entry.target);
+        });
+      }, { rootMargin: '600px 0px' });
+      cards.forEach(function (card) { preloadWatcher.observe(card); });
+    }
+    watchCards();
+
+    /* the photo the card started with, kept so the first dot can bring it back */
+    function rememberOriginal(img) {
+      if (img.hasAttribute('data-orig-src')) return;
+      img.setAttribute('data-orig-src', img.getAttribute('src') || '');
+      img.setAttribute('data-orig-srcset', img.getAttribute('srcset') || '');
+      img.setAttribute('data-orig-sizes', img.getAttribute('sizes') || '');
+      img.setAttribute('data-orig-wide', img.classList.contains('is-wide') ? '1' : '');
+    }
+    function restorePhoto(card) {
+      var img = mainImage(card);
+      if (!img || !img.hasAttribute('data-orig-src')) return;
+      img.removeAttribute('data-swatch-src');
+      if (img.getAttribute('data-orig-srcset')) img.setAttribute('srcset', img.getAttribute('data-orig-srcset'));
+      if (img.getAttribute('data-orig-sizes')) img.setAttribute('sizes', img.getAttribute('data-orig-sizes'));
+      img.classList.toggle('is-wide', !!img.getAttribute('data-orig-wide'));
+      img.setAttribute('src', img.getAttribute('data-orig-src'));
+      card.classList.remove('is-swatched');
+    }
+    function swapPhoto(card, src, label) {
+      var img = mainImage(card);
+      if (!img || !src || img.getAttribute('data-swatch-src') === src) return;
+      rememberOriginal(img);
+      img.setAttribute('data-swatch-src', src);
+      card.classList.add('is-swatched');
+      var pre = loadPhoto(src);
+      var apply = function () {
+        /* the photo you pointed at last wins */
+        if (img.getAttribute('data-swatch-src') !== src) return;
+        img.removeAttribute('srcset');
+        img.removeAttribute('sizes');
+        if (pre.naturalWidth && pre.naturalHeight) img.classList.toggle('is-wide', pre.naturalWidth / pre.naturalHeight > 1.3);
+        img.setAttribute('src', src);
+        if (label) img.setAttribute('alt', label);
+      };
+      /* already loaded and decoded (the usual case): switch in the same frame, no blank flash */
+      if (photoReady[src]) {
+        apply();
+        return;
+      }
+      if (pre.decode) {
+        pre.decode().then(apply, apply);
+      } else if (pre.complete && pre.naturalWidth) {
+        apply();
+      } else {
+        pre.addEventListener('load', apply, { once: true });
+        pre.addEventListener('error', apply, { once: true });
+      }
+    }
+    function setVariantLinks(card, variantId) {
+      card.querySelectorAll('a.tshirt-card__link, a.tshirt-card__image-link, a.tshirt-card__pricing, .tshirt-card__swatch-more a').forEach(function (link) {
+        var base = (link.getAttribute('href') || '').split('?')[0];
+        if (!base) return;
+        link.setAttribute('href', variantId ? base + '?variant=' + variantId : base);
+      });
+    }
+    /* if a theme photo can not be loaded, show a plain T-shirt in the chosen colour instead of a broken picture */
+    function teeFallback(img, colour) {
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 469"><path fill="' + colour +
+        '" d="M135 60 L40 105 L72 190 L115 170 L115 425 L285 425 L285 170 L328 190 L360 105 L265 60 Q200 100 135 60 Z"/></svg>';
+      img.setAttribute('data-fallback', '1');
+      img.removeAttribute('srcset');
+      img.setAttribute('src', 'data:image/svg+xml,' + encodeURIComponent(svg));
+    }
+    function dotColour(card) {
+      var on = card.querySelector('[data-tshirt-swatch][aria-checked="true"]');
+      return on ? window.getComputedStyle(on).backgroundColor : '#cfd2d6';
+    }
+    document.addEventListener('error', function (event) {
+      var img = event.target;
+      if (!img || img.tagName !== 'IMG' || !img.classList.contains('tshirt-card__image')) return;
+      if (img.getAttribute('data-fallback')) return;
+      if (String(img.getAttribute('src')).indexOf('data:') === 0) return;
+      var card = img.closest('.tshirt-card');
+      if (card && card.querySelector('[data-tshirt-swatch]')) teeFallback(img, dotColour(card));
+    }, true);
+    function pickDot(dot) {
+      if (dot.getAttribute('aria-checked') === 'true') return;
+      var card = cardOf(dot);
+      card.querySelectorAll('[data-tshirt-swatch]').forEach(function (other) {
+        other.setAttribute('aria-checked', other === dot ? 'true' : 'false');
+      });
+      var name = dot.getAttribute('data-color-name') || '';
+      var title = card.querySelector('.tshirt-card__link');
+      var status = card.querySelector('[data-tshirt-colorname]');
+      if (status) status.textContent = name;
+      setVariantLinks(card, dot.getAttribute('data-variant'));
+      var shown = mainImage(card);
+      if (shown && shown.getAttribute('data-fallback')) {
+        teeFallback(shown, window.getComputedStyle(dot).backgroundColor);
+        return;
+      }
+      if (dot.hasAttribute('data-default')) {
+        restorePhoto(card);
+      } else {
+        swapPhoto(card, dot.getAttribute('data-img'), title && name ? title.textContent.trim() + ' - ' + name : '');
+      }
+    }
+    document.addEventListener('mouseover', function (event) {
+      var card = event.target.closest && event.target.closest('.tshirt-catalog .tshirt-card');
+      if (!card) return;
+      preloadCard(card);
+      var dot = event.target.closest('[data-tshirt-swatch]');
+      if (dot && canHover) pickDot(dot);
+    });
+    document.addEventListener('touchstart', function (event) {
+      var card = event.target.closest && event.target.closest('.tshirt-catalog .tshirt-card');
+      if (card) preloadCard(card);
+    }, { passive: true });
+    document.addEventListener('click', function (event) {
+      var dot = event.target.closest('.tshirt-catalog [data-tshirt-swatch]');
+      if (dot) pickDot(dot);
+    });
+    document.addEventListener('focusin', function (event) {
+      var dot = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-swatch]');
+      if (dot) {
+        preloadCard(cardOf(dot));
+        pickDot(dot);
+      }
+    });
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closePricing();
+      var dot = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-swatch]');
+      if (!dot) return;
+      var step = event.key === 'ArrowRight' || event.key === 'ArrowDown' ? 1 : event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 0;
+      if (!step) return;
+      var dots = Array.prototype.slice.call(cardOf(dot).querySelectorAll('[data-tshirt-swatch]'));
+      var next = dots[(dots.indexOf(dot) + step + dots.length) % dots.length];
+      event.preventDefault();
+      next.focus();
+    });
+
+    /* "Pricing Details": the price table pops up above the link on hover / focus,
+       and on a first tap on touch screens (a second tap opens the product). */
+    var openPop = null;
+    function closePricing() {
+      if (!openPop) return;
+      openPop.pop.hidden = true;
+      openPop.link.removeAttribute('aria-expanded');
+      openPop = null;
+    }
+    function showPricing(link) {
+      var wrap = link.closest('.tshirt-card__pricing-wrap');
+      var pop = wrap && wrap.querySelector('.tshirt-card__pop');
+      var card = cardOf(link);
+      if (!pop || !card) return;
+      if (openPop && openPop.pop === pop) return;
+      closePricing();
+      pop.hidden = false;
+      var cardBox = card.getBoundingClientRect();
+      var linkBox = link.getBoundingClientRect();
+      var wrapBox = wrap.getBoundingClientRect();
+      var edge = 12;
+      /* narrow phone cards get a wider popover so the table does not wrap */
+      var width = Math.max(cardBox.width - edge * 2, Math.min(272, window.innerWidth - 24));
+      var left = Math.max(12, Math.min(cardBox.left + edge, window.innerWidth - 12 - width));
+      pop.style.width = width + 'px';
+      pop.style.left = left - wrapBox.left + 'px';
+      pop.style.bottom = wrapBox.bottom - linkBox.top + 6 + 'px';
+      link.setAttribute('aria-expanded', 'true');
+      openPop = { pop: pop, link: link, scrollY: window.pageYOffset };
+    }
+    document.addEventListener('mouseover', function (event) {
+      var link = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-pricing]');
+      if (link && canHover) showPricing(link);
+    });
+    document.addEventListener('mouseout', function (event) {
+      var link = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-pricing]');
+      if (canHover && link && openPop && openPop.link === link && !link.contains(event.relatedTarget)) closePricing();
+    });
+    document.addEventListener('focusin', function (event) {
+      var link = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-pricing]');
+      /* keyboard focus opens it; a finger tap is handled by the click below */
+      if (link && link.matches(':focus-visible')) showPricing(link);
+      else if (!link) closePricing();
+    });
+    document.addEventListener('click', function (event) {
+      var link = event.target.closest && event.target.closest('.tshirt-catalog [data-tshirt-pricing]');
+      if (!link) {
+        closePricing();
+        return;
+      }
+      if (!canHover && !(openPop && openPop.link === link)) {
+        event.preventDefault();
+        showPricing(link);
+      }
+    });
+    window.addEventListener('scroll', function () {
+      if (openPop && Math.abs(window.pageYOffset - openPop.scrollY) > 24) closePricing();
+    }, { passive: true });
+
+    syncChips();
+    window.addEventListener('popstate', syncChips);
+
+    /* filters replace the product grid, so paint the hearts and chips again */
+    var grid = document.getElementById('ProductGridContainer');
+    if (grid && window.MutationObserver) {
+      new MutationObserver(function () {
+        paintAll();
+        syncChips();
+        watchCards();
+      }).observe(grid, { childList: true, subtree: true });
+    }
+  })();
+  document.addEventListener('click', function (event) {
+    var chip = event.target.closest('[data-tshirt-chip]');
+    if (!chip || !chip.closest('.tshirt-catalog')) return;
+    var key = chip.getAttribute('data-tshirt-chip');
+    if (window.matchMedia('(max-width: 989px)').matches) {
+      var opener = document.querySelector('.tshirt-catalog .mobile-facets__open-wrapper');
+      if (opener) opener.click();
+      return;
+    }
+    if (key === 'filter') {
+      var aside = document.getElementById('main-collection-filters');
+      if (aside) aside.scrollIntoView({ block: 'nearest' });
+      return;
+    }
+    var details = document.getElementById('Details-' + key + '-' + {{ section.id | json }});
+    if (!details) {
+      var nodes = document.querySelectorAll('#FacetsWrapperDesktop details.js-filter');
+      for (var i = 0; i < nodes.length; i++) {
+        if (nodes[i].id.indexOf('Details-' + key + '-') === 0) {
+          details = nodes[i];
+          break;
+        }
+      }
+    }
+    if (details) {
+      details.open = true;
+      details.scrollIntoView({ block: 'nearest' });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "T-shirt catalog",
+  "class": "tshirt-catalog-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "min": 8,
+      "max": 36,
+      "step": 4,
+      "default": 24,
+      "label": "Products per page"
+    },
+    {
+      "type": "header",
+      "content": "Page heading"
+    },
+    {
+      "type": "text",
+      "id": "page_heading",
+      "label": "Heading",
+      "info": "Big title and the \"items in ...\" line. Leave empty to use the collection title.",
+      "default": "Custom Short Sleeve T-shirts"
+    },
+    {
+      "type": "text",
+      "id": "page_short_title",
+      "label": "Breadcrumb name",
+      "info": "Last item of the breadcrumb. Leave empty to use the collection title.",
+      "default": "Short Sleeve T-shirts"
+    },
+    {
+      "type": "header",
+      "content": "Product cards"
+    },
+    {
+      "type": "number",
+      "id": "price_break_quantity",
+      "label": "Per-item price quantity",
+      "info": "Cards show the per-item price for this order quantity when the product has Shopify volume pricing.",
+      "default": 500
+    },
+    {
+      "type": "text",
+      "id": "pricing_heading",
+      "label": "Pricing Details heading",
+      "info": "Shown above the price table that opens from Pricing Details.",
+      "default": "Price per item at each quantity:"
+    },
+    {
+      "type": "richtext",
+      "id": "pricing_footer",
+      "label": "Pricing Details note",
+      "info": "Optional text under the price table."
+    },
+    {
+      "type": "text",
+      "id": "fallback_delivery",
+      "label": "Delivery label when a product has none",
+      "info": "Shown on every card without a custom.delivery_text value. Clear it to hide.",
+      "default": "3-Day Super Rush Available"
+    },
+    {
+      "type": "text",
+      "id": "fallback_no_minimum",
+      "label": "Minimum label when a product has none",
+      "info": "Shown on every card without a custom.no_minimum value. Clear it to hide.",
+      "default": "No Minimum"
+    },
+    {
+      "type": "text",
+      "id": "fallback_rating",
+      "label": "Rating when a product has none (optional)",
+      "info": "For example 4.7. Shown on every card without a reviews.rating value. Only use a number that is true for your products. Leave empty to hide."
+    },
+    {
+      "type": "text",
+      "id": "fallback_rating_count",
+      "label": "Review count for that rating (optional)",
+      "info": "For example 1028."
+    },
+    {
+      "type": "select",
+      "id": "wide_photo_fit",
+      "label": "Wide photos (for example front + back side by side)",
+      "options": [
+        { "value": "whole", "label": "Show the whole photo" },
+        { "value": "fill", "label": "Fill the card (crops the sides)" }
+      ],
+      "default": "whole",
+      "info": "Tall and square photos always fill the card."
+    },
+    {
+      "type": "range",
+      "id": "demo_fill_cards",
+      "label": "Preview: fill the grid with repeated cards",
+      "info": "0 = off (use this on the live store). For a draft theme with few products: repeats them until the grid has this many cards.",
+      "min": 0,
+      "max": 24,
+      "step": 1,
+      "default": 0
+    },
+    {
+      "type": "checkbox",
+      "id": "sample_photos",
+      "label": "Use the theme's T-shirt photos on the cards",
+      "info": "On: every card shows the plain T-shirt photos that come with this theme (assets/ci-featured-*) and their colour dots. Off: cards show each product's own photos and variant colours.",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "hover_image",
+      "label": "Show the second photo when a card is hovered",
+      "info": "Off by default. Colour dots always switch the photo.",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Text below the products"
+    },
+    {
+      "type": "text",
+      "id": "about_heading",
+      "label": "Heading",
+      "default": "Custom short sleeve T-shirts for every group"
+    },
+    {
+      "type": "richtext",
+      "id": "about_text",
+      "label": "Text",
+      "default": "<p>Pick a style, choose your colors and add your design. Short sleeve T-shirts are an easy way to dress a team, club, family, event or business.</p>"
+    },
+    {
+      "type": "text",
+      "id": "faq_heading",
+      "label": "Questions heading",
+      "default": "Frequently Asked Questions"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature box",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading" },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "faq",
+      "name": "Question",
+      "settings": [
+        { "type": "text", "id": "question", "label": "Question" },
+        { "type": "richtext", "id": "answer", "label": "Answer" }
+      ]
+    }
+  ],
+  "max_blocks": 20,
+  "presets": [{ "name": "T-shirt catalog" }]
+}
+{% endschema %}

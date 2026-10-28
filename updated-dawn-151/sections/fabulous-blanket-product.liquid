@@ -1,0 +1,154 @@
+{{ 'fabulous-blanket.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer></script>
+<script src="{{ 'fabulous-blanket.js' | asset_url }}" defer></script>
+
+{%- assign current_variant = product.selected_or_first_available_variant -%}
+{%- assign digital_addon = section.settings.addon_products[0] -%}
+{%- assign story_addon = section.settings.addon_products[1] -%}
+<section class="fabulous-blanket" id="FabulousBlanket-{{ section.id }}" data-fabulous-blanket data-section-id="{{ section.id }}" data-currency="{{ cart.currency.iso_code }}" data-money-format="{{ shop.money_with_currency_format | escape }}">
+  <script type="application/json" data-blanket-variants>{{ product.variants | json }}</script>
+  <div class="fabulous-blanket__shell">
+    <div class="fabulous-blanket__layout">
+      <div class="fabulous-blanket__gallery" data-gallery>
+        <div class="fabulous-blanket__stage">
+          {%- if product.media.size > 0 -%}
+            {%- assign first_media = product.media.first -%}
+            {{ first_media.preview_image | image_url: width: 1200 | image_tag: loading: 'eager', widths: '500, 750, 1000, 1200', class: 'fabulous-blanket__main-image', alt: first_media.alt }}
+          {%- else -%}
+            {{ 'product-1' | placeholder_svg_tag: 'fabulous-blanket__main-image fabulous-blanket__placeholder' }}
+          {%- endif -%}
+          <button type="button" class="fabulous-blanket__gallery-arrow fabulous-blanket__gallery-arrow--prev" data-gallery-prev aria-label="Previous image">‹</button>
+          <button type="button" class="fabulous-blanket__gallery-arrow fabulous-blanket__gallery-arrow--next" data-gallery-next aria-label="Next image">›</button>
+        </div>
+        {%- if product.media.size > 1 -%}
+          <div class="fabulous-blanket__thumbs" aria-label="Product images">
+            {%- for media in product.media -%}
+              {%- assign thumb_alt = media.alt | default: product.title -%}
+              <button type="button" class="fabulous-blanket__thumb{% if forloop.first %} is-active{% endif %}" data-gallery-thumb data-image="{{ media.preview_image | image_url: width: 1200 }}" data-alt="{{ thumb_alt | escape }}" aria-label="Show image {{ forloop.index }} of {{ product.media.size }}" aria-current="{% if forloop.first %}true{% else %}false{% endif %}">
+                {{ media.preview_image | image_url: width: 120 | image_tag: loading: 'lazy', width: 72, height: 72, alt: thumb_alt }}
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="fabulous-blanket__details">
+        {%- assign rating = product.metafields.reviews.rating.value -%}
+        {%- assign review_count = product.metafields.reviews.rating_count.value -%}
+        {%- if rating != blank and review_count != blank and review_count > 0 -%}
+          {%- assign rating_percent = rating.rating | times: 100.0 | divided_by: rating.scale_max -%}
+          <a class="fabulous-blanket__rating" href="#FabulousBlanketReviews" aria-label="Rated {{ rating.rating }} out of {{ rating.scale_max }} from {{ review_count }} reviews"><span class="fabulous-blanket__stars" aria-hidden="true"><span>★★★★★</span><span style="width:{{ rating_percent }}%">★★★★★</span></span><small>({{ review_count }})</small></a>
+        {%- endif -%}
+        <h1>{{ product.title | escape }}</h1>
+        <div class="fabulous-blanket__price" aria-live="polite">
+          <s data-compare-price{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>{% if current_variant.compare_at_price > current_variant.price %}{{ current_variant.compare_at_price | money_with_currency }}{% endif %}</s>
+          <strong data-sale-price>{{ current_variant.price | money_with_currency }}</strong>
+          <span class="fabulous-blanket__sale" data-sale-badge{% unless current_variant.compare_at_price > current_variant.price %} hidden{% endunless %}>Sale</span>
+        </div>
+        <p class="fabulous-blanket__tax">{{ 'products.product.shipping_policy_html' | t: link: shop.shipping_policy.url }}</p>
+        {%- if section.settings.trust_text != blank -%}
+          {%- if section.settings.trust_link != blank -%}<a class="fabulous-blanket__trust-link" href="{{ section.settings.trust_link }}">{{ section.settings.trust_text | escape }}</a>
+          {%- else -%}<p class="fabulous-blanket__trust-link">{{ section.settings.trust_text | escape }}</p>{%- endif -%}
+        {%- endif -%}
+
+        {%- assign form_id = 'fabulous-blanket-form-' | append: section.id -%}
+        <product-form class="fabulous-blanket__product-form product-form" data-section-id="{{ section.id }}">
+          <div class="product-form__error-message-wrapper" role="alert" hidden><span class="product-form__error-message"></span></div>
+           {%- form 'product', product, id: form_id, class: 'fabulous-blanket__form', data-type: 'add-to-cart-form' -%}
+            <input type="hidden" name="id" class="product-variant-id" value="{{ current_variant.id }}">
+            {%- unless product.has_only_default_variant -%}
+              {%- for option in product.options_with_values -%}
+                <fieldset class="fabulous-blanket__options" data-option-position="{{ option.position }}">
+                  <legend>{{ option.name | escape }}{% if option.selected_value != blank %}<span data-option-selected>{{ option.selected_value | escape }}</span>{% endif %}</legend>
+                  <div class="fabulous-blanket__pills">
+                    {%- for value in option.values -%}
+                      <label class="fabulous-blanket__pill">
+                        <input type="radio" name="blanket-option-{{ option.position }}" value="{{ value | escape }}" data-option-value {% if value.selected %}checked{% endif %}>
+                        <span>{{ value | escape }}</span>
+                      </label>
+                    {%- endfor -%}
+                  </div>
+                </fieldset>
+              {%- endfor -%}
+            {%- endunless -%}
+            {%- assign proof_note = section.settings.proof_note | default: product.metafields.custom.proof_note.value -%}
+            {%- if proof_note != blank -%}<p class="fabulous-blanket__proof-note">{{ proof_note | escape }}</p>{%- endif -%}
+            {%- if section.settings.native_personalization -%}
+              <div class="fabulous-blanket__personalization">
+                <label for="FabulousName-{{ section.id }}">Enter Name <span aria-hidden="true">*</span></label>
+                <input id="FabulousName-{{ section.id }}" type="text" name="properties[Name]" autocomplete="off" maxlength="80" required data-blanket-name>
+                <label for="FabulousPhoto-{{ section.id }}">Upload photo <span aria-hidden="true">*</span></label>
+                <div class="fabulous-blanket__photo-picker">
+                  <input id="FabulousPhoto-{{ section.id }}" type="file" name="properties[Photo]" accept="image/jpeg,image/png,image/webp" required data-blanket-photo>
+                  <span>Select image</span>
+                </div>
+                <small class="fabulous-blanket__photo-name" data-photo-name aria-live="polite">Choose a JPG, PNG, or WebP image.</small>
+              </div>
+            {%- endif -%}
+            <div class="fabulous-blanket__app-blocks">
+              {%- for block in section.blocks -%}{%- if block.type == '@app' -%}<div {{ block.shopify_attributes }}>{% render block %}</div>{%- endif -%}{%- endfor -%}
+            </div>
+            <div class="fabulous-blanket__quantity-row">
+              <label for="FabulousQuantity-{{ section.id }}">Quantity</label>
+              <div class="fabulous-blanket__quantity">
+                <button type="button" data-qty-minus aria-label="Decrease quantity">−</button>
+                <input id="FabulousQuantity-{{ section.id }}" type="number" name="quantity" min="{{ current_variant.quantity_rule.min | default: 1 }}" step="{{ current_variant.quantity_rule.increment | default: 1 }}" value="{{ current_variant.quantity_rule.min | default: 1 }}" inputmode="numeric">
+                <button type="button" data-qty-plus aria-label="Increase quantity">+</button>
+              </div>
+            </div>
+            <button type="submit" name="add" class="fabulous-blanket__add product-form__submit" data-add-button {% unless current_variant.available %}disabled{% endunless %}><span>{% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}</span>{%- render 'loading-spinner' -%}</button>
+            {%- if digital_addon != blank and digital_addon.selected_or_first_available_variant.available -%}
+              <label class="fabulous-blanket__addon"><input type="checkbox" data-addon-variant="{{ digital_addon.selected_or_first_available_variant.id }}"><span><strong>{{ section.settings.digital_addon_label | default: digital_addon.title | escape }} <em>+{{ digital_addon.selected_or_first_available_variant.price | money_with_currency }}</em></strong>{% if section.settings.digital_addon_note != blank %}<small>{{ section.settings.digital_addon_note | escape }}</small>{% endif %}</span></label>
+            {%- endif -%}
+            {%- if story_addon != blank and story_addon.selected_or_first_available_variant.available -%}
+              <label class="fabulous-blanket__addon"><input type="checkbox" data-addon-variant="{{ story_addon.selected_or_first_available_variant.id }}"><span><strong>{{ section.settings.story_addon_label | default: story_addon.title | escape }} <em>+{{ story_addon.selected_or_first_available_variant.price | money_with_currency }}</em></strong>{% if section.settings.story_addon_note != blank %}<small>{{ section.settings.story_addon_note | escape }}</small>{% endif %}</span></label>
+            {%- endif -%}
+          {%- endform -%}
+        </product-form>
+        {%- if section.settings.promise_1 != blank or section.settings.promise_2 != blank or section.settings.promise_3 != blank or section.settings.promise_4 != blank -%}
+          <div class="fabulous-blanket__promises">
+            {%- if section.settings.promise_1 != blank -%}<div class="fabulous-blanket__promise"><span aria-hidden="true">✦</span><div><strong>{{ section.settings.promise_1 | escape }}</strong>{% if section.settings.promise_1_description != blank %}<p>{{ section.settings.promise_1_description | escape }}</p>{% endif %}</div></div>{%- endif -%}
+            {%- if section.settings.promise_2 != blank -%}<div class="fabulous-blanket__promise"><span aria-hidden="true">✦</span><div><strong>{{ section.settings.promise_2 | escape }}</strong>{% if section.settings.promise_2_description != blank %}<p>{{ section.settings.promise_2_description | escape }}</p>{% endif %}</div></div>{%- endif -%}
+            {%- if section.settings.promise_3 != blank -%}<div class="fabulous-blanket__promise"><span aria-hidden="true">✦</span><div><strong>{{ section.settings.promise_3 | escape }}</strong>{% if section.settings.promise_3_description != blank %}<p>{{ section.settings.promise_3_description | escape }}</p>{% endif %}</div></div>{%- endif -%}
+            {%- if section.settings.promise_4 != blank -%}<div class="fabulous-blanket__promise"><span aria-hidden="true">✦</span><div><strong>{{ section.settings.promise_4 | escape }}</strong>{% if section.settings.promise_4_description != blank %}<p>{{ section.settings.promise_4_description | escape }}</p>{% endif %}</div></div>{%- endif -%}
+          </div>
+        {%- endif -%}
+        {%- if product.description != blank -%}<div class="fabulous-blanket__description rte">{{ product.description }}</div>{%- endif -%}
+        {%- if section.settings.shipping_text != blank -%}<details class="fabulous-blanket__accordion"><summary><span class="fabulous-blanket__accordion-title"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 5h12v11H2zM14 9h4l4 4v3h-8z"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>{{ section.settings.shipping_heading | escape }}</span><span class="fabulous-blanket__accordion-chevron" aria-hidden="true">⌄</span></summary><div class="rte">{{ section.settings.shipping_text }}</div></details>{%- endif -%}
+        {%- assign materials_details = product.metafields.custom.materials_and_quality -%}
+        {%- if section.settings.materials_text != blank or materials_details != blank -%}<details class="fabulous-blanket__accordion"><summary><span class="fabulous-blanket__accordion-title"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.8 4.6a5.4 5.4 0 0 0-7.6 0L12 5.8l-1.2-1.2a5.4 5.4 0 0 0-7.6 7.6L12 21l8.8-8.8a5.4 5.4 0 0 0 0-7.6Z"/></svg>{{ section.settings.materials_heading | escape }}</span><span class="fabulous-blanket__accordion-chevron" aria-hidden="true">⌄</span></summary><div class="rte">{%- if section.settings.materials_text != blank -%}{{ section.settings.materials_text }}{%- else -%}{{ materials_details | metafield_tag }}{%- endif -%}</div></details>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name":"Fabulous blanket product",
+  "settings":[
+    {"type":"text","id":"trust_text","label":"External rating text"},
+    {"type":"url","id":"trust_link","label":"External rating link"},
+    {"type":"text","id":"proof_note","label":"Proof and delivery note"},
+    {"type":"checkbox","id":"native_personalization","label":"Require name and photo upload in Shopify cart","default":true},
+    {"type":"product_list","id":"addon_products","label":"Add-on products: digital file first, story second","limit":2},
+    {"type":"text","id":"digital_addon_label","label":"Digital file card title"},
+    {"type":"text","id":"digital_addon_note","label":"Digital file note"},
+    {"type":"text","id":"story_addon_label","label":"Story card title"},
+    {"type":"text","id":"story_addon_note","label":"Story add-on note"},
+    {"type":"text","id":"promise_1","label":"Reassurance title 1"},
+    {"type":"textarea","id":"promise_1_description","label":"Reassurance description 1"},
+    {"type":"text","id":"promise_2","label":"Reassurance title 2"},
+    {"type":"textarea","id":"promise_2_description","label":"Reassurance description 2"},
+    {"type":"text","id":"promise_3","label":"Reassurance title 3"},
+    {"type":"textarea","id":"promise_3_description","label":"Reassurance description 3"},
+    {"type":"text","id":"promise_4","label":"Reassurance title 4"},
+    {"type":"textarea","id":"promise_4_description","label":"Reassurance description 4"},
+    {"type":"text","id":"shipping_heading","label":"Shipping heading","default":"Shipping & delivery times"},
+    {"type":"richtext","id":"shipping_text","label":"Shipping details"},
+    {"type":"text","id":"materials_heading","label":"Materials heading","default":"Materials & quality"},
+    {"type":"richtext","id":"materials_text","label":"Materials details"}
+  ],
+  "blocks":[{"type":"@app"}],
+  "presets":[{"name":"Fabulous blanket product"}]
+}
+{% endschema %}

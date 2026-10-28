@@ -1,0 +1,406 @@
+/* ==========================================================================
+   T-shirt hub: visual design pass (loaded after tshirt-hub.css).
+   Dark ink text, 1px grey borders, 24px rounded cards, grey image wells,
+   dark pill buttons, chevron accordion. Layout and wording are unchanged.
+   Every rule that changes below a breakpoint repeats its own @media, because
+   this file loads after the base file.
+   ========================================================================== */
+.tshirt-hub {
+  --th-ink: #1e2126;
+  --th-border: #d6d8db;
+  --th-well: #f1f2f3;
+  --th-muted: #5b6066;
+  color: var(--th-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- Breadcrumb + title ---------- */
+.tshirt-hub .pc-Breadcrumbs-wrapper { font-size: 14px; color: var(--th-ink); }
+.tshirt-hub .pc-BreadcrumbItem:not(:last-child)::after {
+  content: "";
+  width: 6px; height: 6px; margin: 0 10px 0 8px;
+  border-top: 1.5px solid var(--th-muted); border-right: 1.5px solid var(--th-muted);
+  transform: rotate(45deg);
+}
+.tshirt-hub .pc-BreadcrumbItem a { color: var(--th-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.tshirt-hub .pc-BreadcrumbItem a:hover { color: var(--th-ink); text-decoration: none; }
+.tshirt-hub .pc-Breadcrumbs-title { color: var(--th-ink); font-weight: 400; }
+.tshirt-hub .pc-ToolBar-header-title { color: var(--th-ink); letter-spacing: 0; line-height: 40px; }
+
+/* ---------- Promo banner ---------- */
+.tshirt-hub .pc-PromoBanner { border-radius: 24px; box-shadow: none; color: var(--th-ink); }
+.tshirt-hub .pc-PromoBanner-copy h2 { color: var(--th-ink); letter-spacing: 0; line-height: 1.2; }
+.tshirt-hub .pc-PromoBanner-copy p { color: var(--th-ink); }
+.tshirt-hub .pc-PromoBanner-copy .button-promo {
+  background: var(--th-ink); color: #fff; border-radius: 999px;
+  font-weight: 800; transition: opacity 0.1s;
+}
+.tshirt-hub .pc-PromoBanner-copy .button-promo:hover { background: var(--th-ink); opacity: 0.85; }
+
+/* ---------- Section headings ---------- */
+.tshirt-hub .pc-CatCards-group-label,
+.tshirt-hub .pc-TrendingTitle,
+.tshirt-hub .pc-BlogStories-title,
+.tshirt-hub .pc-HowToOrder-title,
+.tshirt-hub .pc-Faqs-title {
+  color: var(--th-ink); font-weight: 800; letter-spacing: 0;
+}
+.tshirt-hub .pc-CatCards-group-label { font-size: 28px; line-height: 1.2; margin: 0 0 12px; padding-top: 8px; }
+.tshirt-hub .pc-TrendingTitle { font-size: 28px; line-height: 1.2; }
+.tshirt-hub .pc-BlogStories-title { font-size: 26px; line-height: 1.25; margin-bottom: 16px; }
+.tshirt-hub .pc-HowToOrder-title { font-size: 26px; line-height: 1.25; margin-bottom: 16px; }
+.tshirt-hub .pc-Faqs-title { font-size: 24px; line-height: 1.5; margin-bottom: 8px; }
+
+/* ---------- Category tiles ---------- */
+.tshirt-hub .pc-CatCards-group { margin-bottom: 32px; }
+.tshirt-hub .pc-CatCards-group-tiles,
+.tshirt-hub .pc-CatCards-group-tiles--3,
+.tshirt-hub .pc-CatCards-group-tiles--5 {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; max-width: none;
+}
+.tshirt-hub .pc-CatCard--V2 {
+  border: 1px solid var(--th-border); border-radius: 24px; background: #fff; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.tshirt-hub .pc-CatCard--V2:hover {
+  border-color: var(--th-ink); box-shadow: 0 6px 18px rgba(30, 33, 38, 0.12); transform: none;
+}
+.tshirt-hub .pc-CatCard--V2-link { padding: 12px 12px 4px; gap: 4px; color: var(--th-ink); }
+.tshirt-hub .pc-CatCard--V2-image {
+  aspect-ratio: 1.19 / 1; background: var(--th-well); border-radius: 16px; padding: 8px;
+}
+.tshirt-hub .pc-CatCard--V2-image .pc-CatCard--V2-img,
+.tshirt-hub .pc-CatCard--V2-image > img:not(.pc-CatCards-group-sustainable) {
+  max-width: none; max-height: none; width: 100%; height: 100%; object-fit: contain;
+}
+.tshirt-hub .pc-CatCard--V2-name {
+  font-size: 16px; font-weight: 500; line-height: 22px; color: var(--th-ink); padding: 12px 8px 12px;
+}
+.tshirt-hub .pc-CatCard--V2:hover .pc-CatCard--V2-name { color: var(--th-ink); }
+.tshirt-hub .pc-CatCards-group-badge { background: #fa3c00; box-shadow: none; bottom: 12px; left: 12px; }
+
+/* ---------- Trending carousel ---------- */
+.tshirt-hub .pc-TrendingHeader { margin-bottom: 16px; }
+.tshirt-hub .pc-Carousel-arrow {
+  width: 32px; height: 32px; border: 1.5px solid var(--th-ink); background: #fff; color: var(--th-ink); box-shadow: none;
+}
+.tshirt-hub .pc-Carousel-arrow:hover { background: var(--th-ink); color: #fff; border-color: var(--th-ink); box-shadow: none; }
+.tshirt-hub .pc-Carousel-arrow svg { width: 16px; height: 16px; }
+.tshirt-hub .pc-TrendingTrack { padding: 2px 0 8px; gap: 16px; }
+.tshirt-hub .pc-TrendingCard {
+  border: 1px solid var(--th-border); border-radius: 24px; padding: 16px; gap: 12px;
+  flex: 0 0 calc((100% - 48px) / 4); min-width: 0; transition: border-color 0.2s, box-shadow 0.2s;
+}
+.tshirt-hub .pc-TrendingCard:hover { transform: none; border-color: var(--th-ink); box-shadow: 0 6px 18px rgba(30, 33, 38, 0.12); }
+.tshirt-hub .pc-TrendingCard-imageWrap { background: var(--th-well); border-radius: 16px; aspect-ratio: 1 / 1; }
+.tshirt-hub .pc-TrendingCard-info { padding: 0; gap: 8px; }
+.tshirt-hub .pc-TrendingCard-title { font-size: 16px; font-weight: 600; line-height: 20px; color: var(--th-ink); margin: 0; }
+.tshirt-hub .pc-TrendingCard-title:hover { color: var(--th-ink); text-decoration: underline; }
+.tshirt-hub .pc-TrendingCard-meta { justify-content: flex-start; flex-wrap: wrap; gap: 0; font-size: 13px; line-height: 19.5px; }
+.tshirt-hub .pc-TrendingCard-price { font-size: 14px; font-weight: 700; color: var(--th-ink); padding-right: 8px; margin-right: 8px; border-right: 1px solid var(--th-border); }
+.tshirt-hub .pc-TrendingCard-noMin { background: none; padding: 0; border-radius: 0; color: var(--th-ink); font-size: 13px; font-weight: 500; }
+.tshirt-hub .pc-TrendingCard-actions { padding: 0; }
+.tshirt-hub .pc-TrendingCard-btn {
+  flex: 0 0 auto; padding: 11px 18px; font-size: 14px; font-weight: 800; line-height: 20px; border-radius: 999px; transition: opacity 0.1s;
+}
+.tshirt-hub .pc-TrendingCard-btn--design { background: var(--th-ink); color: #fff; }
+.tshirt-hub .pc-TrendingCard-btn--design:hover { background: var(--th-ink); opacity: 0.85; }
+
+/* ---------- Advice & Inspiration ---------- */
+.tshirt-hub .pc-BlogStories-grid { gap: 24px; }
+.tshirt-hub .pc-BlogStoryCard { border: 0; border-radius: 0; background: none; overflow: visible; transition: none; }
+.tshirt-hub .pc-BlogStoryCard:hover { transform: none; box-shadow: none; }
+.tshirt-hub .pc-BlogStoryCard-imageWrap { border-radius: 20px; }
+.tshirt-hub .pc-BlogStoryCard-content { padding: 16px 0 0; }
+.tshirt-hub .pc-BlogStoryCard-title { font-size: 18px; font-weight: 600; line-height: 22.5px; color: var(--th-ink); margin-bottom: 8px; }
+.tshirt-hub .pc-BlogStoryCard-title:hover { color: var(--th-ink); text-decoration: underline; }
+.tshirt-hub .pc-BlogStoryCard-desc {
+  font-size: 14px; line-height: 21px; color: var(--th-ink); margin: 0 0 4px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 0 1 auto;
+}
+.tshirt-hub .pc-BlogStoryCard-link {
+  align-self: flex-start; margin: 8px 0 0 -12px; padding: 8px 12px; border-radius: 999px;
+  font-size: 13px; font-weight: 800; line-height: 16px; color: var(--th-ink); transition: background-color 0.15s;
+}
+.tshirt-hub .pc-BlogStoryCard-link:hover { background: var(--th-well); text-decoration: none; }
+
+/* ---------- Product experts ---------- */
+.tshirt-hub .pc-ExpertsCard { background: #fff; border: 1px solid var(--th-border); border-radius: 24px; box-shadow: none; }
+.tshirt-hub .pc-ExpertsCard-content { padding: 24px 32px; }
+.tshirt-hub .pc-ExpertsCard-header { font-size: 18px; font-weight: 700; line-height: 1.3; color: var(--th-ink); }
+.tshirt-hub .pc-ExpertsCard-copy { font-size: 16px; font-weight: 400; line-height: 24px; color: var(--th-ink); margin-bottom: 16px; }
+.tshirt-hub .pc-ExpertsCard-phoneLink { color: var(--th-ink); font-size: 16px; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.tshirt-hub .pc-ExpertsCard-phoneLink svg { display: none; }
+.tshirt-hub .pc-ExpertsCard-phoneLink:hover { text-decoration: none; }
+.tshirt-hub .button-experts-chat {
+  background: #fff; color: var(--th-ink); border: 1.5px solid var(--th-ink);
+  padding: 8px 18px; font-size: 14px; font-weight: 800; transition: background-color 0.15s, color 0.15s;
+}
+.tshirt-hub .button-experts-chat:hover { background: var(--th-ink); color: #fff; }
+.tshirt-hub .pc-ExpertsCard-hours { color: var(--th-muted); font-size: 13px; }
+
+/* ---------- Buying guide text ---------- */
+.tshirt-hub .pc-SeoContent-title { font-size: 20px; font-weight: 800; letter-spacing: 0; color: var(--th-ink); }
+.tshirt-hub .pc-SeoContent-intro,
+.tshirt-hub .pc-SeoContent-section p,
+.tshirt-hub .pc-SeoContent-list li { font-size: 14px; line-height: 21px; color: var(--th-ink); font-weight: 400; }
+.tshirt-hub .pc-SeoContent-subheading { font-size: 16px; font-weight: 800; letter-spacing: 0; line-height: 24px; color: var(--th-ink); margin: 28px 0 8px; }
+.tshirt-hub .pc-SeoContent-list li { margin-bottom: 4px; }
+.tshirt-hub .pc-SeoContent-list li strong { color: var(--th-ink); font-weight: 700; }
+.tshirt-hub .pc-SeoContent-note { font-style: normal; color: var(--th-ink); font-size: 14px; }
+.tshirt-hub .pc-SeoContent a { color: var(--th-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+
+/* ---------- How to order ---------- */
+.tshirt-hub .pc-HowToOrder-tiles { gap: 16px; }
+.tshirt-hub .pc-HowToOrder-tile {
+  border: 1px solid var(--th-border); border-radius: 24px; padding: 24px; transition: border-color 0.2s;
+}
+.tshirt-hub .pc-HowToOrder-tile:hover { transform: none; box-shadow: none; border-color: var(--th-ink); }
+.tshirt-hub .pc-HowToOrder-tile-number { background: var(--th-ink); color: #fff; width: 40px; height: 40px; font-size: 16px; }
+.tshirt-hub .pc-HowToOrder-tile-title { font-size: 16px; font-weight: 800; color: var(--th-ink); margin-bottom: 8px; }
+.tshirt-hub .pc-HowToOrder-tile-desc { font-size: 14px; line-height: 21px; font-weight: 400; color: var(--th-ink); }
+
+/* ---------- FAQ: one bordered card with divider rows and chevrons ---------- */
+.tshirt-hub .pc-Faqs { border: 1px solid var(--th-border); border-radius: 24px; padding: 24px 40px; }
+.tshirt-hub .pc-Faqs-faq { background: none; border: 0; border-bottom: 1px solid var(--th-border); border-radius: 0; margin: 0; }
+.tshirt-hub .pc-Faqs-faq:last-child { border-bottom: 0; }
+.tshirt-hub .pc-Faqs-faq:hover { background: none; border-color: var(--th-border); }
+.tshirt-hub .pc-Faqs-faq-question { padding: 16px 0; font-size: 18px; font-weight: 800; line-height: 23.4px; color: var(--th-ink); }
+.tshirt-hub .pc-Faqs-faq-question::after,
+.tshirt-hub .pc-Faqs-faq-question.isOpened::after {
+  content: ""; flex: none; width: 8px; height: 8px; margin: -4px 4px 0 14px; font-size: 0;
+  border-right: 2px solid var(--th-ink); border-bottom: 2px solid var(--th-ink);
+  transform: rotate(45deg); transition: transform 0.2s ease;
+}
+.tshirt-hub .pc-Faqs-faq-question.isOpened::after { transform: rotate(-135deg); margin-top: 4px; }
+.tshirt-hub .pc-Faqs-faq-answer { padding: 0 40px 16px 0; font-size: 16px; line-height: 24px; font-weight: 500; color: var(--th-ink); }
+
+.tshirt-hub a:focus-visible, .tshirt-hub button:focus-visible { outline: 2px solid #1e39d2; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tshirt-hub * { transition: none !important; }
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .tshirt-hub .pc-CatCards-group-tiles,
+  .tshirt-hub .pc-CatCards-group-tiles--3,
+  .tshirt-hub .pc-CatCards-group-tiles--5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tshirt-hub .pc-TrendingCard { flex: 0 0 calc((100% - 32px) / 3); }
+  .tshirt-hub .pc-Faqs { padding: 20px 24px; }
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 768px) {
+  .tshirt-hub .pc-CatCards-group-label,
+  .tshirt-hub .pc-TrendingTitle { font-size: 22px; }
+  .tshirt-hub .pc-BlogStories-title,
+  .tshirt-hub .pc-HowToOrder-title { font-size: 22px; }
+  .tshirt-hub .pc-CatCards-group-tiles,
+  .tshirt-hub .pc-CatCards-group-tiles--3,
+  .tshirt-hub .pc-CatCards-group-tiles--5 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  .tshirt-hub .pc-CatCard--V2 { border-radius: 20px; }
+  .tshirt-hub .pc-CatCard--V2-link { padding: 8px 8px 0; }
+  .tshirt-hub .pc-CatCard--V2-image { border-radius: 14px; }
+  .tshirt-hub .pc-CatCard--V2-name { font-size: 14px; line-height: 18px; padding: 10px 4px 12px; }
+  .tshirt-hub .pc-TrendingCard { flex: 0 0 min(78%, 280px); border-radius: 20px; padding: 12px; }
+  .tshirt-hub .pc-ExpertsCard { border-radius: 20px; }
+  .tshirt-hub .pc-ExpertsCard-content { padding: 20px; }
+  .tshirt-hub .pc-HowToOrder-tile { border-radius: 20px; }
+  .tshirt-hub .pc-Faqs { border-radius: 20px; padding: 16px 16px; }
+  .tshirt-hub .pc-Faqs-faq-question { font-size: 16px; line-height: 21px; }
+  .tshirt-hub .pc-Faqs-faq-answer { padding-right: 0; font-size: 15px; line-height: 22px; }
+  .tshirt-hub .pc-PromoBanner { border-radius: 20px; }
+}
+
+/* "Read more" toggle (phone only) */
+@media (max-width: 768px) {
+  .tshirt-hub .pc-SeoContent-toggle { color: var(--th-ink); font-weight: 800; border-color: var(--th-border); }
+  .tshirt-hub .pc-SeoContent-toggle:hover { background: var(--th-well); }
+}
+
+/* ---------- Phone carousels: Advice & Inspiration, How to Order; hide expert photo ---------- */
+.tshirt-hub .pc-MobileHeader { display: block; }
+.tshirt-hub .pc-MobileNav { display: none; }
+
+@media (max-width: 768px) {
+  .tshirt-hub .pc-MobileHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+  .tshirt-hub .pc-MobileHeader .pc-BlogStories-title,
+  .tshirt-hub .pc-MobileHeader .pc-HowToOrder-title { margin: 0; }
+  .tshirt-hub .pc-MobileNav { display: flex; flex: none; }
+
+  .tshirt-hub .pc-BlogStories-grid,
+  .tshirt-hub .pc-HowToOrder-tiles {
+    display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding: 2px 0 8px;
+  }
+  .tshirt-hub .pc-BlogStories-grid::-webkit-scrollbar,
+  .tshirt-hub .pc-HowToOrder-tiles::-webkit-scrollbar { display: none; }
+  .tshirt-hub .pc-BlogStoryCard,
+  .tshirt-hub .pc-HowToOrder-tile { flex: 0 0 min(78%, 300px); min-width: 0; scroll-snap-align: start; }
+
+  .tshirt-hub .pc-ExpertsCard-image { display: none; }
+}
+
+/* ---------- Featured Products ---------- */
+.tshirt-hub .pc-Featured { margin-bottom: 32px; }
+.tshirt-hub .pc-Featured-heading { margin: 0 0 12px; padding-top: 8px; font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: 0; color: var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard {
+  display: flex; align-items: center; gap: 24px; width: 100%; max-width: 617px;
+  padding: 12px 24px 12px 12px; background: #fff; border: 1px solid var(--th-border); border-radius: 24px;
+}
+.tshirt-hub .pc-FeaturedCard-image {
+  position: relative; display: block; flex: 0 0 220px; width: 220px; aspect-ratio: 1 / 1.05;
+  overflow: hidden; background: var(--th-well); border-radius: 16px;
+}
+.tshirt-hub .pc-FeaturedCard-image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top; mix-blend-mode: multiply; }
+.tshirt-hub .pc-FeaturedCard-badge {
+  position: absolute; top: 12px; left: 12px; padding: 3px 10px; border-radius: 999px;
+  background: #fa3c00; color: #fff; font-size: 12px; font-weight: 800; line-height: 1.2;
+}
+.tshirt-hub .pc-FeaturedCard-body { display: flex; min-width: 0; flex: 1; flex-direction: column; align-items: flex-start; gap: 12px; }
+.tshirt-hub .pc-FeaturedCard-title { margin: 0; font-size: 22px; font-weight: 800; line-height: 1.25; letter-spacing: 0; color: var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tshirt-hub .pc-FeaturedCard-swatch { width: 24px; height: 24px; border-radius: 50%; background: var(--th-border); box-shadow: inset 0 0 0 1px rgba(30, 33, 38, 0.18); }
+.tshirt-hub .pc-FeaturedCard-more { font-size: 12px; font-weight: 500; color: var(--th-muted); }
+.tshirt-hub .pc-FeaturedCard-meta { display: flex; flex-wrap: wrap; align-items: center; font-size: 14px; line-height: 20px; }
+.tshirt-hub .pc-FeaturedCard-note { padding-right: 12px; font-weight: 500; color: var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard-note + .pc-FeaturedCard-details { padding-left: 12px; border-left: 1px solid var(--th-border); }
+.tshirt-hub .pc-FeaturedCard-details { font-weight: 600; color: var(--th-ink); text-decoration: underline; text-underline-offset: 2px; }
+.tshirt-hub .pc-FeaturedCard-details:hover { text-decoration: none; }
+.tshirt-hub .pc-FeaturedCard-btn {
+  display: inline-flex; align-items: center; padding: 11px 18px; border-radius: 999px; background: var(--th-ink); color: #fff;
+  font-size: 14px; font-weight: 800; line-height: 20px; text-decoration: none; transition: opacity 0.1s;
+}
+.tshirt-hub .pc-FeaturedCard-btn:hover { opacity: 0.85; color: #fff; }
+
+@media (max-width: 768px) {
+  .tshirt-hub .pc-Featured-heading { font-size: 22px; }
+  .tshirt-hub .pc-FeaturedCard { max-width: none; gap: 16px; padding: 8px 16px 8px 8px; border-radius: 20px; }
+  .tshirt-hub .pc-FeaturedCard-image { flex-basis: 132px; width: 132px; border-radius: 12px; }
+  .tshirt-hub .pc-FeaturedCard-title { font-size: 18px; }
+  .tshirt-hub .pc-FeaturedCard-swatch { width: 20px; height: 20px; }
+}
+@media (max-width: 480px) {
+  .tshirt-hub .pc-FeaturedCard { flex-direction: column; align-items: stretch; padding: 8px 8px 16px; gap: 12px; }
+  .tshirt-hub .pc-FeaturedCard-image { flex: none; width: 100%; aspect-ratio: 1.3 / 1; }
+  .tshirt-hub .pc-FeaturedCard-body { padding: 0 8px; }
+}
+
+/* Featured Products: clickable colours */
+.tshirt-hub .pc-FeaturedCard-colors { display: flex; flex-direction: column; gap: 8px; }
+.tshirt-hub .pc-FeaturedCard-colorname { margin: 0; font-size: 13px; line-height: 18px; color: var(--th-muted); }
+.tshirt-hub .pc-FeaturedCard-colorname strong { font-weight: 700; color: var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard-colors .pc-FeaturedCard-swatches { gap: 10px 10px; padding: 3px 2px; }
+.tshirt-hub .pc-FeaturedCard-swatchitem, .tshirt-hub .pc-FeaturedCard-moreitem { display: flex; margin: 0; padding: 0; list-style: none; }
+.tshirt-hub .pc-FeaturedCard-swatchitem.is-extra { display: none; }
+.tshirt-hub .pc-FeaturedCard-colors.is-expanded .pc-FeaturedCard-swatchitem.is-extra { display: flex; }
+.tshirt-hub .pc-FeaturedCard-swatch--btn {
+  display: block; box-sizing: border-box; padding: 0; border: 0; cursor: pointer;
+  transition: box-shadow 0.12s, transform 0.12s;
+}
+.tshirt-hub .pc-FeaturedCard-swatch--btn:hover { transform: scale(1.1); }
+.tshirt-hub .pc-FeaturedCard-swatch--btn.is-selected { box-shadow: inset 0 0 0 1px rgba(30, 33, 38, 0.18), 0 0 0 2px #fff, 0 0 0 4px var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard-swatch--btn:focus-visible { outline: 2px solid #1e39d2; outline-offset: 4px; }
+.tshirt-hub .pc-FeaturedCard-more--btn { padding: 4px 2px; border: 0; background: none; font: inherit; font-size: 12px; font-weight: 700; color: var(--th-ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.tshirt-hub .pc-FeaturedCard-image img { transition: opacity 0.15s; }
+.tshirt-hub .pc-FeaturedCard-image img.is-swapping { opacity: 0.35; }
+@media (prefers-reduced-motion: reduce) {
+  .tshirt-hub .pc-FeaturedCard-swatch--btn, .tshirt-hub .pc-FeaturedCard-image img { transition: none; }
+  .tshirt-hub .pc-FeaturedCard-swatch--btn:hover { transform: none; }
+}
+@media (max-width: 768px) {
+  .tshirt-hub .pc-FeaturedCard-colors .pc-FeaturedCard-swatches { gap: 8px 8px; }
+}
+
+/* ==========================================================================
+   Featured Products and Trending Products cards (match the reference images)
+   ========================================================================== */
+
+/* Star rating, shared by both cards */
+.tshirt-hub .pc-Rating { display: flex; flex-wrap: nowrap; align-items: center; gap: 6px; min-height: 20px; min-width: 0; max-width: 100%; color: #000; }
+.tshirt-hub .pc-Rating-stars { display: inline-flex; flex: none; align-items: center; gap: 2px; height: 16px; }
+.tshirt-hub .pc-Rating-score { flex: none; font-size: 14px; font-weight: 500; line-height: 20px; color: var(--th-ink); }
+.tshirt-hub .pc-Rating-count { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 14px; line-height: 20px; color: var(--th-muted); }
+.tshirt-hub .pc-Rating-star { position: relative; display: inline-block; flex: none; width: 16px; height: 16px; }
+.tshirt-hub .pc-Rating-star svg { display: block; width: 16px; height: 16px; fill: none; stroke: #000; stroke-width: 1.4; stroke-linejoin: round; }
+.tshirt-hub .pc-Rating-star.is-full svg { fill: #000; }
+.tshirt-hub .pc-Rating-starfill { position: absolute; top: 0; left: 0; width: 50%; height: 100%; overflow: hidden; }
+.tshirt-hub .pc-Rating-starfill svg { fill: #000; }
+@media (max-width: 767px) {
+  .tshirt-hub .pc-Rating-star:nth-child(n+2) { display: none; }
+  .tshirt-hub .pc-Rating-star:first-child svg { fill: #000; }
+  .tshirt-hub .pc-Rating-star:first-child .pc-Rating-starfill { display: none; }
+}
+
+/* Featured: swatches without the colour label, check mark on the selected one, plain grey +N */
+.tshirt-hub .pc-FeaturedCard-colors { position: relative; }
+.tshirt-hub .pc-FeaturedCard-colorname { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.tshirt-hub .pc-FeaturedCard-swatch--btn { position: relative; color: #fff; }
+.tshirt-hub .pc-FeaturedCard-swatch--btn.is-light { color: var(--th-ink); }
+.tshirt-hub .pc-FeaturedCard-swatch--btn.is-selected { box-shadow: inset 0 0 0 1px rgba(30, 33, 38, 0.35); }
+.tshirt-hub .pc-FeaturedCard-swatch--btn.is-selected::after {
+  content: ""; position: absolute; inset: 0; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5.5 12.5l4.2 4.2L18.5 8' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 62% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5.5 12.5l4.2 4.2L18.5 8' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 62% no-repeat;
+}
+.tshirt-hub .pc-FeaturedCard-more--btn { padding: 4px 2px; font-size: 14px; font-weight: 400; color: var(--th-muted); text-decoration: none; }
+
+/* Featured: stars sit first in the No Minimum / View Details row */
+.tshirt-hub .pc-FeaturedCard-meta .pc-Rating { padding-right: 12px; }
+.tshirt-hub .pc-FeaturedCard-meta .pc-Rating + .pc-FeaturedCard-note { padding-left: 12px; border-left: 1px solid var(--th-border); }
+.tshirt-hub .pc-FeaturedCard .pc-Rating-score, .tshirt-hub .pc-FeaturedCard .pc-Rating-count { display: none; }
+@media (max-width: 767px) {
+  .tshirt-hub .pc-FeaturedCard .pc-Rating-score, .tshirt-hub .pc-FeaturedCard .pc-Rating-count { display: inline; }
+  .tshirt-hub .pc-FeaturedCard-meta .pc-Rating { flex-basis: 100%; padding-right: 0; margin-bottom: 6px; }
+  .tshirt-hub .pc-FeaturedCard-meta .pc-Rating + .pc-FeaturedCard-note { padding-left: 0; border-left: 0; }
+  .tshirt-hub .pc-FeaturedCard-note + .pc-FeaturedCard-details { padding-left: 12px; }
+}
+
+/* Trending: heart on the image, rating under the title, swatches and per-item price on phones */
+.tshirt-hub .pc-TrendingCard-media { position: relative; }
+.tshirt-hub .pc-TrendingCard-fav {
+  position: absolute; top: 8px; right: 8px; z-index: 1; display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; margin: 0; padding: 0; border: 0; border-radius: 50%; background: #fff; color: #4b5057;
+  cursor: pointer; box-shadow: 0 1px 3px rgba(30, 33, 38, 0.18);
+}
+.tshirt-hub .pc-TrendingCard-fav svg { display: block; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.tshirt-hub .pc-TrendingCard-fav.is-active { color: var(--th-ink); }
+.tshirt-hub .pc-TrendingCard-fav.is-active svg { fill: currentColor; }
+.tshirt-hub .pc-TrendingCard-fav:focus-visible { outline: 2px solid #1e39d2; outline-offset: 2px; }
+.tshirt-hub .pc-TrendingCard-info .pc-Rating { margin: 0; }
+.tshirt-hub .pc-TrendingCard-delivery { display: none; }
+.tshirt-hub .pc-TrendingCard-swatches { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; padding: 2px 0; list-style: none; }
+.tshirt-hub .pc-TrendingCard-swatchitem, .tshirt-hub .pc-TrendingCard-moreitem { display: flex; margin: 0; padding: 0; list-style: none; }
+.tshirt-hub .pc-TrendingCard-swatchitem.is-extra { display: none; }
+.tshirt-hub .pc-TrendingCard-colors.is-expanded .pc-TrendingCard-swatchitem.is-extra { display: flex; }
+.tshirt-hub .pc-TrendingCard-swatch {
+  position: relative; display: block; box-sizing: border-box; width: 16px; height: 16px; padding: 0; border: 0; border-radius: 50%;
+  background: var(--th-border); box-shadow: inset 0 0 0 1px rgba(30, 33, 38, 0.18); cursor: pointer;
+}
+.tshirt-hub .pc-TrendingCard-swatch::before { content: ""; position: absolute; inset: -6px; }
+.tshirt-hub .pc-TrendingCard-swatch.is-selected { box-shadow: inset 0 0 0 1px rgba(30, 33, 38, 0.18), 0 0 0 2px #fff, 0 0 0 3.5px var(--th-ink); }
+.tshirt-hub .pc-TrendingCard-swatch:focus-visible { outline: 2px solid #1e39d2; outline-offset: 4px; }
+.tshirt-hub .pc-TrendingCard-more { min-height: 16px; padding: 0 2px; border: 0; background: none; font: inherit; font-size: 13px; line-height: 16px; color: var(--th-muted); cursor: pointer; }
+.tshirt-hub .pc-TrendingCard-colors { display: block; }
+.tshirt-hub .pc-TrendingCard-unitrow { display: flex; flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 12px; row-gap: 0; }
+.tshirt-hub .pc-TrendingCard-unit { margin: 0; font-size: 15px; font-weight: 400; line-height: 22px; color: var(--th-ink); }
+.tshirt-hub .pc-TrendingCard-was { margin-right: 2px; color: var(--th-muted); text-decoration: line-through; }
+.tshirt-hub .pc-TrendingCard-now { font-size: 16px; font-weight: 800; color: var(--th-ink); }
+.tshirt-hub .pc-TrendingCard-was + .pc-TrendingCard-now { color: #fa3c00; }
+.tshirt-hub .pc-TrendingCard-pricing { font-size: 14px; font-weight: 600; line-height: 22px; color: var(--th-ink); text-decoration: underline; text-underline-offset: 2px; }
+.tshirt-hub .pc-TrendingCard-price.has-unit { display: none; }
+.tshirt-hub .pc-TrendingCard-meta { margin-top: 0; }
+.tshirt-hub .pc-TrendingCard-actions { display: none; }
+/* single star, score and count at every width, as in the reference */
+.tshirt-hub .pc-TrendingCard .pc-Rating-star:nth-child(n+2) { display: none; }
+.tshirt-hub .pc-TrendingCard .pc-Rating-star:first-child svg { fill: #000; }
+.tshirt-hub .pc-TrendingCard .pc-Rating-star:first-child .pc-Rating-starfill { display: none; }
+@media (max-width: 767px) {
+  .tshirt-hub .pc-TrendingCard-unitrow { flex-direction: column; align-items: flex-start; }
+  .tshirt-hub .pc-TrendingCard-pricing { line-height: 20px; }
+  .tshirt-hub .pc-TrendingCard-delivery {
+    display: inline-block; align-self: flex-start; max-width: 100%; margin: 0; padding: 3px 8px; border-radius: 6px;
+    background: var(--th-well); font-size: 12px; font-weight: 500; line-height: 18px; color: var(--th-ink);
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "sections": {
+    "catalog": {
+      "type": "tshirt-catalog",
+      "blocks": {
+        "feature_1": {
+          "type": "feature",
+          "settings": {
+            "heading": "Styles for every budget",
+            "text": "Compare everyday basics and softer premium tees side by side, then pick the one that fits your group and your budget."
+          }
+        },
+        "feature_2": {
+          "type": "feature",
+          "settings": {
+            "heading": "Easy to start",
+            "text": "Choose a style and colors, then add your design. You can see the price for your quantity before you decide."
+          }
+        },
+        "feature_3": {
+          "type": "feature",
+          "settings": {
+            "heading": "Printing that fits your order",
+            "text": "Screen printing suits larger orders with a few colors. Digital printing suits detailed designs and small orders."
+          }
+        },
+        "feature_4": {
+          "type": "feature",
+          "settings": {
+            "heading": "No-minimum styles",
+            "text": "Look for the No Minimum label on a product to order as few shirts as you need."
+          }
+        },
+        "feature_5": {
+          "type": "feature",
+          "settings": {
+            "heading": "Clear pricing",
+            "text": "Pricing Details on each product shows the price per item at different quantities."
+          }
+        },
+        "feature_6": {
+          "type": "feature",
+          "settings": {
+            "heading": "Delivery you can plan for",
+            "text": "Products marked with a rush label can be delivered faster. Check the label on each product."
+          }
+        },
+        "faq_1": {
+          "type": "faq",
+          "settings": {
+            "question": "How much do custom T-shirts cost?",
+            "answer": "<p>The price depends on the style, the quantity and the print. Open Pricing Details on any product to see the price per item at different quantities.</p>"
+          }
+        },
+        "faq_2": {
+          "type": "faq",
+          "settings": {
+            "question": "Which brands do you offer?",
+            "answer": "<p>The brands on this page change as styles come and go. Use the Brand filter to see what is available now.</p>"
+          }
+        },
+        "faq_3": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I order just one shirt?",
+            "answer": "<p>Yes, on styles marked No Minimum. Use the No Minimum filter to see them.</p>"
+          }
+        },
+        "faq_4": {
+          "type": "faq",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Delivery time depends on the style and your order size. Products with a rush label can arrive faster. Check the label on each product.</p>"
+          }
+        },
+        "faq_5": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I mix sizes and colors in one order?",
+            "answer": "<p>You can mix sizes in one order. Colors can be mixed on styles that offer more than one color. Choose your colors on the product page.</p>"
+          }
+        },
+        "faq_6": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you have women's cuts and youth sizes?",
+            "answer": "<p>Yes. Use the Style and Shape filters, or open the Youth T-shirts link on the left, to find them.</p>"
+          }
+        },
+        "faq_7": {
+          "type": "faq",
+          "settings": {
+            "question": "What is the difference between screen printing and digital printing?",
+            "answer": "<p>Screen printing gives the best value on larger orders with few colors. Digital printing handles many colors and photos, and suits small orders.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_1",
+        "feature_2",
+        "feature_3",
+        "feature_4",
+        "feature_5",
+        "feature_6",
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6",
+        "faq_7"
+      ],
+      "settings": {
+        "products_per_page": 24,
+        "page_heading": "Custom Short Sleeve T-shirts",
+        "page_short_title": "Short Sleeve T-shirts",
+        "fallback_delivery": "3-Day Super Rush Available",
+        "fallback_no_minimum": "No Minimum"
+      }
+    }
+  },
+  "order": [
+    "catalog"
+  ]
+}

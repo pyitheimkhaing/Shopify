@@ -1,0 +1,95 @@
+<main class="fbc-main" data-fbc-main>
+  <div class="fbc-main__shell">
+    <header class="fbc-main__hero"><h1>{{ section.settings.heading | default: collection.title | escape }}</h1></header>
+
+    <div class="fbc-main__toolbar">
+      <button class="fbc-main__filter-toggle" type="button" data-fbc-sort-open aria-controls="FbcSortDrawer-{{ section.id }}" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h18M3 17h18"/><circle cx="8" cy="7" r="2"/><circle cx="16" cy="17" r="2"/></svg>
+        Filter and sort
+      </button>
+      <form class="fbc-main__desktop-sort" action="{{ collection.url }}" method="get">
+        <label for="FbcDesktopSort-{{ section.id }}">Sort by:</label>
+        <select id="FbcDesktopSort-{{ section.id }}" name="sort_by" data-fbc-autosort>
+          {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+          {%- for option in collection.sort_options -%}<option value="{{ option.value | escape }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name | escape }}</option>{%- endfor -%}
+        </select>
+      </form>
+      <span class="fbc-main__count">{%- if collection.products_count > 0 -%}{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}{%- else -%}{{ section.blocks.size }} designs{%- endif -%}</span>
+    </div>
+
+    <div class="fbc-main__sort-scrim" data-fbc-sort-close hidden></div>
+    <div class="fbc-main__sort-drawer" id="FbcSortDrawer-{{ section.id }}" aria-hidden="true" tabindex="-1">
+      <div class="fbc-main__sort-head"><span>Filter and sort<small>{{ collection.products_count }} {% if collection.products_count == 1 %}product{% else %}products{% endif %}</small></span><button type="button" data-fbc-sort-close aria-label="Close filter and sort">×</button></div>
+      <form class="fbc-main__sort-form" action="{{ collection.url }}" method="get">
+        <div class="fbc-main__sort-field"><label for="FbcMobileSort-{{ section.id }}">Sort by:</label><select id="FbcMobileSort-{{ section.id }}" name="sort_by">{%- for option in collection.sort_options -%}<option value="{{ option.value | escape }}"{% if option.value == current_sort %} selected{% endif %}>{{ option.name | escape }}</option>{%- endfor -%}</select></div>
+        <div class="fbc-main__sort-actions"><a href="{{ collection.url }}">Remove all</a><button type="submit">Apply</button></div>
+      </form>
+    </div>
+
+    {%- if collection.products_count > 0 -%}
+      {%- paginate collection.products by 24 -%}
+        <div class="fbc-main__grid">
+          {%- for card_product in collection.products -%}
+            {%- assign matched_block = nil -%}
+            {%- for block in section.blocks -%}
+              {%- if block.settings.product.handle == card_product.handle or block.settings.expected_handle == card_product.handle -%}{%- assign matched_block = block -%}{%- break -%}{%- endif -%}
+            {%- endfor -%}
+            {%- assign card_title = matched_block.settings.title | default: card_product.title -%}
+            <article class="fbc-card" {% if matched_block != nil %}{{ matched_block.shopify_attributes }}{% endif %}>
+              <a class="fbc-card__media" href="{{ card_product.url }}" aria-label="{{ card_title | escape }}">
+                {%- if matched_block.settings.asset_image != blank -%}<img src="{{ matched_block.settings.asset_image | asset_url }}" alt="{{ card_title | escape }}" width="900" height="900" loading="lazy">
+                {%- elsif card_product.featured_image != blank -%}{{ card_product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '360, 540, 720, 900', sizes: '(min-width: 990px) 33vw, 50vw', alt: card_title }}
+                {%- endif -%}
+                {%- if card_product.compare_at_price_max > card_product.price_min -%}<span class="fbc-card__badge">Sale</span>{%- endif -%}
+              </a>
+              <div class="fbc-card__info">
+                <h2><a href="{{ card_product.url }}">{{ card_title | escape }}</a></h2>
+                {%- assign rating = card_product.metafields.reviews.rating.value -%}
+                {%- assign review_count = card_product.metafields.reviews.rating_count.value -%}
+                {%- if rating != blank and review_count > 0 -%}<div class="fbc-card__rating" aria-label="Rated {{ rating.rating }} out of {{ rating.scale_max }} from {{ review_count }} reviews"><span aria-hidden="true">★★★★★</span> <small>({{ review_count }})</small></div>{%- endif -%}
+                <p class="fbc-card__price">{%- if card_product.compare_at_price_min > card_product.price_min -%}<s>{{ card_product.compare_at_price_min | money_with_currency }}</s>{%- endif -%}<span>{% if card_product.price_varies %}From {% endif %}{{ card_product.price_min | money_with_currency }}</span></p>
+              </div>
+            </article>
+          {%- endfor -%}
+        </div>
+        {%- if paginate.pages > 1 -%}<nav class="fbc-main__pagination" aria-label="Collection pages">{{ paginate | default_pagination }}</nav>{%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      <div class="fbc-main__grid" aria-label="Blanket designs awaiting collection products">
+        {%- for block in section.blocks -%}
+          {%- assign preview_product = block.settings.product -%}
+          {%- assign preview_title = block.settings.title | default: preview_product.title -%}
+          <article class="fbc-card" {{ block.shopify_attributes }}>
+            {%- if preview_product != blank -%}<a class="fbc-card__media" href="{{ preview_product.url }}" aria-label="{{ preview_title | escape }}">{%- else -%}<div class="fbc-card__media">{%- endif -%}
+              {%- if block.settings.asset_image != blank -%}<img src="{{ block.settings.asset_image | asset_url }}" alt="{{ preview_title | escape }}" width="900" height="900" loading="lazy">{%- elsif preview_product.featured_image != blank -%}{{ preview_product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: preview_title }}{%- endif -%}
+              {%- if preview_product.compare_at_price_max > preview_product.price_min -%}<span class="fbc-card__badge">Sale</span>{%- endif -%}
+            {%- if preview_product != blank -%}</a>{%- else -%}</div>{%- endif -%}
+            <div class="fbc-card__info"><h2>{%- if preview_product != blank -%}<a href="{{ preview_product.url }}">{{ preview_title | escape }}</a>{%- else -%}{{ preview_title | escape }}{%- endif -%}</h2>
+              {%- if preview_product != blank -%}<p class="fbc-card__price">{%- if preview_product.compare_at_price_min > preview_product.price_min -%}<s>{{ preview_product.compare_at_price_min | money_with_currency }}</s>{%- endif -%}<span>{% if preview_product.price_varies %}From {% endif %}{{ preview_product.price_min | money_with_currency }}</span></p>{%- else -%}<p class="fbc-card__unavailable">Product setup pending</p>{%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.about_heading != blank -%}<details class="fbc-main__about"><summary>{{ section.settings.about_heading | escape }}<span aria-hidden="true">⌄</span></summary><div class="rte">{{ section.settings.about_text }}</div></details>{%- endif -%}
+  </div>
+</main>
+
+{% schema %}
+{
+  "name": "Fabulous collection main",
+  "settings": [
+    {"type": "text", "id": "heading", "label": "Heading", "default": "Personalized Blankets for Kids"},
+    {"type": "text", "id": "about_heading", "label": "About heading", "default": "About Personalized Blankets for Kids"},
+    {"type": "richtext", "id": "about_text", "label": "About text", "default": "<p>Explore personalized blankets for kids. Choose a design and add your photos on its product page.</p>"}
+  ],
+  "blocks": [{"type": "preview_card", "name": "Blanket design", "limit": 12, "settings": [
+    {"type": "product", "id": "product", "label": "Matching Shopify product"},
+    {"type": "text", "id": "expected_handle", "label": "Existing card handle"},
+    {"type": "text", "id": "title", "label": "Display title"},
+    {"type": "text", "id": "asset_image", "label": "Theme asset image filename"}
+  ]}],
+  "presets": [{"name": "Fabulous collection main"}]
+}
+{% endschema %}

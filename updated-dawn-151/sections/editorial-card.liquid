@@ -1,0 +1,7 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="fp-section editorial"><div class="fp-wrap fp-duo">
+  <article class="fp-panel fp-panel--night"><h3>Chapter two: <em>their story</em></h3><p>Add the tale that belongs to their portrait. A beautifully written story starring your child, delivered as a keepsake PDF with their name woven through every page.</p><span class="fp-panel__soon">Coming soon</span></article>
+  <article class="fp-panel fp-panel--ivory"><h3>Not only walls</h3><p>The same magical worlds, printed on soft fleece blankets and cozy pillows. Because some dreams are for cuddling, not just for hanging.</p><a class="fp-panel__link" href="{{ section.settings.link }}">Shop blankets &amp; pillows →</a></article>
+</div></section>
+{% schema %}{"name":"Editorial pair","settings":[{"type":"url","id":"link","label":"Blankets link"}],"presets":[{"name":"Editorial pair"}]}{% endschema %}

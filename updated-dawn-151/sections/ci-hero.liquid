@@ -1,0 +1,31 @@
+{{ 'ci-base.css' | asset_url | stylesheet_tag }}
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'ci-theme.js' | asset_url }}" defer></script>
+<section class="hero-section">
+  <div class="page-width hero-inner">
+    <div class="hero-content">
+      <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      <h1>{{ section.settings.heading }}</h1>
+      <p class="hero-copy">{{ section.settings.text }}</p>
+      <a class="button button-primary" href="{{ section.settings.primary_link }}">{{ section.settings.primary_label }}</a>
+    </div>
+    <div class="hero-image" style="background-image:url('{% if section.settings.image != blank %}{{ section.settings.image | image_url: width: 1600 }}{% else %}{{ 'ci-hero.jpg' | asset_url }}{% endif %}')"></div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Hero image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Featured" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "It's The Thought That Lasts" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Thousands of gifts for clients and teams, customized for one or five hundred." },
+    { "type": "text", "id": "primary_label", "label": "Primary button", "default": "Get Started" },
+    { "type": "url", "id": "primary_link", "label": "Primary link" },
+    { "type": "text", "id": "secondary_label", "label": "Secondary button", "default": "Shop best sellers" },
+    { "type": "url", "id": "secondary_link", "label": "Secondary link" }
+  ],
+  "presets": [{ "name": "Editorial hero" }]
+}
+{% endschema %}

@@ -1,0 +1,6 @@
+<article class="collection-card">
+  <a class="collection-card__media" href="{{ product.url | default: '#' }}">
+    {% if product.featured_image %}{{ product.featured_image | image_url: width: 900 | image_tag: loading: 'lazy', alt: product.title }}{% else %}<img src="{{ image_url | default: 'https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230&width=900' }}" alt="{{ title | default: 'The Little Royal' }}" width="900" height="900" loading="lazy">{% endif %}
+  </a>
+  <div class="collection-card__info"><h3><a href="{{ product.url | default: '#' }}">{{ product.title | default: title | default: 'The Little Royal' }}</a></h3><div class="collection-card__rating">★★★★★ <span>{% if review_count %}{{ review_count }}{% endif %}</span></div><p>From {% if product != blank %}{{ product.price | money }}{% else %}$59.95 USD{% endif %}</p></div>
+</article>

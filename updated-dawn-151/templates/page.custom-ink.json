@@ -1,0 +1,381 @@
+{
+  "sections": {
+    "hero": {
+      "type": "ci-hero",
+      "settings": {}
+    },
+    "trust": {
+      "type": "trust-bar",
+      "blocks": {
+        "item_1": {
+          "type": "item",
+          "settings": {
+            "icon": "shield",
+            "text": "100% Satisfaction Guarantee"
+          }
+        },
+        "item_2": {
+          "type": "item",
+          "settings": {
+            "icon": "tools",
+            "text": "Easy Customization Tools"
+          }
+        },
+        "item_3": {
+          "type": "item",
+          "settings": {
+            "icon": "products",
+            "text": "Over 15,000 Product Options"
+          }
+        },
+        "item_4": {
+          "type": "item",
+          "settings": {
+            "icon": "truck",
+            "text": "Free Standard Delivery"
+          }
+        },
+        "link_5": {
+          "type": "link",
+          "settings": {
+            "label": "Design Lab",
+            "url": "/pages/start-designing"
+          }
+        },
+        "link_6": {
+          "type": "link",
+          "settings": {
+            "label": "Apparel",
+            "url": "/collections/all"
+          }
+        },
+        "link_7": {
+          "type": "link",
+          "settings": {
+            "label": "Promotional Products",
+            "url": "/collections/all"
+          }
+        },
+        "link_8": {
+          "type": "link",
+          "settings": {
+            "label": "Design Templates",
+            "url": "/pages/design-templates"
+          }
+        },
+        "link_9": {
+          "type": "link",
+          "settings": {
+            "label": "Your Account",
+            "url": "/account"
+          }
+        },
+        "link_10": {
+          "type": "link",
+          "settings": {
+            "label": "About Us",
+            "url": "/pages/about-us"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "link_5",
+        "link_6",
+        "link_7",
+        "link_8",
+        "link_9",
+        "link_10"
+      ],
+      "settings": {
+        "quicklinks_label": "Popular links"
+      }
+    },
+    "categories": {
+      "type": "category-grid",
+      "blocks": {
+        "category_1": {
+          "type": "category",
+          "settings": {
+            "title": "T-shirts",
+            "link": "/products/t-shirt-hub",
+            "asset_image": "ci-tshirts.webp"
+          }
+        },
+        "category_2": {
+          "type": "category",
+          "settings": {
+            "title": "Sweats & Hoodies",
+            "link": "/pages/sweats-hoodies",
+            "asset_image": "ci-sweatshirts.webp"
+          }
+        },
+        "category_3": {
+          "type": "category",
+          "settings": {
+            "title": "Hats",
+            "link": "/pages/hats-polos-more",
+            "asset_image": "ci-hats.webp"
+          }
+        },
+        "category_4": {
+          "type": "category",
+          "settings": {
+            "title": "Blankets",
+            "link": "/pages/blankets",
+            "asset_image": "1 Photos-01.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "category_1",
+        "category_2",
+        "category_3",
+        "category_4"
+      ],
+      "settings": {
+        "heading": "Custom t-shirts & promotional products for your group"
+      }
+    },
+    "promo": {
+      "type": "split-promo",
+      "settings": {
+        "asset_image": "ci-banner.webp",
+        "background": "#68a8b8",
+        "heading": "New Arrivals Are Here",
+        "text": "Gear up for the season with fresh picks from the brands you love. From cozy layers to cool accessories, we're always adding more!",
+        "button": "Shop Now",
+        "link": "/collections/all"
+      }
+    },
+    "brands": {
+      "type": "featured-brands",
+      "blocks": {
+        "brand_1": {
+          "type": "brand",
+          "settings": {
+            "name": "NIKE",
+            "link": "/collections/all"
+          }
+        },
+        "brand_2": {
+          "type": "brand",
+          "settings": {
+            "name": "THE NORTH FACE",
+            "link": "/collections/all"
+          }
+        },
+        "brand_3": {
+          "type": "brand",
+          "settings": {
+            "name": "carhartt",
+            "link": "/collections/all"
+          }
+        },
+        "brand_4": {
+          "type": "brand",
+          "settings": {
+            "name": "COMFORT COLORS",
+            "link": "/collections/all"
+          }
+        },
+        "brand_5": {
+          "type": "brand",
+          "settings": {
+            "name": "adidas",
+            "link": "/collections/all"
+          }
+        },
+        "brand_6": {
+          "type": "brand",
+          "settings": {
+            "name": "STANLEY",
+            "link": "/collections/all"
+          }
+        },
+        "brand_7": {
+          "type": "brand",
+          "settings": {
+            "name": "JBL",
+            "link": "/collections/all"
+          }
+        },
+        "brand_8": {
+          "type": "brand",
+          "settings": {
+            "name": "Moleskine",
+            "link": "/collections/all"
+          }
+        },
+        "brand_9": {
+          "type": "brand",
+          "settings": {
+            "name": "GILDAN",
+            "link": "/collections/all"
+          }
+        },
+        "brand_10": {
+          "type": "brand",
+          "settings": {
+            "name": "Champion",
+            "link": "/collections/all"
+          }
+        },
+        "brand_11": {
+          "type": "brand",
+          "settings": {
+            "name": "NEW ERA",
+            "link": "/collections/all"
+          }
+        },
+        "brand_12": {
+          "type": "brand",
+          "settings": {
+            "name": "RICHARDSON",
+            "link": "/collections/all"
+          }
+        },
+        "brand_13": {
+          "type": "brand",
+          "settings": {
+            "name": "OGIO",
+            "link": "/collections/all"
+          }
+        },
+        "brand_14": {
+          "type": "brand",
+          "settings": {
+            "name": "KOOZIE",
+            "link": "/collections/all"
+          }
+        },
+        "brand_15": {
+          "type": "brand",
+          "settings": {
+            "name": "TravisMathew",
+            "link": "/collections/all"
+          }
+        },
+        "brand_16": {
+          "type": "brand",
+          "settings": {
+            "name": "YETI",
+            "link": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "brand_1",
+        "brand_2",
+        "brand_3",
+        "brand_4",
+        "brand_5",
+        "brand_6",
+        "brand_7",
+        "brand_8",
+        "brand_9",
+        "brand_10",
+        "brand_11",
+        "brand_12",
+        "brand_13",
+        "brand_14",
+        "brand_15",
+        "brand_16"
+      ],
+      "settings": {
+        "heading": "Shop Featured Brands",
+        "more_label": "See All Featured Brands",
+        "more_link": "/collections/all"
+      }
+    },
+    "reviews": {
+      "type": "ci-reviews",
+      "blocks": {
+        "review_1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Fantastic results and very pleased with my interaction with Custom Ink.",
+            "name": "JASON T.",
+            "detail": "Kill Devil Hills, NC",
+            "time": "about 11 hours ago"
+          }
+        },
+        "review_2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "The final product was everything I had hoped to accomplish. Communication with customer service led me to create my own design and see it come to life.",
+            "name": "BETTY H.",
+            "detail": "Mona, UT",
+            "time": "about 13 hours ago"
+          }
+        },
+        "review_3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Custom Ink was super easy to use and they came in super fast!",
+            "name": "ADDISON L.",
+            "detail": "Westminster, CO",
+            "time": "about 14 hours ago"
+          }
+        },
+        "review_4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "No issues with any part of experience other than multiple emails clogging inbox.",
+            "name": "LESLIE O.",
+            "detail": "Springfield, MO",
+            "time": "about 14 hours ago"
+          }
+        },
+        "review_5": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Great communication and quality. Fast and reliable",
+            "name": "ERIC V.",
+            "detail": "Kokopelli General Contractors, Santa Fe, NM",
+            "time": "about 16 hours ago"
+          }
+        },
+        "review_6": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "Great customer service! Quick turnaround time and an excellent product.",
+            "name": "LYNNE L.",
+            "detail": "Cumberland, VA",
+            "time": "about 16 hours ago"
+          }
+        }
+      },
+      "block_order": [
+        "review_1",
+        "review_2",
+        "review_3",
+        "review_4",
+        "review_5",
+        "review_6"
+      ],
+      "settings": {
+        "heading": "What Our Customers Say",
+        "more_label": "See All Reviews",
+        "more_link": "/pages/reviews"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "categories",
+    "promo",
+    "brands",
+    "reviews"
+  ]
+}

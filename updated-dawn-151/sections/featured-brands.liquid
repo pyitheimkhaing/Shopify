@@ -1,0 +1,61 @@
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+{{ 'ci-design.css' | asset_url | stylesheet_tag }}
+
+{%- if section.blocks.size > 0 or request.design_mode -%}
+<section class="cid-section cid-brands" {{ section.shopify_attributes }}>
+  <div class="cid-wrap">
+    {%- if section.settings.heading != blank -%}<h2 class="cid-h2">{{ section.settings.heading }}</h2>{%- endif -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="cid-brands__grid">
+        {%- for block in section.blocks -%}
+          {%- capture inner -%}
+            {%- if block.settings.logo != blank -%}
+              {{ block.settings.logo | image_url: width: 280 | image_tag: loading: 'lazy', alt: block.settings.name }}
+            {%- else -%}
+              {{ block.settings.name }}
+            {%- endif -%}
+          {%- endcapture -%}
+          {%- if block.settings.link != blank -%}
+            <a class="cid-brand" href="{{ block.settings.link }}" {{ block.shopify_attributes }}>{{ inner }}</a>
+          {%- else -%}
+            <div class="cid-brand" {{ block.shopify_attributes }}>{{ inner }}</div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if section.settings.more_link != blank and section.settings.more_label != blank -%}
+        <div class="cid-brands__more">
+          <a class="cid-pill" href="{{ section.settings.more_link }}">{{ section.settings.more_label }}
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      {%- endif -%}
+    {%- else -%}
+      <p class="cid-empty">Add "Brand" blocks. This section is hidden on the live store until you do.</p>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Brand tiles",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop Featured Brands" },
+    { "type": "text", "id": "more_label", "label": "Link label", "default": "See All Featured Brands" },
+    { "type": "url", "id": "more_link", "label": "Link" }
+  ],
+  "blocks": [
+    {
+      "type": "brand",
+      "name": "Brand",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Brand" },
+        { "type": "image_picker", "id": "logo", "label": "Logo (optional)" },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [{ "name": "Brand tiles" }]
+}
+{% endschema %}

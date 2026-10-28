@@ -1,0 +1,435 @@
+{% comment %}
+  Renders a product card for the T-shirt catalog (Custom Ink style).
+
+  Accepts:
+  - card_product: {Object} Product Liquid object
+  - section_id: {String} The ID of the section that contains this card
+  - price_break_quantity: {Number} Order quantity used for the per-item price. Default: 500 (optional)
+  - pricing_heading: {String} Heading above the Pricing Details table (optional)
+  - pricing_footer: {String} Rich text under the Pricing Details table (optional)
+  - fallback_delivery / fallback_no_minimum: {String} Labels shown when the product has no metafield value (optional)
+  - fallback_rating / fallback_rating_count: {String} Rating shown when the product has no rating metafield. When left empty a fixed rating (4.5-4.8, "10,000+") is shown (optional)
+  - hover_image: {Boolean} Show the product's second photo when the card is hovered. Default: false (optional)
+  - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+  - sample_photos: {Boolean} Use the T-shirt photos bundled with the theme (assets/ci-featured-*.png, the same photos the T-shirts hub uses) and their
+    colours instead of the product's own photos. Default: false (optional)
+  - title_override: {String} Show this title instead of the product's (preview cards only) (optional)
+  - sample_index: {Number} Position of the card in the grid; picks which sample colour a card starts on (optional)
+
+  Reads from the product:
+  - Colour dots: only colours whose variant has its own photo get a dot. Pointing at a dot
+    (or tapping it) shows that colour's photo; the first dot brings the original photo back.
+  - Badge: metafield custom.badge_text, or the tags "Staff Pick" / "Best Seller" / "Top Rated" / "New"
+    (demo_badge is only used when the product has none: it is meant for previewing a draft theme)
+  - Rating: metafields reviews.rating and reviews.rating_count (hidden when empty)
+  - Per-item price: Shopify volume pricing, compare-at price for the deal pill
+  - Pills: metafields custom.delivery_text and custom.no_minimum
+
+  Usage:
+  {% render 'tshirt-card', card_product: product, section_id: section.id %}
+{% endcomment %}
+{%- liquid
+  assign card_qty = price_break_quantity | default: 500
+  assign card_title = title_override | default: card_product.title
+  assign card_swatch_limit = 10
+  if sample_photos
+    assign card_swatch_limit = 8
+  endif
+
+  assign card_color_option = null
+  assign card_color_index = 0
+  for product_option in card_product.options_with_values
+    assign option_name = product_option.name | downcase
+    if option_name contains 'color' or option_name contains 'colour'
+      assign card_color_option = product_option
+      assign card_color_index = forloop.index0
+      break
+    endif
+  endfor
+
+  assign card_badge = card_product.metafields.custom.badge_text.value
+  if card_badge == blank
+    if card_product.tags contains 'Staff Pick'
+      assign card_badge = 'Staff Pick'
+    elsif card_product.tags contains 'Best Seller'
+      assign card_badge = 'Best Seller'
+    elsif card_product.tags contains 'Top Rated'
+      assign card_badge = 'Top Rated'
+    elsif card_product.tags contains 'New'
+      assign card_badge = 'New!'
+    elsif demo_badge != blank
+      assign card_badge = demo_badge
+    endif
+  endif
+
+  assign card_variant = card_product.selected_or_first_available_variant
+  assign card_unit_price = card_product.price
+  assign card_has_breaks = false
+  assign card_breaks = null
+  if card_variant.quantity_price_breaks.size > 0
+    assign card_breaks = card_variant.quantity_price_breaks | sort: 'minimum_quantity'
+    for price_break in card_breaks
+      if price_break.minimum_quantity <= card_qty
+        assign card_has_breaks = true
+        assign card_unit_price = price_break.price
+      endif
+    endfor
+  endif
+
+  assign card_was_price = null
+  if card_product.compare_at_price > card_unit_price
+    assign card_was_price = card_product.compare_at_price
+  endif
+
+  assign card_rating = card_product.metafields.reviews.rating.value
+  assign card_delivery = card_product.metafields.custom.delivery_text.value
+  assign card_no_minimum = card_product.metafields.custom.no_minimum
+
+  comment
+    Labels and rating fall back to the section settings when the product has no metafield value.
+  endcomment
+  if card_delivery == blank
+    assign card_delivery = fallback_delivery
+  endif
+  if card_no_minimum == blank
+    assign card_no_minimum = fallback_no_minimum
+  endif
+  assign card_rating_value = null
+  assign card_rating_max = 5
+  assign card_rating_count = 0
+  if card_rating != blank and card_rating.scale_max > 0
+    assign card_rating_value = card_rating.rating
+    assign card_rating_max = card_rating.scale_max
+    assign card_rating_count = card_product.metafields.reviews.rating_count | plus: 0
+  elsif fallback_rating != blank
+    assign card_rating_value = fallback_rating | plus: 0
+    assign card_rating_count = fallback_rating_count | plus: 0
+  else
+    comment
+      Fixed rating: with no rating metafield and no fallback set, every card still shows a star rating
+      (4.5 / 4.7 ... with the count as "10,000+") like the Custom Ink cards.
+    endcomment
+    assign card_fixed_ratings = '4.5,4.7,4.5,4.6,4.8,4.7' | split: ','
+    assign card_fixed_pos = sample_index | default: 0 | modulo: card_fixed_ratings.size
+    assign card_rating_value = card_fixed_ratings[card_fixed_pos] | plus: 0
+    assign card_rating_count = 10000
+  endif
+
+  comment
+    One entry per colour that has its own variant photo. The three lists stay in step:
+    first variant id, colour name and photo address (separated by a rare character).
+  endcomment
+  assign card_color_seen = ''
+  assign card_color_vids = ''
+  assign card_color_imgs = ''
+  assign card_color_names = ''
+  assign card_dot_total = 0
+  if card_color_option != null
+    for card_item in card_product.variants
+      assign item_color = card_item.options[card_color_index] | strip
+      assign item_key = item_color | downcase
+      assign item_token = '¦' | append: item_key | append: '¦'
+      assign item_known = false
+      if card_color_seen contains item_token
+        assign item_known = true
+      endif
+      if card_item.featured_media and item_known == false
+        assign card_color_seen = card_color_seen | append: item_token
+        assign card_color_vids = card_color_vids | append: card_item.id | append: '¦'
+        assign card_color_names = card_color_names | append: item_color | append: '¦'
+        assign item_photo = card_item.featured_media | image_url: width: 540
+        assign card_color_imgs = card_color_imgs | append: item_photo | append: '¦'
+        assign card_dot_total = card_dot_total | plus: 1
+      endif
+    endfor
+    assign card_color_vids = card_color_vids | split: '¦'
+    assign card_color_imgs = card_color_imgs | split: '¦'
+    assign card_color_names = card_color_names | split: '¦'
+  endif
+
+  comment
+    Sample photos: the colours that have a matching photo in the theme assets. Each card starts on a
+    different colour (sample_index), the dots follow in the same order.
+  endcomment
+  assign card_sample_hex = ''
+  if sample_photos
+    assign sample_palette = 'white|White|#efefef,black|Black|#272727,navy|Navy|#1e2d44,royal|Royal Blue|#1d59a2,lightblue|Light Blue|#6578a3,sapphire|Steel Blue|#507189,grey|Heather Grey|#b9b9c1,red|Charcoal|#5c5c5c,purple|Slate|#51515d,natural|Natural|#e0d6ca,militarygreen|Military Green|#5a6954,forest|Forest Green|#233527,maroon|Maroon|#5a243d,daisy|Daisy Yellow|#f4cf51,darkheather|Light Yellow|#e2dc85,azalea|Pink|#f573b3' | split: ','
+    assign sample_total = sample_palette.size
+    assign sample_start = sample_index | default: 0 | modulo: sample_total
+    assign card_color_names = ''
+    assign card_color_imgs = ''
+    assign card_sample_hex = ''
+    for sample_step in (0..15)
+      assign sample_pos = sample_start | plus: sample_step | modulo: sample_total
+      assign sample_parts = sample_palette[sample_pos] | split: '|'
+      assign sample_file = 'ci-featured-' | append: sample_parts[0] | append: '.png'
+      assign card_color_names = card_color_names | append: sample_parts[1] | append: '¦'
+      assign sample_url = sample_file | asset_url
+      assign card_color_imgs = card_color_imgs | append: sample_url | append: '¦'
+      assign card_sample_hex = card_sample_hex | append: sample_parts[2] | append: '¦'
+    endfor
+    assign card_color_names = card_color_names | split: '¦'
+    assign card_color_imgs = card_color_imgs | split: '¦'
+    assign card_sample_hex = card_sample_hex | split: '¦'
+    assign card_color_vids = ''
+    assign card_dot_total = sample_total
+    assign card_color_option = null
+  endif
+-%}
+{%- if card_product and card_product != empty -%}
+  <div class="tshirt-card">
+    <div class="tshirt-card__media">
+      <a href="{{ card_product.url }}" class="tshirt-card__image-link" tabindex="-1" aria-hidden="true">
+        {%- if sample_photos -%}
+          {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+          <img
+            src="{{ card_color_imgs[0] }}"
+            alt="{{ card_title | escape }}"
+            class="tshirt-card__image"
+            decoding="async"
+            {% unless lazy_load == false %}
+              loading="lazy"
+            {% endunless %}
+            width="400"
+            height="469"
+          >
+          {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+        {%- elsif card_product.featured_media -%}
+          {% comment %}theme-check-disable ImgLazyLoading{% endcomment %}
+          <img
+            srcset="
+              {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+              {%- if card_product.featured_media.width >= 540 -%}{{ card_product.featured_media | image_url: width: 540 }} 540w,{%- endif -%}
+              {%- if card_product.featured_media.width >= 720 -%}{{ card_product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+              {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+            "
+            src="{{ card_product.featured_media | image_url: width: 540 }}"
+            sizes="(min-width: 990px) calc((100vw - 460px) / 3), (min-width: 750px) calc((100vw - 80px) / 2), calc((100vw - 56px) / 2)"
+            alt="{{ card_product.featured_media.alt | escape }}"
+            class="tshirt-card__image{% if card_product.featured_media.aspect_ratio > 1.3 %} is-wide{% endif %}"
+            decoding="async"
+            {% unless lazy_load == false %}
+              loading="lazy"
+            {% endunless %}
+            width="{{ card_product.featured_media.width }}"
+            height="{{ card_product.featured_media.height }}"
+          >
+          {%- if hover_image and card_product.media[1] != null -%}
+            <img
+              src="{{ card_product.media[1] | image_url: width: 540 }}"
+              alt="{{ card_product.media[1].alt | escape }}"
+              class="tshirt-card__image tshirt-card__image--secondary{% if card_product.media[1].aspect_ratio > 1.3 %} is-wide{% endif %}"
+              decoding="async"
+              width="{{ card_product.media[1].width }}"
+              height="{{ card_product.media[1].height }}"
+            >
+          {%- endif -%}
+          {% comment %}theme-check-enable ImgLazyLoading{% endcomment %}
+        {%- else -%}
+          {{ 'product-apparel-2' | placeholder_svg_tag: 'tshirt-card__placeholder' }}
+        {%- endif -%}
+      </a>
+
+      {%- if card_product.available == false -%}
+        <span class="tshirt-card__badge tshirt-card__badge--sold-out">{{ 'products.product.sold_out' | t }}</span>
+      {%- elsif card_badge != blank -%}
+        <span class="tshirt-card__badge">{{ card_badge | escape }}</span>
+      {%- endif -%}
+
+      <button
+        type="button"
+        class="tshirt-card__fav"
+        aria-pressed="false"
+        aria-label="Favorite"
+        data-tshirt-fav="{{ card_product.handle }}"
+      >
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12 20.7l-1.2-1.1C6 15.3 3 12.5 3 9a4.8 4.8 0 0 1 4.9-4.9c1.6 0 3.1.8 4.1 2 1-1.2 2.5-2 4.1-2A4.8 4.8 0 0 1 21 9c0 3.5-3 6.3-7.8 10.6L12 20.7z"/></svg>
+      </button>
+    </div>
+
+    <div class="tshirt-card__body">
+      {%- if card_dot_total > 1 -%}
+        <ul class="tshirt-card__swatches" role="radiogroup" aria-label="{% if card_color_option %}{{ card_color_option.name | escape }}{% else %}Color{% endif %}">
+          {%- for color_name in card_color_names limit: card_swatch_limit -%}
+            {%- liquid
+              assign color_key = color_name | downcase | strip
+              assign color_bg = null
+              if card_sample_hex != blank
+                assign color_bg = card_sample_hex[forloop.index0]
+              endif
+              for color_value in card_color_option.values
+                if color_value.name == color_name
+                  if color_value.swatch.image
+                    assign color_image = color_value.swatch.image | image_url: width: 50
+                    assign color_bg = 'url(' | append: color_image | append: ') center / cover'
+                  elsif color_value.swatch.color
+                    assign color_bg = 'rgb(' | append: color_value.swatch.color.rgb | append: ')'
+                  endif
+                  break
+                endif
+              endfor
+              if color_bg == null
+                case color_key
+                  when 'white'
+                    assign color_bg = '#f1f1f1'
+                  when 'black'
+                    assign color_bg = '#111111'
+                  when 'blue'
+                    assign color_bg = '#1c5ba3'
+                  when 'royal blue' or 'royal'
+                    assign color_bg = '#2f5fd0'
+                  when 'navy' or 'navy blue'
+                    assign color_bg = '#1f2e44'
+                  when 'red'
+                    assign color_bg = '#c8202f'
+                  when 'grey' or 'gray' or 'heather grey' or 'heather gray' or 'sport grey'
+                    assign color_bg = '#bababc'
+                  when 'green'
+                    assign color_bg = '#2f6b3a'
+                  when 'forest' or 'forest green'
+                    assign color_bg = '#1f4d2e'
+                  when 'natural'
+                    assign color_bg = '#e8dcc3'
+                  when 'gold' or 'yellow'
+                    assign color_bg = '#f2c230'
+                  else
+                    assign color_bg = color_key | handleize | remove: '-'
+                endcase
+              endif
+            -%}
+            <li class="tshirt-card__swatch-item">
+              <button
+                type="button"
+                class="tshirt-card__swatch"
+                role="radio"
+                style="background: {{ color_bg }};"
+                title="{{ color_name | escape }}"
+                aria-label="{{ color_name | escape }}"
+                aria-checked="{% if forloop.first %}true{% else %}false{% endif %}"
+                {% if forloop.first %}
+                  data-default="true"
+                {% endif %}
+                data-tshirt-swatch
+                data-color-name="{{ color_name | escape }}"
+                data-variant="{% unless sample_photos %}{{ card_color_vids[forloop.index0] }}{% endunless %}"
+                data-img="{{ card_color_imgs[forloop.index0] }}"
+              ></button>
+            </li>
+          {%- endfor -%}
+          {%- assign card_swatch_extra = card_dot_total | minus: card_swatch_limit -%}
+          {%- if card_swatch_extra > 0 -%}
+            <li class="tshirt-card__swatch-more"><a href="{{ card_product.url }}">+{{ card_swatch_extra }}</a></li>
+          {%- endif -%}
+        </ul>
+        <span class="visually-hidden" role="status" aria-live="polite" data-tshirt-colorname></span>
+      {%- endif -%}
+
+      <h3 class="tshirt-card__title">
+        <a href="{{ card_product.url }}" id="CardLink-{{ section_id }}-{{ card_product.id }}" class="tshirt-card__link">
+          {{- card_title | escape -}}
+        </a>
+      </h3>
+
+      {%- if card_rating_value != null and card_rating_value > 0 -%}
+        <div
+          class="tshirt-card__rating"
+          role="img"
+          aria-label="{{ 'accessibility.star_reviews_info' | t: rating_value: card_rating_value, rating_max: card_rating_max }}"
+        >
+          <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true" focusable="false"><path d="M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.2 1.2-6.5L2.5 9.5l6.6-.9L12 2.6z"/></svg>
+          <span class="tshirt-card__rating-score">{{ card_rating_value | round: 1 }}</span>
+          {%- if card_rating_count >= 10000 -%}
+            <span class="tshirt-card__rating-count">(10,000+)</span>
+          {%- elsif card_rating_count > 999 -%}
+            {%- assign card_rating_thousands = card_rating_count | divided_by: 1000 -%}
+            {%- assign card_rating_rest = card_rating_count | modulo: 1000 | prepend: '000' | slice: -3, 3 -%}
+            <span class="tshirt-card__rating-count">({{ card_rating_thousands }},{{ card_rating_rest }})</span>
+          {%- elsif card_rating_count > 0 -%}
+            <span class="tshirt-card__rating-count">({{ card_rating_count }})</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      <div class="tshirt-card__price">
+        <div class="tshirt-card__price-main">
+          <p class="tshirt-card__unit">
+            {%- assign card_unit_money = card_unit_price | money -%}
+            {%- if card_was_price != null -%}
+              <span class="visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+              <s class="tshirt-card__was">{{ card_was_price | money }}</s>
+              <span class="visually-hidden">{{ 'products.product.price.sale_price' | t }}</span>
+            {%- endif -%}
+            <strong class="tshirt-card__now{% if card_was_price != null %} tshirt-card__now--deal{% endif %}">
+              {%- if card_has_breaks == false and card_product.price_varies -%}
+                {{- 'products.product.price.from_price_html' | t: price: card_unit_money -}}
+              {%- else -%}
+                {{- card_unit_money -}}
+              {%- endif -%}
+            </strong>
+            {%- if card_has_breaks -%}
+              <span>/ea for {{ card_qty }} items</span>
+            {%- endif -%}
+          </p>
+          {%- if card_was_price != null -%}
+            <span class="tshirt-card__deal">Limited Time Deal</span>
+          {%- endif -%}
+        </div>
+        {%- if card_breaks != null -%}
+          <div class="tshirt-card__pricing-wrap">
+            <a
+              href="{{ card_product.url }}"
+              class="tshirt-card__pricing"
+              aria-describedby="CardPop-{{ section_id }}-{{ card_product.id }}"
+              data-tshirt-pricing
+            >
+              Pricing Details
+            </a>
+            <div class="tshirt-card__pop" id="CardPop-{{ section_id }}-{{ card_product.id }}" role="tooltip" hidden>
+              {%- if pricing_heading != blank -%}
+                <p class="tshirt-card__pop-heading">{{ pricing_heading | escape }}</p>
+              {%- endif -%}
+              <table class="tshirt-card__pop-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price Per Item</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%- if card_breaks.first.minimum_quantity > 1 -%}
+                    <tr>
+                      <td>1 (minimum)</td>
+                      <td>{{ card_variant.price | money }}</td>
+                    </tr>
+                  {%- endif -%}
+                  {%- for price_break in card_breaks limit: 8 -%}
+                    <tr>
+                      <td>{{ price_break.minimum_quantity }}{% if forloop.first and price_break.minimum_quantity <= 1 %} (minimum){% endif %}</td>
+                      <td>{{ price_break.price | money }}</td>
+                    </tr>
+                  {%- endfor -%}
+                </tbody>
+              </table>
+              {%- if pricing_footer != blank -%}
+                <div class="tshirt-card__pop-footer rte">{{ pricing_footer }}</div>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- else -%}
+          <a href="{{ card_product.url }}" class="tshirt-card__pricing">Pricing Details</a>
+        {%- endif -%}
+      </div>
+
+      {%- if card_delivery != blank or card_no_minimum != blank -%}
+        <ul class="tshirt-card__pills" role="list">
+          {%- if card_delivery != blank -%}
+            <li class="tshirt-card__pill">{{ card_delivery | escape }}</li>
+          {%- endif -%}
+          {%- if card_no_minimum != blank -%}
+            <li class="tshirt-card__pill">{{ card_no_minimum | escape }}</li>
+          {%- endif -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}

@@ -1,0 +1,8 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="fp-section reviews" id="reviews">
+  <div class="fp-wrap"><p class="fp-kicker">Reviews</p><h2 class="fp-sec">Rated 4.7 <em>Excellent</em> on Trustpilot</h2>
+    <div class="fp-revs">{% for block in section.blocks %}<article class="fp-rev"><div class="fp-stars">★★★★★</div><p>“{{ block.settings.quote }}”</p><span>{{ block.settings.author }}</span></article>{% endfor %}</div>
+  </div>
+</section>
+{% schema %}{"name":"Reviews","blocks":[{"type":"review","name":"Review","settings":[{"type":"textarea","id":"quote","label":"Quote","default":"So real, my granddaughter saw the picture and said: I don't remember meeting that unicorn."},{"type":"text","id":"author","label":"Author","default":"Verified customer"}]}],"presets":[{"name":"Reviews","blocks":[{"type":"review"},{"type":"review","settings":{"quote":"Bought one for each of our grandkids for Christmas. We were ecstatic when they arrived!","author":"Margaret · Verified customer"}},{"type":"review","settings":{"quote":"The quality is beautiful and the team made every detail feel personal.","author":"Sarah · Verified customer"}}]}]}{% endschema %}

@@ -1,0 +1,58 @@
+<footer class="fbc-footer">
+  <div class="fbc-footer__newsletter">
+    <h2>{{ section.settings.newsletter_heading | escape }}</h2>
+    {%- form 'customer', class: 'fbc-footer__newsletter-form' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter">
+      <label class="visually-hidden" for="FbcNewsletter-{{ section.id }}">Email</label>
+      <input id="FbcNewsletter-{{ section.id }}" type="email" name="contact[email]" value="{{ form.email | escape }}" placeholder="Email" autocomplete="email" required>
+      <button type="submit" aria-label="Subscribe">→</button>
+      {%- if form.errors -%}<p class="fbc-footer__form-message" role="alert">{{ form.errors | default_errors }}</p>{%- endif -%}
+      {%- if form.posted_successfully? -%}<p class="fbc-footer__form-message" role="status">Thank you for subscribing.</p>{%- endif -%}
+    {%- endform -%}
+  </div>
+
+  <div class="fbc-footer__inner">
+    <div class="fbc-footer__columns">
+      <div><h3>Navigate</h3><ul>{%- for link in section.settings.navigate_menu.links -%}<li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>{%- endfor -%}</ul></div>
+      <div><h3>Company</h3><ul>{%- for link in section.settings.company_menu.links -%}<li><a href="{{ link.url }}">{{ link.title | escape }}</a></li>{%- endfor -%}</ul></div>
+      <div><h3>Contact</h3><p><a href="tel:{{ section.settings.contact_phone | remove: ' ' | remove: '-' }}">{{ section.settings.contact_phone | escape }}</a></p><p>{{ section.settings.hours_weekdays | escape }}<br>{{ section.settings.hours_weekends | escape }}</p><p><a href="/pages/contact">Email us</a></p></div>
+    </div>
+
+    <div class="fbc-footer__localization">
+      {%- if localization.available_countries.size > 1 -%}
+        {%- form 'localization', id: 'FbcCountryForm', class: 'fbc-footer__locale-form' -%}
+          <label for="FbcCountry-{{ section.id }}">Country/region</label>
+          <select id="FbcCountry-{{ section.id }}" name="country_code" data-fbc-localization>
+            {%- for country in localization.available_countries -%}<option value="{{ country.iso_code }}"{% if country.iso_code == localization.country.iso_code %} selected{% endif %}>{{ country.name | escape }} | {{ country.currency.iso_code }} {{ country.currency.symbol }}</option>{%- endfor -%}
+          </select>
+        {%- endform -%}
+      {%- endif -%}
+      {%- if localization.available_languages.size > 1 -%}
+        {%- form 'localization', id: 'FbcLanguageForm', class: 'fbc-footer__locale-form' -%}
+          <label for="FbcLanguage-{{ section.id }}">Language</label>
+          <select id="FbcLanguage-{{ section.id }}" name="locale_code" data-fbc-localization>
+            {%- for language in localization.available_languages -%}<option value="{{ language.iso_code }}"{% if language.iso_code == localization.language.iso_code %} selected{% endif %}>{{ language.endonym_name | capitalize | escape }}</option>{%- endfor -%}
+          </select>
+        {%- endform -%}
+      {%- endif -%}
+    </div>
+
+    {%- if shop.enabled_payment_types.size > 0 -%}<ul class="fbc-footer__payments" aria-label="Payment methods">{%- for type in shop.enabled_payment_types -%}<li>{{ type | payment_type_svg_tag }}</li>{%- endfor -%}</ul>{%- endif -%}
+    <div class="fbc-footer__legal"><span>© {{ 'now' | date: '%Y' }}, <a href="{{ routes.root_url }}">SwiftBay Prints</a></span>{%- for policy in shop.policies -%}{%- if policy != blank -%}<span aria-hidden="true">·</span><a href="{{ policy.url }}">{{ policy.title | escape }}</a>{%- endif -%}{%- endfor -%}</div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Fabulous footer",
+  "settings": [
+    {"type": "text", "id": "newsletter_heading", "label": "Newsletter heading", "default": "Subscribe to our emails"},
+    {"type": "link_list", "id": "navigate_menu", "label": "Navigate menu", "default": "main-menu"},
+    {"type": "link_list", "id": "company_menu", "label": "Company menu", "default": "footer"},
+    {"type": "text", "id": "contact_phone", "label": "Contact phone", "default": "650-339-6766"},
+    {"type": "text", "id": "hours_weekdays", "label": "Weekday hours", "default": "Mon - Fri, 9am - 8pm PST"},
+    {"type": "text", "id": "hours_weekends", "label": "Weekend hours", "default": "Weekends, 9am - 5pm PST"}
+  ],
+  "presets": [{"name": "Fabulous footer"}]
+}
+{% endschema %}

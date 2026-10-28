@@ -1,0 +1,1758 @@
+{{ 'ci-base.css' | asset_url | stylesheet_tag }}
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+{{ 'tshirt-hub.css' | asset_url | stylesheet_tag }}
+{{ 'tshirt-hub-design.css' | asset_url | stylesheet_tag }}
+
+<section class="tshirt-hub" id="TshirtHub-{{ section.id }}">
+  <div class="sb-Wrapper">
+    <!-- A. Breadcrumb & Page Toolbar -->
+    <div class="pc-Header">
+      <nav class="pc-Breadcrumbs" aria-label="Breadcrumb">
+        <ol class="pc-Breadcrumbs-wrapper" itemscope itemtype="https://schema.org/BreadcrumbList">
+          <li class="pc-BreadcrumbItem" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a href="{{ routes.all_products_collection_url | default: '/collections/all' }}" itemprop="item">
+              <span itemprop="name">All Products</span>
+            </a>
+            <meta itemprop="position" content="1">
+          </li>
+          <li class="pc-BreadcrumbItem" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <span class="pc-Breadcrumbs-title" itemprop="name">T-shirts</span>
+            <meta itemprop="position" content="2">
+          </li>
+        </ol>
+      </nav>
+
+      <div class="pc-ToolBar">
+        <div class="pc-ToolBar-section">
+          <div class="pc-ToolBar-header">
+            <h1 class="pc-ToolBar-header-title">
+              {{ section.settings.page_title | default: 'Custom T-shirts' }}
+            </h1>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B. Promotional Hero Banner -->
+    <div class="pc-Subcategories-CatHero" id="category-hero">
+      <div class="pc-PromoBanner" style="--cat-promo-bg: {{ section.settings.promo_bg | default: '#C67DBC' }};">
+        <div class="pc-PromoBanner-copy">
+          <h2>
+            {%- if section.settings.promo_heading != blank -%}
+              {{ section.settings.promo_heading | replace: 'shirts for', 'shirts<br class="desktop-br"> for' }}
+            {%- else -%}
+              Design custom shirts<br class="desktop-br"> for your team or event.
+            {%- endif -%}
+          </h2>
+          <p>{{ section.settings.promo_subheading | default: 'High-quality printing, no minimums on select styles, and fast, reliable delivery.' }}</p>
+          <a
+            class="button-promo"
+            href="{{ section.settings.promo_link | default: routes.collections_url | append: '/t-shirts' }}"
+          >
+            <span>{{ section.settings.promo_button | default: 'Shop All T-Shirts' }}</span>
+            <svg class="button-promo-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </a>
+        </div>
+        <div class="pc-PromoBanner-imageWrap">
+          <picture class="pc-PromoBanner-picture">
+            <source media="(max-width: 768px)" srcset="{{ 'ci-hero-tshirts-mobile.png' | asset_url }}">
+            <img
+              src="{{ 'ci-hero-tshirts-desktop.png' | asset_url }}"
+              alt="{{ section.settings.promo_heading | default: 'Design custom shirts for your team or event.' | escape }}"
+              class="pc-PromoBanner-image"
+              loading="eager"
+              width="528"
+              height="398"
+            >
+          </picture>
+        </div>
+      </div>
+    </div>
+
+    <!-- B2. Featured Products -->
+    {%- if section.settings.show_featured -%}
+      {%- liquid
+        assign fp = section.settings.featured_product
+        assign f_title = fp.title | default: section.settings.featured_title
+        assign f_details_link = section.settings.featured_details_link | default: fp.url | default: '/designlab'
+        assign f_design_link = section.settings.featured_design_link | default: fp.url | default: '/designlab'
+        assign f_image = fp.featured_image | default: section.settings.featured_image
+        assign f_max_swatches = 8
+        assign f_colors = section.blocks | where: 'type', 'featured_color'
+        assign f_has_colors = false
+        assign f_color_opt = nil
+        assign f_first_name = ''
+        if f_colors.size > 0
+          assign f_has_colors = true
+          assign f_first = f_colors | first
+          assign f_first_name = f_first.settings.name
+          if f_first.settings.image != blank
+            assign f_image = f_first.settings.image | image_url: width: 640
+          elsif f_first.settings.asset_image != blank
+            assign f_image = f_first.settings.asset_image | asset_url
+          endif
+        elsif fp != blank
+          for option in fp.options_with_values
+            assign opt_name = option.name | downcase
+            if opt_name contains 'color' or opt_name contains 'colour'
+              assign f_color_opt = option
+              break
+            endif
+          endfor
+          if f_color_opt != nil and f_color_opt.values.size > 0
+            assign f_opt_index = f_color_opt.position | minus: 1
+            assign f_any_img = false
+            for variant in fp.variants
+              if variant.featured_image != blank
+                assign f_any_img = true
+                break
+              endif
+            endfor
+            assign f_elig_count = 0
+            for value in f_color_opt.values
+              assign v_img = ''
+              for variant in fp.variants
+                if variant.options[f_opt_index] == value.name and variant.featured_image != blank
+                  assign v_img = variant.featured_image | image_url: width: 640
+                  break
+                endif
+              endfor
+              if v_img != '' or f_any_img == false
+                assign f_elig_count = f_elig_count | plus: 1
+                if f_elig_count == 1
+                  assign f_first_name = value.name
+                  if v_img != ''
+                    assign f_image = v_img
+                  else
+                    assign f_image = fp.featured_image | image_url: width: 640
+                  endif
+                endif
+              endif
+            endfor
+            if f_elig_count > 0
+              assign f_has_colors = true
+            endif
+          endif
+        endif
+      -%}
+      {%- if f_title != blank -%}
+        <section class="pc-Featured" id="featured-products">
+          {%- if section.settings.featured_heading != blank -%}
+            <h2 class="pc-Featured-heading">{{ section.settings.featured_heading }}</h2>
+          {%- endif -%}
+          <article class="pc-FeaturedCard">
+            <a class="pc-FeaturedCard-image" href="{{ f_details_link }}" aria-label="{{ f_title | escape }}">
+              {%- if f_image != blank -%}
+                {%- if f_has_colors -%}
+                  <img src="{{ f_image }}" alt="{{ f_title | escape }}" loading="lazy" width="220" height="220" data-featured-img>
+                {%- else -%}
+                  <img src="{{ f_image | image_url: width: 480 }}" alt="{{ f_title | escape }}" loading="lazy" width="220" height="220">
+                {%- endif -%}
+              {%- endif -%}
+              {%- if section.settings.featured_badge != blank -%}
+                <span class="pc-FeaturedCard-badge">{{ section.settings.featured_badge }}</span>
+              {%- endif -%}
+            </a>
+            <div class="pc-FeaturedCard-body">
+              <h3 class="pc-FeaturedCard-title">{{ f_title }}</h3>
+              {%- if f_colors.size > 0 -%}
+                <div class="pc-FeaturedCard-colors" data-featured-colors>
+                  <p class="pc-FeaturedCard-colorname">Color: <strong data-featured-colorname>{{ f_first_name }}</strong></p>
+                  <ul class="pc-FeaturedCard-swatches" role="radiogroup" aria-label="Color">
+                    {%- for block in f_colors -%}
+                      {%- liquid
+                        assign c_img = ''
+                        if block.settings.image != blank
+                          assign c_img = block.settings.image | image_url: width: 640
+                        elsif block.settings.asset_image != blank
+                          assign c_img = block.settings.asset_image | asset_url
+                        endif
+                      -%}
+                      <li class="pc-FeaturedCard-swatchitem{% if forloop.index > f_max_swatches %} is-extra{% endif %}" {{ block.shopify_attributes }}>
+                        <button type="button" class="pc-FeaturedCard-swatch pc-FeaturedCard-swatch--btn{% if forloop.first %} is-selected{% endif %}" role="radio" aria-checked="{% if forloop.first %}true{% else %}false{% endif %}" aria-label="{{ block.settings.name | escape }}" title="{{ block.settings.name | escape }}" data-color-name="{{ block.settings.name | escape }}" data-color-image="{{ c_img }}" style="background: {{ block.settings.color | default: '#d6d8db' }};"></button>
+                      </li>
+                    {%- endfor -%}
+                    {%- assign c_extra = f_colors.size | minus: f_max_swatches -%}
+                    {%- if c_extra > 0 -%}
+                      <li class="pc-FeaturedCard-moreitem"><button type="button" class="pc-FeaturedCard-more pc-FeaturedCard-more--btn" aria-expanded="false" data-featured-more data-more-label="+{{ c_extra }}">+{{ c_extra }}</button></li>
+                    {%- endif -%}
+                  </ul>
+                </div>
+              {%- elsif f_has_colors -%}
+                <div class="pc-FeaturedCard-colors" data-featured-colors>
+                  <p class="pc-FeaturedCard-colorname">{{ f_color_opt.name }}: <strong data-featured-colorname>{{ f_first_name }}</strong></p>
+                  <ul class="pc-FeaturedCard-swatches" role="radiogroup" aria-label="{{ f_color_opt.name | escape }}">
+                    {%- assign c_n = 0 -%}
+                    {%- for value in f_color_opt.values -%}
+                      {%- liquid
+                        assign c_img = ''
+                        for variant in fp.variants
+                          if variant.options[f_opt_index] == value.name and variant.featured_image != blank
+                            assign c_img = variant.featured_image | image_url: width: 640
+                            break
+                          endif
+                        endfor
+                        assign c_show = false
+                        if c_img != '' or f_any_img == false
+                          assign c_show = true
+                        endif
+                        if c_show and c_img == ''
+                          assign c_img = fp.featured_image | image_url: width: 640
+                        endif
+                        assign c_key = value.name | downcase | strip
+                        if value.swatch.image
+                          assign sw_img = value.swatch.image | image_url: width: 50
+                          assign c_bg = 'url(' | append: sw_img | append: ') center / cover'
+                        elsif value.swatch.color
+                          assign c_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                        else
+                          case c_key
+                            when 'white'
+                              assign c_bg = '#f1f1f1'
+                            when 'black'
+                              assign c_bg = '#292929'
+                            when 'blue'
+                              assign c_bg = '#1c5ba3'
+                            when 'navy'
+                              assign c_bg = '#1f2e44'
+                            when 'red'
+                              assign c_bg = '#c8202f'
+                            when 'grey' or 'gray'
+                              assign c_bg = '#bababc'
+                            when 'green'
+                              assign c_bg = '#2f6b3a'
+                            else
+                              assign c_bg = c_key | handleize | remove: '-'
+                          endcase
+                        endif
+                      -%}
+                      {%- if c_show -%}
+                        {%- assign c_n = c_n | plus: 1 -%}
+                        <li class="pc-FeaturedCard-swatchitem{% if c_n > f_max_swatches %} is-extra{% endif %}">
+                          <button type="button" class="pc-FeaturedCard-swatch pc-FeaturedCard-swatch--btn{% if c_n == 1 %} is-selected{% endif %}" role="radio" aria-checked="{% if c_n == 1 %}true{% else %}false{% endif %}" aria-label="{{ value.name | escape }}" title="{{ value.name | escape }}" data-color-name="{{ value.name | escape }}" data-color-image="{{ c_img }}" style="background: {{ c_bg }};"></button>
+                        </li>
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {%- assign c_extra = f_elig_count | minus: f_max_swatches -%}
+                    {%- if c_extra > 0 -%}
+                      <li class="pc-FeaturedCard-moreitem"><button type="button" class="pc-FeaturedCard-more pc-FeaturedCard-more--btn" aria-expanded="false" data-featured-more data-more-label="+{{ c_extra }}">+{{ c_extra }}</button></li>
+                    {%- endif -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+              <div class="pc-FeaturedCard-meta">
+                {%- render 'hub-rating', product: fp, default_count: section.settings.featured_rating_count -%}
+                {%- if section.settings.featured_note != blank -%}
+                  <span class="pc-FeaturedCard-note">{{ section.settings.featured_note }}</span>
+                {%- endif -%}
+                {%- if section.settings.featured_details_label != blank -%}
+                  <a class="pc-FeaturedCard-details" href="{{ f_details_link }}">{{ section.settings.featured_details_label }}</a>
+                {%- endif -%}
+              </div>
+              {%- if section.settings.featured_design_label != blank -%}
+                <a class="pc-FeaturedCard-btn" href="{{ f_design_link }}">{{ section.settings.featured_design_label }}</a>
+              {%- endif -%}
+            </div>
+          </article>
+          {%- if f_has_colors -%}
+            <script>
+              (function () {
+                var root = document.getElementById('featured-products');
+                if (!root) return;
+                var img = root.querySelector('[data-featured-img]');
+                var label = root.querySelector('[data-featured-colorname]');
+                var box = root.querySelector('[data-featured-colors]');
+                if (!img || !box) return;
+                var title = {{ f_title | json }};
+                var buttons = Array.prototype.slice.call(box.querySelectorAll('.pc-FeaturedCard-swatch--btn'));
+                buttons.forEach(function (b) {
+                  var m = (window.getComputedStyle(b).backgroundColor || '').match(/[\d.]+/g);
+                  if (m && m.length >= 3 && !(m.length > 3 && +m[3] === 0)) b.classList.toggle('is-light', (0.299 * m[0] + 0.587 * m[1] + 0.114 * m[2]) / 255 > 0.62);
+                });
+                function select(btn) {
+                  buttons.forEach(function (b) {
+                    var on = b === btn;
+                    b.classList.toggle('is-selected', on);
+                    b.setAttribute('aria-checked', on ? 'true' : 'false');
+                    b.tabIndex = on ? 0 : -1;
+                  });
+                  var name = btn.getAttribute('data-color-name');
+                  var src = btn.getAttribute('data-color-image');
+                  if (label) label.textContent = name;
+                  if (src && img.getAttribute('src') !== src) {
+                    img.classList.add('is-swapping');
+                    var next = new Image();
+                    next.onload = next.onerror = function () {
+                      img.src = src;
+                      img.alt = title + ' - ' + name;
+                      img.classList.remove('is-swapping');
+                    };
+                    next.src = src;
+                  }
+                }
+                buttons.forEach(function (btn, i) {
+                  btn.tabIndex = i === 0 ? 0 : -1;
+                  btn.addEventListener('click', function () { select(btn); });
+                  btn.addEventListener('keydown', function (e) {
+                    var d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+                    if (!d) return;
+                    e.preventDefault();
+                    var visible = buttons.filter(function (b) { return b.offsetParent !== null; });
+                    var n = visible[(visible.indexOf(btn) + d + visible.length) % visible.length];
+                    n.focus();
+                    select(n);
+                  });
+                });
+                var more = box.querySelector('[data-featured-more]');
+                if (more) {
+                  more.addEventListener('click', function () {
+                    var open = box.classList.toggle('is-expanded');
+                    more.setAttribute('aria-expanded', open ? 'true' : 'false');
+                    more.textContent = open ? 'Less' : more.getAttribute('data-more-label');
+                  });
+                }
+              })();
+            </script>
+          {%- endif -%}
+        </section>
+      {%- endif -%}
+    {%- endif -%}
+
+    <!-- C. Category Grid: Shop By Style -->
+    <div class="pc-CatCards--grouped pc-CatCards--grouped-style">
+      {% assign style_tiles_count = 0 %}
+      {% for block in section.blocks %}
+        {% if block.settings.group == 'style' and block.settings.title != blank and block.settings.link != blank %}
+          {% assign style_tiles_count = style_tiles_count | plus: 1 %}
+        {% endif %}
+      {% endfor %}
+
+      {% if style_tiles_count > 0 %}
+        {% liquid
+          assign tiles_mod_class = ''
+          if style_tiles_count == 3
+            assign tiles_mod_class = ' pc-CatCards-group-tiles--3'
+          elsif style_tiles_count >= 5
+            assign tiles_mod_class = ' pc-CatCards-group-tiles--5'
+          endif
+        %}
+        <div class="pc-CatCards-group" id="Group-style">
+          <h2 class="pc-CatCards-group-label">Shop By Style</h2>
+          <div class="pc-CatCards-group-tiles{{ tiles_mod_class }}">
+            {% for block in section.blocks %}
+              {% if block.settings.group == 'style' and block.settings.title != blank and block.settings.link != blank %}
+                {% liquid
+                  assign block_title_lower = block.settings.title | downcase
+                  assign tile_img_src = ''
+
+                  if block.settings.image != blank
+                    assign tile_img_src = block.settings.image | image_url: width: 400
+                  elsif block_title_lower contains 'short sleeve'
+                    assign tile_img_src = 'ci-cat-shortsleeve.jpg' | asset_url
+                  elsif block_title_lower contains 'long sleeve'
+                    assign tile_img_src = 'ci-cat-longsleeve.jpg' | asset_url
+                  elsif block_title_lower contains 'tank' or block_title_lower contains 'sleeveless'
+                    assign tile_img_src = 'ci-cat-tanktops.jpg' | asset_url
+                  else
+                    assign tile_img_src = 'ci-cat-shortsleeve.jpg' | asset_url
+                  endif
+                %}
+
+                <div class="pc-CatCard--V2" {{ block.shopify_attributes }}>
+                  <div class="pc-CatCard--V2-content">
+                    <a class="pc-CatCard--V2-link" href="{{ block.settings.link }}">
+                      <div class="pc-CatCard--V2-image">
+                        <img
+                          class="pc-CatCard--V2-img"
+                          src="{{ tile_img_src }}"
+                          alt="{{ block.settings.title | escape }}"
+                          loading="lazy"
+                          width="200"
+                          height="200"
+                        >
+                        {% if block.settings.badge != blank %}
+                          <span class="pc-CatCards-group-badge">{{ block.settings.badge }}</span>
+                        {% endif %}
+                      </div>
+                      <h3 class="pc-CatCard--V2-name">{{ block.settings.title }}</h3>
+                    </a>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- E. Category Grids (Shop By Fabric, Shop By Fit, Shop By Collection) -->
+    <div class="pc-CatCards--grouped">
+      {% assign group_keys = 'fabric|fit|collection' | split: '|' %}
+      {% assign group_labels = 'Shop By Fabric|Shop By Fit|Shop By Collection' | split: '|' %}
+
+      {% for key in group_keys %}
+        {% assign group_tiles_count = 0 %}
+        {% for block in section.blocks %}
+          {% if block.settings.group == key and block.settings.title != blank and block.settings.link != blank %}
+            {% assign group_tiles_count = group_tiles_count | plus: 1 %}
+          {% endif %}
+        {% endfor %}
+
+        {% if group_tiles_count > 0 %}
+          {% liquid
+            assign tiles_mod_class = ''
+            if group_tiles_count == 3
+              assign tiles_mod_class = ' pc-CatCards-group-tiles--3'
+            elsif group_tiles_count >= 5
+              assign tiles_mod_class = ' pc-CatCards-group-tiles--5'
+            endif
+          %}
+          <div class="pc-CatCards-group" id="Group-{{ key }}">
+            <h2 class="pc-CatCards-group-label">{{ group_labels[forloop.index0] }}</h2>
+            <div class="pc-CatCards-group-tiles{{ tiles_mod_class }}">
+              {% for block in section.blocks %}
+                {% if block.settings.group == key and block.settings.title != blank and block.settings.link != blank %}
+                  {% liquid
+                    assign block_title_lower = block.settings.title | downcase
+                    assign tile_img_src = ''
+
+                    if block.settings.image != blank
+                      assign tile_img_src = block.settings.image | image_url: width: 400
+                    elsif block_title_lower contains 'short sleeve'
+                      assign tile_img_src = 'ci-cat-shortsleeve.jpg' | asset_url
+                    elsif block_title_lower contains 'long sleeve'
+                      assign tile_img_src = 'ci-cat-longsleeve.jpg' | asset_url
+                    elsif block_title_lower contains 'tank' or block_title_lower contains 'sleeveless'
+                      assign tile_img_src = 'ci-cat-tanktops.jpg' | asset_url
+                    elsif block_title_lower contains 'premium'
+                      assign tile_img_src = 'ci-cat-premium.jpg' | asset_url
+                    elsif block_title_lower contains 'tri-blend' or block_title_lower contains 'triblend'
+                      assign tile_img_src = 'ci-cat-soft-triblend.jpg' | asset_url
+                    elsif block_title_lower contains 'performance'
+                      assign tile_img_src = 'ci-cat-performance.jpg' | asset_url
+                    elsif block_title_lower contains 'heavyweight'
+                      assign tile_img_src = 'ci-cat-heavyweight.jpg' | asset_url
+                    elsif block_title_lower contains 'sustainable'
+                      assign tile_img_src = 'ci-cat-sustainable.png' | asset_url
+                    elsif block_title_lower contains 'unisex'
+                      assign tile_img_src = 'ci-cat-unisex.png' | asset_url
+                    elsif block_title_lower contains 'women' or block_title_lower contains 'ladies'
+                      assign tile_img_src = 'ci-cat-womens.jpg' | asset_url
+                    elsif block_title_lower contains 'kid' or block_title_lower contains 'youth'
+                      assign tile_img_src = 'ci-cat-kids.jpg' | asset_url
+                    elsif block_title_lower contains 'tall'
+                      assign tile_img_src = 'ci-cat-tall.jpg' | asset_url
+                    elsif block_title_lower contains 'no minimum'
+                      assign tile_img_src = 'ci-cat-no-minimum.jpg' | asset_url
+                    elsif block_title_lower contains 'usa' or block_title_lower contains 'america'
+                      assign tile_img_src = 'ci-cat-made-in-usa.jpg' | asset_url
+                    elsif block_title_lower contains 'tie-dye' or block_title_lower contains 'tiedye'
+                      assign tile_img_src = 'ci-cat-tiedye.jpg' | asset_url
+                    elsif block_title_lower contains 'new'
+                      assign tile_img_src = 'ci-cat-new.png' | asset_url
+                    elsif block_title_lower contains 'canada'
+                      assign tile_img_src = 'ci-cat-canada.jpg' | asset_url
+                    else
+                      assign tile_img_src = 'ci-cat-shortsleeve.jpg' | asset_url
+                    endif
+                  %}
+
+                  <div class="pc-CatCard--V2" {{ block.shopify_attributes }}>
+                    <div class="pc-CatCard--V2-content">
+                      <a class="pc-CatCard--V2-link" href="{{ block.settings.link }}">
+                        <div class="pc-CatCard--V2-image">
+                          <img
+                            class="pc-CatCard--V2-img"
+                            src="{{ tile_img_src }}"
+                            alt="{{ block.settings.title | escape }}"
+                            loading="lazy"
+                            width="200"
+                            height="200"
+                          >
+
+                          {% if block.settings.badge != blank %}
+                            <span class="pc-CatCards-group-badge">{{ block.settings.badge }}</span>
+                          {% elsif block_title_lower contains 'sustainable' %}
+                            <img
+                              alt="Sustainable"
+                              class="pc-CatCards-group-sustainable"
+                              src="{{ 'ci-cat-sustainable-badge.png' | asset_url }}"
+                              width="28"
+                              height="28"
+                              loading="lazy"
+                            >
+                          {% elsif block_title_lower contains 'usa' %}
+                            <div class="pc-CatCard--V2-flag pc-CatCard-flag--us" title="Made in USA">
+                              <svg viewBox="0 0 60 30" width="60" height="30" aria-hidden="true">
+                                <rect width="60" height="30" fill="#b22234"/>
+                                <rect y="2.31" width="60" height="2.31" fill="#ffffff"/>
+                                <rect y="6.92" width="60" height="2.31" fill="#ffffff"/>
+                                <rect y="11.54" width="60" height="2.31" fill="#ffffff"/>
+                                <rect y="16.15" width="60" height="2.31" fill="#ffffff"/>
+                                <rect y="20.77" width="60" height="2.31" fill="#ffffff"/>
+                                <rect y="25.38" width="60" height="2.31" fill="#ffffff"/>
+                                <rect width="24" height="16.15" fill="#3c3b6e"/>
+                                <g fill="#ffffff">
+                                  <circle cx="4" cy="3" r="0.9"/>
+                                  <circle cx="10" cy="3" r="0.9"/>
+                                  <circle cx="16" cy="3" r="0.9"/>
+                                  <circle cx="22" cy="3" r="0.9"/>
+                                  <circle cx="7" cy="6" r="0.9"/>
+                                  <circle cx="13" cy="6" r="0.9"/>
+                                  <circle cx="19" cy="6" r="0.9"/>
+                                  <circle cx="4" cy="9" r="0.9"/>
+                                  <circle cx="10" cy="9" r="0.9"/>
+                                  <circle cx="16" cy="9" r="0.9"/>
+                                  <circle cx="22" cy="9" r="0.9"/>
+                                  <circle cx="7" cy="12" r="0.9"/>
+                                  <circle cx="13" cy="12" r="0.9"/>
+                                  <circle cx="19" cy="12" r="0.9"/>
+                                </g>
+                              </svg>
+                            </div>
+                          {% elsif block_title_lower contains 'canada' %}
+                            <div class="pc-CatCard--V2-flag pc-CatCard-flag--ca" title="Canada T-shirts">
+                              <svg viewBox="0 0 60 30" width="60" height="30" aria-hidden="true">
+                                <rect width="15" height="30" fill="#d80027"/>
+                                <rect x="15" width="30" height="30" fill="#ffffff"/>
+                                <rect x="45" width="15" height="30" fill="#d80027"/>
+                                <path d="M30 6.5l1.6 3.8 3.5-.8-1.5 3 3.6 1.6-4.2 1.8.8 4-3.8-1.8v3.4h-1.6V18.1l-3.8 1.8.8-4-4.2-1.8 3.6-1.6-1.5-3 3.5.8L30 6.5z" fill="#d80027"/>
+                              </svg>
+                            </div>
+                          {% endif %}
+                        </div>
+                        <h3 class="pc-CatCard--V2-name">{{ block.settings.title }}</h3>
+                      </a>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <!-- E. Trending Products Section (Shop Trending Products Carousel) -->
+    {% liquid
+      assign trending_col_handle = section.settings.trending_collection | default: 't-shirts'
+      assign trending_col = collections[trending_col_handle]
+      if trending_col == blank or trending_col.products.size == 0
+        assign trending_col = collections['all']
+      endif
+    %}
+
+    {% if trending_col != blank and trending_col.products.size > 0 %}
+      <section class="pc-TrendingSection" id="trending-products-widget">
+        <div class="pc-TrendingHeader">
+          <h2 class="pc-TrendingTitle">{{ section.settings.trending_title | default: 'Shop Trending Products' }}</h2>
+          <div class="pc-TrendingNav">
+            <button
+              type="button"
+              class="pc-Carousel-arrow pc-Carousel-arrow--prev"
+              id="TrendingPrev-{{ section.id }}"
+              aria-label="Previous products"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button
+              type="button"
+              class="pc-Carousel-arrow pc-Carousel-arrow--next"
+              id="TrendingNext-{{ section.id }}"
+              aria-label="Next products"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="pc-TrendingTrack" id="TrendingTrack-{{ section.id }}">
+          {% assign t_count = 0 %}
+          {% for product in trending_col.products %}
+            {% assign p_title_lower = product.title | downcase %}
+            {% unless p_title_lower contains 'blanket' or product.tags contains 'blanket' or p_title_lower contains 'banner' %}
+              {% assign t_count = t_count | plus: 1 %}
+              {% if t_count <= 12 %}
+                {%- liquid
+                  assign t_color_opt = nil
+                  assign t_colors = 0
+                  assign t_has_unit = false
+                  assign t_unit_price = 0
+                  assign t_qty = section.settings.price_break_quantity | default: 100
+                  for option in product.options_with_values
+                    assign opt_name = option.name | downcase
+                    if opt_name contains 'color' or opt_name contains 'colour'
+                      assign t_color_opt = option
+                      break
+                    endif
+                  endfor
+                  if t_color_opt != nil
+                    assign t_opt_index = t_color_opt.position | minus: 1
+                    for value in t_color_opt.values
+                      for variant in product.variants
+                        if variant.options[t_opt_index] == value.name and variant.featured_image != blank
+                          assign t_colors = t_colors | plus: 1
+                          break
+                        endif
+                      endfor
+                    endfor
+                  endif
+                  assign t_variant = product.selected_or_first_available_variant
+                  if t_variant.quantity_price_breaks.size > 0
+                    assign t_breaks = t_variant.quantity_price_breaks | sort: 'minimum_quantity'
+                    for pb in t_breaks
+                      if pb.minimum_quantity <= t_qty
+                        assign t_has_unit = true
+                        assign t_unit_price = pb.price
+                      endif
+                    endfor
+                  endif
+                  if t_has_unit == false
+                    assign t_has_unit = true
+                    assign t_unit_price = product.price
+                  endif
+                  assign t_delivery = product.metafields.custom.delivery_text.value | default: section.settings.trending_delivery_label
+                -%}
+                <div class="pc-TrendingCard" data-trending-card>
+                  <div class="pc-TrendingCard-media">
+                    <a href="{{ product.url }}" class="pc-TrendingCard-imageWrap">
+                      <img
+                        src="{{ product.featured_image | image_url: width: 400 }}"
+                        alt="{{ product.title | escape }}"
+                        loading="lazy"
+                        width="220"
+                        height="220"
+                        data-trending-img
+                      >
+                    </a>
+                    <button type="button" class="pc-TrendingCard-fav" aria-pressed="false" aria-label="Favorite" data-trending-fav="{{ product.handle }}">
+                      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M12 20.7l-1.2-1.1C6 15.3 3 12.5 3 9a4.8 4.8 0 0 1 4.9-4.9c1.6 0 3.1.8 4.1 2 1-1.2 2.5-2 4.1-2A4.8 4.8 0 0 1 21 9c0 3.5-3 6.3-7.8 10.6L12 20.7z"/></svg>
+                    </button>
+                  </div>
+                  <div class="pc-TrendingCard-info">
+                    {%- if t_colors > 1 -%}
+                      <div class="pc-TrendingCard-colors" data-trending-colors>
+                        <ul class="pc-TrendingCard-swatches" role="radiogroup" aria-label="{{ t_color_opt.name | escape }}">
+                          {%- assign t_n = 0 -%}
+                          {%- for value in t_color_opt.values -%}
+                            {%- liquid
+                              assign c_img = ''
+                              for variant in product.variants
+                                if variant.options[t_opt_index] == value.name and variant.featured_image != blank
+                                  assign c_img = variant.featured_image | image_url: width: 400
+                                  break
+                                endif
+                              endfor
+                              assign c_key = value.name | downcase | strip
+                              if value.swatch.image
+                                assign sw_img = value.swatch.image | image_url: width: 50
+                                assign c_bg = 'url(' | append: sw_img | append: ') center / cover'
+                              elsif value.swatch.color
+                                assign c_bg = 'rgb(' | append: value.swatch.color.rgb | append: ')'
+                              else
+                                case c_key
+                                  when 'white'
+                                    assign c_bg = '#f1f1f1'
+                                  when 'black'
+                                    assign c_bg = '#292929'
+                                  when 'blue'
+                                    assign c_bg = '#1c5ba3'
+                                  when 'navy'
+                                    assign c_bg = '#1f2e44'
+                                  when 'red'
+                                    assign c_bg = '#c8202f'
+                                  when 'grey' or 'gray'
+                                    assign c_bg = '#bababc'
+                                  when 'green'
+                                    assign c_bg = '#2f6b3a'
+                                  else
+                                    assign c_bg = c_key | handleize | remove: '-'
+                                endcase
+                              endif
+                            -%}
+                            {%- if c_img != '' -%}
+                              {%- assign t_n = t_n | plus: 1 -%}
+                              <li class="pc-TrendingCard-swatchitem{% if t_n > 8 %} is-extra{% endif %}">
+                                <button type="button" class="pc-TrendingCard-swatch{% if t_n == 1 %} is-selected{% endif %}" role="radio" aria-checked="{% if t_n == 1 %}true{% else %}false{% endif %}" aria-label="{{ value.name | escape }}" title="{{ value.name | escape }}" data-color-name="{{ value.name | escape }}" data-color-image="{{ c_img }}" style="background: {{ c_bg }};"></button>
+                              </li>
+                            {%- endif -%}
+                          {%- endfor -%}
+                          {%- assign t_extra = t_colors | minus: 8 -%}
+                          {%- if t_extra > 0 -%}
+                            <li class="pc-TrendingCard-moreitem"><button type="button" class="pc-TrendingCard-more" aria-expanded="false" data-trending-more data-more-label="+{{ t_extra }}">+{{ t_extra }}</button></li>
+                          {%- endif -%}
+                        </ul>
+                      </div>
+                    {%- endif -%}
+                    <a href="{{ product.url }}" class="pc-TrendingCard-title">
+                      {{ product.title }}
+                    </a>
+                    {%- render 'hub-rating', product: product, default_count: section.settings.trending_rating_count -%}
+                    {%- if t_has_unit -%}
+                      <div class="pc-TrendingCard-unitrow">
+                      <p class="pc-TrendingCard-unit">
+                        {%- if product.price > t_unit_price -%}<s class="pc-TrendingCard-was">{{ product.price | money_without_trailing_zeros }}</s> {% endif -%}
+                        <strong class="pc-TrendingCard-now">{{ t_unit_price | money_without_trailing_zeros }}</strong><span>/ea for {{ t_qty }} items</span>
+                      </p>
+                      <a href="{{ product.url }}" class="pc-TrendingCard-pricing">Pricing Details</a>
+                      </div>
+                    {%- endif -%}
+                    {%- if t_delivery != blank -%}
+                      <p class="pc-TrendingCard-delivery">{{ t_delivery }}</p>
+                    {%- endif -%}
+                    <div class="pc-TrendingCard-meta">
+                      <span class="pc-TrendingCard-price{% if t_has_unit %} has-unit{% endif %}">From {{ product.price | money }}</span>
+                      <span class="pc-TrendingCard-noMin">No Minimum</span>
+                    </div>
+                  </div>
+                  <div class="pc-TrendingCard-actions">
+                    <a href="{{ product.url }}" class="pc-TrendingCard-btn pc-TrendingCard-btn--design">
+                      Start Designing
+                    </a>
+                  </div>
+                </div>
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
+        </div>
+        <script>
+          (function () {
+            var track = document.getElementById('TrendingTrack-{{ section.id }}');
+            if (!track) return;
+            var key = 'sb-favorites';
+            function read() {
+              try { var v = JSON.parse(window.localStorage.getItem(key) || '[]'); return Array.isArray(v) ? v : []; } catch (e) { return []; }
+            }
+            function write(list) {
+              try { window.localStorage.setItem(key, JSON.stringify(list)); } catch (e) {}
+            }
+            function paint(btn, on) {
+              btn.classList.toggle('is-active', on);
+              btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+            }
+            var saved = read();
+            track.querySelectorAll('[data-trending-fav]').forEach(function (btn) {
+              paint(btn, saved.indexOf(btn.getAttribute('data-trending-fav')) !== -1);
+            });
+            track.addEventListener('click', function (e) {
+              var fav = e.target.closest('[data-trending-fav]');
+              if (fav && track.contains(fav)) {
+                var list = read();
+                var id = fav.getAttribute('data-trending-fav');
+                var at = list.indexOf(id);
+                if (at === -1) list.push(id); else list.splice(at, 1);
+                write(list);
+                paint(fav, at === -1);
+                return;
+              }
+              var more = e.target.closest('[data-trending-more]');
+              if (more && track.contains(more)) {
+                var box = more.closest('[data-trending-colors]');
+                var open = box.classList.toggle('is-expanded');
+                more.setAttribute('aria-expanded', open ? 'true' : 'false');
+                more.textContent = open ? 'Less' : more.getAttribute('data-more-label');
+                return;
+              }
+              var btn = e.target.closest('.pc-TrendingCard-swatch');
+              if (!btn || !track.contains(btn)) return;
+              var card = btn.closest('[data-trending-card]');
+              var img = card && card.querySelector('[data-trending-img]');
+              card.querySelectorAll('.pc-TrendingCard-swatch').forEach(function (b) {
+                var on = b === btn;
+                b.classList.toggle('is-selected', on);
+                b.setAttribute('aria-checked', on ? 'true' : 'false');
+              });
+              var src = btn.getAttribute('data-color-image');
+              if (img && src && img.getAttribute('src') !== src) {
+                var next = new Image();
+                next.onload = next.onerror = function () { img.src = src; img.removeAttribute('srcset'); };
+                next.src = src;
+              }
+            });
+          })();
+        </script>
+      </section>
+    {% endif %}
+
+    <!-- F. Advice & Inspiration (3-Column Editorial Cards) -->
+    <section class="pc-BlogStories" id="category-blog-stories">
+      <div class="pc-MobileHeader">
+        <h2 class="pc-BlogStories-title">{{ section.settings.stories_heading | default: 'Advice & Inspiration' }}</h2>
+        <div class="pc-TrendingNav pc-MobileNav">
+          <button type="button" class="pc-Carousel-arrow" data-mc-target="BlogTrack-{{ section.id }}" data-mc-dir="-1" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" class="pc-Carousel-arrow" data-mc-target="BlogTrack-{{ section.id }}" data-mc-dir="1" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+      </div>
+      <div class="pc-BlogStories-grid" id="BlogTrack-{{ section.id }}">
+        <!-- Story 1: Custom T-Shirts Guide -->
+        <article class="pc-BlogStoryCard">
+          <a href="{{ section.settings.story_1_link | default: '/products/t-shirt-hub#guide' }}" class="pc-BlogStoryCard-imageWrap">
+            <img
+              src="{{ 'ci-blog-guide.jpg' | asset_url }}"
+              alt="{{ section.settings.story_1_title | default: 'Custom T-Shirts: How to Design, Print, and Order the Perfect Shirt' | escape }}"
+              class="pc-BlogStoryCard-image"
+              loading="lazy"
+              width="400"
+              height="225"
+            >
+          </a>
+          <div class="pc-BlogStoryCard-content">
+            <a href="{{ section.settings.story_1_link | default: '/products/t-shirt-hub#guide' }}" class="pc-BlogStoryCard-title">
+              {{ section.settings.story_1_title | default: 'Custom T-Shirts: How to Design, Print, and Order the Perfect Shirt' }}
+            </a>
+            <p class="pc-BlogStoryCard-desc">
+              {{ section.settings.story_1_desc | default: '25 years of custom t-shirt orders, distilled: how to design, which printing method to pick, fabrics compared, and ordering tips organizers can actually use.' }}
+            </p>
+            <a href="{{ section.settings.story_1_link | default: '/products/t-shirt-hub#guide' }}" class="pc-BlogStoryCard-link">
+              Read Guide &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Story 2: Fabric & Material Guide -->
+        <article class="pc-BlogStoryCard">
+          <a href="{{ section.settings.story_2_link | default: '/pages/screen-printing' }}" class="pc-BlogStoryCard-imageWrap">
+            <img
+              src="{{ 'ci-blog-materials.jpg' | asset_url }}"
+              alt="{{ section.settings.story_2_title | default: 'How to Choose the Best T-Shirt Material: Cotton, Polyester, Blends & More' | escape }}"
+              class="pc-BlogStoryCard-image"
+              loading="lazy"
+              width="400"
+              height="225"
+            >
+          </a>
+          <div class="pc-BlogStoryCard-content">
+            <a href="{{ section.settings.story_2_link | default: '/pages/screen-printing' }}" class="pc-BlogStoryCard-title">
+              {{ section.settings.story_2_title | default: 'How to Choose the Best T-Shirt Material: Cotton, Polyester, Blends & More' }}
+            </a>
+            <p class="pc-BlogStoryCard-desc">
+              {{ section.settings.story_2_desc | default: 'The best t-shirt materials, compared head-to-head: cotton, polyester, 50/50, CVC, and tri-blend, with weight guides, print compatibility, and picks by use case.' }}
+            </p>
+            <a href="{{ section.settings.story_2_link | default: '/pages/screen-printing' }}" class="pc-BlogStoryCard-link">
+              Read Guide &rarr;
+            </a>
+          </div>
+        </article>
+
+        <!-- Story 3: Design Ideas & Inspiration -->
+        <article class="pc-BlogStoryCard">
+          <a href="{{ section.settings.story_3_link | default: '/pages/design-idea' }}" class="pc-BlogStoryCard-imageWrap">
+            <img
+              src="{{ 'ci-blog-ideas.jpg' | asset_url }}"
+              alt="{{ section.settings.story_3_title | default: 'T-Shirt Design Ideas: 50+ Inspiration Sources for Custom Shirts' | escape }}"
+              class="pc-BlogStoryCard-image"
+              loading="lazy"
+              width="400"
+              height="225"
+            >
+          </a>
+          <div class="pc-BlogStoryCard-content">
+            <a href="{{ section.settings.story_3_link | default: '/pages/design-idea' }}" class="pc-BlogStoryCard-title">
+              {{ section.settings.story_3_title | default: 'T-Shirt Design Ideas: 50+ Inspiration Sources for Custom Shirts' }}
+            </a>
+            <p class="pc-BlogStoryCard-desc">
+              {{ section.settings.story_3_desc | default: '54 custom t-shirt design ideas across seven categories, from funny and vintage to cause-based and location-specific, plus printing tips and free design tools.' }}
+            </p>
+            <a href="{{ section.settings.story_3_link | default: '/pages/design-idea' }}" class="pc-BlogStoryCard-link">
+              Explore Ideas &rarr;
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- G. Product Experts Card -->
+    {% if section.settings.show_experts %}
+      <div class="pc-CatCard pc-CatCard--experts">
+        <div class="pc-ExpertsCard">
+          <div
+            class="pc-ExpertsCard-image"
+            style="background-image: url('{{ 'ci-experts.jpg' | asset_url }}');"
+          ></div>
+          <div class="pc-ExpertsCard-content">
+            <header class="pc-ExpertsCard-header">
+              {{ section.settings.experts_title | default: 'Product Experts Available 7 Days a Week' }}
+            </header>
+            <div class="pc-ExpertsCard-copy">
+              {{ section.settings.experts_copy | default: "Not sure what to buy? We'll point you to the right product!" }}
+            </div>
+            <div class="pc-ExpertsCard-cta">
+              <a class="pc-ExpertsCard-phoneLink" href="tel:{{ section.settings.experts_phone | default: '650-339-6766' }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>{{ section.settings.experts_phone | default: '650-339-6766' }}</span>
+              </a>
+              <a class="button-experts-chat" href="{{ section.settings.experts_chat_link | default: '/pages/contact' }}">
+                {{ section.settings.experts_chat_label | default: 'Chat With Us' }}
+              </a>
+            </div>
+            <div class="pc-ExpertsCard-hours">
+              Mon - Fri: 9am - 8pm PST &bull; Weekends: 9am - 5pm PST
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- H. SEO Content & Buying Guide with Accessible Mobile Read More / Read Less -->
+    {% if section.settings.show_seo %}
+      <div class="pc-SeoContent pc-SeoContent--psr-custom-tshirts" id="guide">
+        <div class="pc-SeoContent-header">
+          <h3 class="pc-SeoContent-title">
+            Create Custom T-shirts for Your Company, Group, or Event
+          </h3>
+          <p class="pc-SeoContent-intro">
+            Designing custom t-shirts should feel as good as wearing them. That's why SwiftBay Prints gives you the tools and support to make custom t-shirt printing simple from start to finish — whether you need one shirt or one thousand.
+          </p>
+        </div>
+
+        <div class="pc-SeoContent-collapsible" id="SeoContentCollapsible-{{ section.id }}">
+          <!-- Subsection 1: Core Advantages -->
+          <ul class="pc-SeoContent-list">
+            <li>
+              <strong>Easy-to-Use Online Designer:</strong> Design your own shirt in minutes. Upload your logo, add custom text, adjust placements, and preview your artwork before it goes to print. Every design is checked by print specialists before production.
+            </li>
+            <li>
+              <strong>Help When You Need It:</strong> Our dedicated team is available 7 days a week to answer questions, recommend optimal fabrics, and help you get the best value for your budget.
+            </li>
+            <li>
+              <strong>No Minimums Required:</strong> Order exactly what you need. Choose from a large variety of t-shirt styles with no minimum order requirements, or take advantage of tiered volume discounts for large events.
+            </li>
+            <li>
+              <strong>Options for Everyone:</strong> From budget-friendly basics to premium soft tees, we offer short sleeve, long sleeve, tank tops, and performance athletic wear in unisex, women's, and youth sizing.
+            </li>
+            <li>
+              <strong>High-Definition Printing Methods:</strong> We match your design to the best decoration technique — including vibrant Direct-to-Film (DTF) digital printing and premium screen printing — for sharp, durable results that last wash after wash.
+            </li>
+            <li>
+              <strong>Clear, Upfront Pricing:</strong> View transparent pricing with no hidden setup fees.
+            </li>
+            <li>
+              <strong>Fast &amp; Reliable Delivery:</strong> Guaranteed on-time delivery with flexible shipping options so your team receives their gear right on schedule.
+            </li>
+            <li>
+              <strong>Group-Friendly Ordering:</strong> Easily collect sizes and quantities for company teams, school clubs, athletic rosters, or family gatherings.
+            </li>
+          </ul>
+
+          <!-- Subsection 2: Choosing the Right T-Shirt Fabric -->
+          <div class="pc-SeoContent-section">
+            <h4 class="pc-SeoContent-subheading">Choosing the Right T-Shirt Fabric</h4>
+            <p>
+              The fabric you choose affects softness, durability, and how your design looks once it's printed or embroidered.
+            </p>
+            <ul class="pc-SeoContent-list">
+              <li>
+                <strong>100% Cotton:</strong> The classic choice — breathable, soft, and reliable for everyday wear. Best for screen printing and digital printing, and the go-to for large group orders and giveaways.
+              </li>
+              <li>
+                <strong>Cotton-Poly Blend:</strong> More durable than 100% cotton and less prone to shrinking, with a slightly softer, more relaxed drape. A strong pick for high-volume team and event orders.
+              </li>
+              <li>
+                <strong>Tri-Blend:</strong> A cotton-poly-rayon mix with an exceptionally soft, vintage-heathered hand feel — popular for retail-quality apparel and premium giveaways where the shirt itself is part of the gift.
+              </li>
+              <li>
+                <strong>Performance Poly:</strong> Moisture-wicking and lightweight, built for movement. The standard choice for athletic teams, 5Ks, and outdoor events.
+              </li>
+            </ul>
+            <p class="pc-SeoContent-note">
+              Not sure which fabric fits your event? Our team can help you match fabric to occasion and budget.
+            </p>
+          </div>
+
+          <!-- Subsection 3: Decoration Methods -->
+          <div class="pc-SeoContent-section">
+            <h4 class="pc-SeoContent-subheading">Screen Printing, Digital Printing, or Embroidery for Custom Shirts?</h4>
+            <ul class="pc-SeoContent-list">
+              <li>
+                <strong>Screen Printing:</strong> The best value at scale — durable, vibrant, and cost-effective for bulk orders. Works best with 1-3 solid ink colors; more colors added to a design increases cost.
+              </li>
+              <li>
+                <strong>Digital Printing (DTF / Direct-to-Film):</strong> Unlimited color reproduction — ideal for detailed designs, photographs, and subtle gradients that screen printing cannot reproduce cleanly. A strong choice for single shirts and smaller orders since there is no extra per-color fee.
+              </li>
+              <li>
+                <strong>Embroidery:</strong> A raised, textured, stitched finish that reads as premium and professional — the standard choice for corporate logos and staff uniforms. Works best with clean, bold logos.
+              </li>
+            </ul>
+            <p class="pc-SeoContent-note">
+              Not sure which is right for your design? Upload your artwork in our online designer and we'll recommend the best fit.
+            </p>
+          </div>
+
+          <!-- Subsection 4: Design Placement -->
+          <div class="pc-SeoContent-section">
+            <h4 class="pc-SeoContent-subheading">Where on Your Custom Tee to Put Your Design</h4>
+            <ul class="pc-SeoContent-list">
+              <li>
+                <strong>Full Front:</strong> Maximum visibility — ideal for bold logos, large event graphics, or a hero design that's the main attraction.
+              </li>
+              <li>
+                <strong>Left Chest:</strong> A smaller, classic placement — the standard choice for corporate branding, team names, and a clean, retail-ready presentation.
+              </li>
+              <li>
+                <strong>Back:</strong> Great for secondary details — sponsor listings, event dates, roster names, or a slogan that reads clearly from a distance.
+              </li>
+              <li>
+                <strong>Sleeve:</strong> A subtle accent placement for a small logo, badge, or icon.
+              </li>
+            </ul>
+            <p class="pc-SeoContent-note">
+              Combine placements — like a small left-chest logo with a bold back design — to get the most out of your custom shirt.
+            </p>
+          </div>
+
+          <!-- Subsection 5: Pricing Factors & Saving Tips -->
+          <div class="pc-SeoContent-section">
+            <h4 class="pc-SeoContent-subheading">What Affects Your Custom T-Shirt Price (and How to Save)</h4>
+            <p>
+              Your price depends on quantity, garment style, number of print locations, and decoration method. Here is how to maximize your budget:
+            </p>
+            <ul class="pc-SeoContent-list">
+              <li>
+                <strong>Order More:</strong> The price per shirt drops noticeably as your quantity increases — transparent tiered pricing applies automatically.
+              </li>
+              <li>
+                <strong>Use Fewer Colors (for screen printing):</strong> Since screen printing involves separate screens per ink color, keeping your design to 1-2 colors provides significant savings for volume runs.
+              </li>
+              <li>
+                <strong>Choose Digital Printing for Smaller Quantities:</strong> If you're ordering a handful of shirts, Direct-to-Film has zero per-color setup charges, making it the most economical choice.
+              </li>
+              <li>
+                <strong>Stick to One Print Location:</strong> Adding a second placement (like a full back print) adds production cost — a single, well-placed graphic keeps your unit price lowest.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Subsection 6: Groups & Occasions -->
+          <div class="pc-SeoContent-section">
+            <h4 class="pc-SeoContent-subheading">Custom T-Shirts for Every Group</h4>
+            <p>
+              Whatever brings your people together, there's a custom t-shirt built for the occasion:
+            </p>
+            <ul class="pc-SeoContent-list">
+              <li>
+                <strong>Company &amp; Corporate Events:</strong> Employee onboarding kits, corporate retreats, and conferences — professional apparel that looks as sharp in the office as it does offsite.
+              </li>
+              <li>
+                <strong>School &amp; Spirit Wear:</strong> Student councils, clubs, spirit weeks, and class trips — durable shirts mixing youth and adult sizing so the entire school matches.
+              </li>
+              <li>
+                <strong>Sports Teams &amp; Leagues:</strong> Tough enough for practice drills, sharp enough for travel days — personalize with custom rosters and numbers.
+              </li>
+              <li>
+                <strong>Nonprofits &amp; Fundraisers:</strong> High-impact, giveaway-friendly merchandise that supporters are eager to wear — priced to support organizational budgets.
+              </li>
+              <li>
+                <strong>Family Reunions &amp; Life Events:</strong> A shared graphic with a family surname or milestone year turns any gathering into an unforgettable memory.
+              </li>
+              <li>
+                <strong>Bachelorette &amp; Bachelor Parties:</strong> Rapid turnarounds and no minimum order barriers make it effortless to outfit everyone before the big celebration.
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pc-SeoContent-toggleWrapper">
+          <button
+            type="button"
+            class="pc-SeoContent-toggle"
+            id="SeoContentToggle-{{ section.id }}"
+            aria-expanded="false"
+            aria-controls="SeoContentCollapsible-{{ section.id }}"
+          >
+            <span class="pc-SeoContent-toggleText">Read more</span>
+            <svg class="pc-SeoContent-toggleIcon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- J. How to Order Custom T-Shirts -->
+    {% if section.settings.show_how_to_order %}
+      <div class="pc-HowToOrder">
+        <div class="pc-MobileHeader">
+          <h4 class="pc-HowToOrder-title">How to Order Custom T-Shirts</h4>
+          <div class="pc-TrendingNav pc-MobileNav">
+          <button type="button" class="pc-Carousel-arrow" data-mc-target="HowTrack-{{ section.id }}" data-mc-dir="-1" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          <button type="button" class="pc-Carousel-arrow" data-mc-target="HowTrack-{{ section.id }}" data-mc-dir="1" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
+        </div>
+        </div>
+        <ul class="pc-HowToOrder-tiles" id="HowTrack-{{ section.id }}">
+          <li class="pc-HowToOrder-tile">
+            <div class="pc-HowToOrder-tile-number">1</div>
+            <h5 class="pc-HowToOrder-tile-title">Select Your T-shirt</h5>
+            <div class="pc-HowToOrder-tile-desc">
+              Browse custom t-shirt options by style, color, or price, then click on the specific t-shirt you want to customize.
+            </div>
+          </li>
+          <li class="pc-HowToOrder-tile">
+            <div class="pc-HowToOrder-tile-number">2</div>
+            <h5 class="pc-HowToOrder-tile-title">Customize Your T-shirt</h5>
+            <div class="pc-HowToOrder-tile-desc">
+              Once you click "Start Designing", your chosen product will load in our online designer where you can upload artwork, add text, and preview your design.
+            </div>
+          </li>
+          <li class="pc-HowToOrder-tile">
+            <div class="pc-HowToOrder-tile-number">3</div>
+            <h5 class="pc-HowToOrder-tile-title">Select Sizes and Quantities</h5>
+            <div class="pc-HowToOrder-tile-desc">
+              Specify the quantity of each size, take advantage of volume tier discounts, and have everything shipped directly to your team or address.
+            </div>
+          </li>
+          <li class="pc-HowToOrder-tile">
+            <div class="pc-HowToOrder-tile-number">4</div>
+            <h5 class="pc-HowToOrder-tile-title">Complete Your Custom Order</h5>
+            <div class="pc-HowToOrder-tile-desc">
+              Review your design proof, add to cart, enter shipping and payment details, and place your order with complete confidence.
+            </div>
+          </li>
+        </ul>
+      </div>
+    {% endif %}
+
+    <!-- K. Frequently Asked Questions Accordion -->
+    {% if section.settings.show_faqs %}
+      <section class="pc-Faqs" id="pc-Faqs">
+        <h3 class="pc-Faqs-title">Frequently Asked Questions</h3>
+        <div class="pc-FaqWrapper">
+          <!-- FAQ 1 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question isOpened" aria-expanded="true">
+              How much does a custom t-shirt cost?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: block;">
+              <p>
+                The cost depends on the garment style you choose, print placements, and the quantity you order. The more shirts you order, the lower your price per shirt. With SwiftBay Prints all-inclusive pricing, you will always see your exact total before you buy — no hidden setup fees or surprise charges.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              Why should I order custom t-shirts from SwiftBay Prints?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                We bring high-definition printing, soft and durable fabrics, and dedicated customer support to every order. Every design is checked by our production specialists before printing, ensuring crisp details, vibrant colors, and guaranteed on-time delivery.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              Can I order just one custom t-shirt?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Yes! We offer no minimum order requirements on our core t-shirt styles. Whether you need a single shirt for a gift or hundreds of custom shirts to outfit your whole company, you can order exactly the quantity you need.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What is the turnaround time for custom t-shirt printing?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Standard production and delivery typically takes between 7 to 12 business days, with expedited rush production and shipping options available at checkout for time-sensitive events.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              How do I design my own custom t-shirt?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                You can design your shirt directly in our online product customizer. Simply choose your garment, click "Start Designing", upload your artwork or logo, add custom text in your favorite fonts, and arrange your design in real time.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 6 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              How do I order custom t-shirts for my group or business?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Ordering for a group is simple. Create your design on the selected t-shirt, select the sizes and quantities needed across your team, and add them to your cart. Bulk tier discounts apply automatically as quantities increase. For very large organization orders, contact our experts for a personalized volume quote.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 7 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What are some tips for designing a high-quality t-shirt?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Use high-contrast color combinations (for example, light graphics on dark shirts or dark graphics on light shirts), keep text legible from a few feet away, and upload high-resolution files (300 DPI or vector formats) to ensure crisp print edges.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 8 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What kinds of events can I order custom t-shirts for?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                We produce custom shirts for every occasion imaginable: corporate events, startup branding, charity walks, 5K marathons, school spirit weeks, family reunions, sports teams, church events, and celebrations.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 9 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              Can I choose between digital printing and screen printing?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Yes. We utilize advanced Direct-to-Film (DTF) digital printing for multi-color, photo-realistic, or single-shirt orders, and screen printing for high-volume bulk runs. We will always ensure your design is paired with the best technique for durability and value.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 10 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What file types work best for uploading artwork for my shirt design?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Vector files (SVG, AI, EPS, PDF) produce the sharpest results at any size. High-resolution PNG files with transparent backgrounds (at least 300 DPI) also work excellently. If you are unsure about your file format, upload your file and our design specialists will review it.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 11 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What happens after I place my custom shirt order?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Once your order is placed, our print team inspects your artwork for print resolution, placement, and alignment. Your shirts are then queued for precision printing, quality checked, carefully packaged, and shipped directly to your door with tracking updates.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 12 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What if I need to make changes after ordering?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Please reach out to our support team as soon as possible via phone at 650-339-6766 or through our Contact page. If your order has not entered active production yet, we can usually modify sizes, quantities, or artwork details.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 13 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              Do you offer discounts for large bulk orders?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                Yes! Our pricing scales with quantity — the more shirts you order, the lower your per-shirt cost. For high-volume company or organization orders, contact our team for specialized wholesale pricing.
+              </p>
+            </div>
+          </div>
+
+          <!-- FAQ 14 -->
+          <div class="pc-Faqs-faq">
+            <button type="button" class="pc-Faqs-faq-question" aria-expanded="false">
+              What if my shirts arrive and there is an issue?
+            </button>
+            <div class="pc-Faqs-faq-answer" style="display: none;">
+              <p>
+                We stand behind our print quality. If your order arrives with a manufacturing defect or printing flaw, contact our support team with your order number and photos, and we will make it right through a rapid reprint or resolution.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQPage JSON-LD Structured Data -->
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How much does a custom t-shirt cost?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The cost depends on the garment style you choose, print placements, and the quantity you order. The more shirts you order, the lower your price per shirt. With SwiftBay Prints all-inclusive pricing, you will always see your exact total before you buy — no hidden setup fees or surprise charges."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Why should I order custom t-shirts from SwiftBay Prints?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "We bring high-definition printing, soft and durable fabrics, and dedicated customer support to every order. Every design is checked by our production specialists before printing, ensuring crisp details, vibrant colors, and guaranteed on-time delivery."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can I order just one custom t-shirt?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! We offer no minimum order requirements on our core t-shirt styles. Whether you need a single shirt for a gift or hundreds of custom shirts to outfit your whole company, you can order exactly the quantity you need."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the turnaround time for custom t-shirt printing?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Standard production and delivery typically takes between 7 to 12 business days, with expedited rush production and shipping options available at checkout for time-sensitive events."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How do I design my own custom t-shirt?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can design your shirt directly in our online product customizer. Simply choose your garment, click 'Start Designing', upload your artwork or logo, add custom text in your favorite fonts, and arrange your design in real time."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Do you offer discounts for large bulk orders?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes! Our pricing scales with quantity — the more shirts you order, the lower your per-shirt cost. For high-volume company or organization orders, contact our team for specialized wholesale pricing."
+              }
+            }
+          ]
+        }
+      </script>
+    {% endif %}
+  </div>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    // 1. Mobile Read more / Read less interaction for buying guide
+    var seoToggle = document.getElementById('SeoContentToggle-{{ section.id }}');
+    var seoContent = document.getElementById('SeoContentCollapsible-{{ section.id }}');
+
+    if (seoToggle && seoContent) {
+      seoToggle.addEventListener('click', function () {
+        var isExpanded = seoToggle.getAttribute('aria-expanded') === 'true';
+        var textSpan = seoToggle.querySelector('.pc-SeoContent-toggleText');
+
+        if (isExpanded) {
+          seoContent.classList.remove('is-expanded');
+          seoToggle.setAttribute('aria-expanded', 'false');
+          if (textSpan) textSpan.textContent = 'Read more';
+          var headerEl = document.querySelector('#TshirtHub-{{ section.id }} .pc-SeoContent');
+          if (headerEl) {
+            var rect = headerEl.getBoundingClientRect();
+            if (rect.top < 0) {
+              headerEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+        } else {
+          seoContent.classList.add('is-expanded');
+          seoToggle.setAttribute('aria-expanded', 'true');
+          if (textSpan) textSpan.textContent = 'Read less';
+        }
+      });
+    }
+
+    // 3. FAQ Accordion interaction
+    var faqQuestions = document.querySelectorAll('#TshirtHub-{{ section.id }} .pc-Faqs-faq-question');
+    faqQuestions.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isOpened = btn.classList.contains('isOpened');
+        var answer = btn.nextElementSibling;
+
+        if (isOpened) {
+          btn.classList.remove('isOpened');
+          btn.setAttribute('aria-expanded', 'false');
+          if (answer) answer.style.display = 'none';
+        } else {
+          btn.classList.add('isOpened');
+          btn.setAttribute('aria-expanded', 'true');
+          if (answer) answer.style.display = 'block';
+        }
+      });
+    });
+
+    // 4. Trending Products Carousel Navigation
+    var track = document.getElementById('TrendingTrack-{{ section.id }}');
+    var prevBtn = document.getElementById('TrendingPrev-{{ section.id }}');
+    var nextBtn = document.getElementById('TrendingNext-{{ section.id }}');
+
+    if (track && prevBtn && nextBtn) {
+      prevBtn.addEventListener('click', function () {
+        track.scrollBy({ left: -260, behavior: 'smooth' });
+      });
+      nextBtn.addEventListener('click', function () {
+        track.scrollBy({ left: 260, behavior: 'smooth' });
+      });
+    }
+
+    // 5. Phone carousels (Advice & Inspiration, How to Order)
+    document.querySelectorAll('#TshirtHub-{{ section.id }} [data-mc-target]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var el = document.getElementById(btn.getAttribute('data-mc-target'));
+        if (!el) return;
+        var first = el.children[0];
+        var gap = parseFloat(getComputedStyle(el).columnGap) || 16;
+        var step = first ? first.getBoundingClientRect().width + gap : 260;
+        el.scrollBy({ left: step * parseInt(btn.getAttribute('data-mc-dir'), 10), behavior: 'smooth' });
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "T-shirt hub",
+  "settings": [
+    {
+      "type": "text",
+      "id": "page_title",
+      "label": "Page Title",
+      "default": "Custom T-shirts"
+    },
+    {
+      "type": "header",
+      "content": "Promotional Hero Banner"
+    },
+    {
+      "type": "text",
+      "id": "promo_heading",
+      "label": "Promo Heading",
+      "default": "Design custom shirts for your team or event."
+    },
+    {
+      "type": "text",
+      "id": "promo_subheading",
+      "label": "Promo Subheading",
+      "default": "High-quality printing, no minimums on select styles, and fast, reliable delivery."
+    },
+    {
+      "type": "text",
+      "id": "promo_button",
+      "label": "Promo Button Label",
+      "default": "Shop All T-Shirts"
+    },
+    {
+      "type": "url",
+      "id": "promo_link",
+      "label": "Promo Button Link"
+    },
+    {
+      "type": "color",
+      "id": "promo_bg",
+      "label": "Promo Background Color",
+      "default": "#c67dbc"
+    },
+    {
+      "type": "header",
+      "content": "Featured Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_featured",
+      "label": "Show Featured Products",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "featured_heading",
+      "label": "Heading",
+      "default": "Featured Products"
+    },
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Product",
+      "info": "Supplies the title, image and color swatches. Leave empty to use the manual fields below."
+    },
+    {
+      "type": "text",
+      "id": "featured_title",
+      "label": "Manual title (used if no product)"
+    },
+    {
+      "type": "image_picker",
+      "id": "featured_image",
+      "label": "Manual image (used if no product)"
+    },
+    {
+      "type": "text",
+      "id": "featured_badge",
+      "label": "Badge",
+      "default": "Best Seller"
+    },
+    {
+      "type": "text",
+      "id": "featured_note",
+      "label": "Note",
+      "default": "No Minimum"
+    },
+    {
+      "type": "text",
+      "id": "featured_details_label",
+      "label": "Details link label",
+      "default": "View Details"
+    },
+    {
+      "type": "url",
+      "id": "featured_details_link",
+      "label": "Details link",
+      "info": "Leave empty to open the selected product page."
+    },
+    {
+      "type": "text",
+      "id": "featured_design_label",
+      "label": "Button label",
+      "default": "Start Designing"
+    },
+    {
+      "type": "url",
+      "id": "featured_design_link",
+      "label": "Button link",
+      "info": "Leave empty to open the selected product."
+    },
+    {
+      "type": "text",
+      "id": "featured_rating_count",
+      "label": "Rating count (placeholder)",
+      "info": "Shown beside the rating on phones, for example 1028+. Used only when the product has no review count. Leave empty to hide. Only enter a number that is true."
+    },
+    {
+      "type": "header",
+      "content": "Trending Products Carousel"
+    },
+    {
+      "type": "text",
+      "id": "trending_title",
+      "label": "Trending Heading",
+      "default": "Shop Trending Products"
+    },
+    {
+      "type": "collection",
+      "id": "trending_collection",
+      "label": "Trending Collection"
+    },
+    {
+      "type": "text",
+      "id": "trending_rating_count",
+      "label": "Rating count (placeholder)",
+      "info": "Shown beside the rating when a product has no review count, for example 1028+. Leave empty to hide. Only enter a number that is true."
+    },
+    {
+      "type": "number",
+      "id": "price_break_quantity",
+      "label": "Per-item price quantity",
+      "info": "Phones show the per-item price for this order quantity when the product has Shopify volume pricing.",
+      "default": 100
+    },
+    {
+      "type": "text",
+      "id": "trending_delivery_label",
+      "label": "Delivery and rush text",
+      "info": "Phones only. A product's own custom.delivery_text value is used first. Leave empty to hide. Only enter rush availability your products really support."
+    },
+    {
+      "type": "header",
+      "content": "Advice & Inspiration (Guides)"
+    },
+    {
+      "type": "text",
+      "id": "stories_heading",
+      "label": "Stories Heading",
+      "default": "Advice & Inspiration"
+    },
+    {
+      "type": "text",
+      "id": "story_1_title",
+      "label": "Story 1 Title",
+      "default": "Custom T-Shirts: How to Design, Print, and Order the Perfect Shirt"
+    },
+    {
+      "type": "text",
+      "id": "story_1_desc",
+      "label": "Story 1 Description",
+      "default": "25 years of custom t-shirt orders, distilled: how to design, which printing method to pick, fabrics compared, and ordering tips organizers can actually use."
+    },
+    {
+      "type": "url",
+      "id": "story_1_link",
+      "label": "Story 1 Link"
+    },
+    {
+      "type": "text",
+      "id": "story_2_title",
+      "label": "Story 2 Title",
+      "default": "How to Choose the Best T-Shirt Material: Cotton, Polyester, Blends & More"
+    },
+    {
+      "type": "text",
+      "id": "story_2_desc",
+      "label": "Story 2 Description",
+      "default": "The best t-shirt materials, compared head-to-head: cotton, polyester, 50/50, CVC, and tri-blend, with weight guides, print compatibility, and picks by use case."
+    },
+    {
+      "type": "url",
+      "id": "story_2_link",
+      "label": "Story 2 Link"
+    },
+    {
+      "type": "text",
+      "id": "story_3_title",
+      "label": "Story 3 Title",
+      "default": "T-Shirt Design Ideas: 50+ Inspiration Sources for Custom Shirts"
+    },
+    {
+      "type": "text",
+      "id": "story_3_desc",
+      "label": "Story 3 Description",
+      "default": "54 custom t-shirt design ideas across seven categories, from funny and vintage to cause-based and location-specific, plus printing tips and free design tools."
+    },
+    {
+      "type": "url",
+      "id": "story_3_link",
+      "label": "Story 3 Link"
+    },
+    {
+      "type": "header",
+      "content": "Product Experts"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_experts",
+      "label": "Show Experts Card",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "experts_title",
+      "label": "Experts Title",
+      "default": "Product Experts Available 7 Days a Week"
+    },
+    {
+      "type": "text",
+      "id": "experts_copy",
+      "label": "Experts Description",
+      "default": "Not sure what to buy? We'll point you to the right product!"
+    },
+    {
+      "type": "text",
+      "id": "experts_phone",
+      "label": "Experts Phone Number",
+      "default": "650-339-6766"
+    },
+    {
+      "type": "text",
+      "id": "experts_chat_label",
+      "label": "Experts Chat Button Label",
+      "default": "Chat With Us"
+    },
+    {
+      "type": "url",
+      "id": "experts_chat_link",
+      "label": "Experts Chat Link"
+    },
+    {
+      "type": "header",
+      "content": "SEO Guide, How To Order & FAQs"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_seo",
+      "label": "Show SEO Guide",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_how_to_order",
+      "label": "Show How to Order",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_faqs",
+      "label": "Show FAQs",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Category tile",
+      "settings": [
+        {
+          "type": "select",
+          "id": "group",
+          "label": "Group",
+          "default": "style",
+          "options": [
+            { "value": "style", "label": "Shop By Style" },
+            { "value": "fabric", "label": "Shop By Fabric" },
+            { "value": "fit", "label": "Shop By Fit" },
+            { "value": "collection", "label": "Shop By Collection" }
+          ]
+        },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "url", "id": "link", "label": "Link" },
+        { "type": "image_picker", "id": "image", "label": "Custom Image (Optional Override)" },
+        { "type": "text", "id": "badge", "label": "Badge (e.g. New!)" }
+      ]
+    },
+    {
+      "type": "featured_color",
+      "name": "Featured color",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Color name", "default": "Black" },
+        { "type": "color", "id": "color", "label": "Swatch color", "default": "#1e2126" },
+        { "type": "image_picker", "id": "image", "label": "Product image in this color" },
+        { "type": "text", "id": "asset_image", "label": "Fallback theme file", "info": "File name in the theme's assets folder, used only when no image is selected above." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "T-shirt hub"
+    }
+  ]
+}
+{% endschema %}

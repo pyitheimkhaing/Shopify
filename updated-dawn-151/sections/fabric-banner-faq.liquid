@@ -1,0 +1,62 @@
+<section class="fb-page fb-faq" data-fb-panel="faq" hidden>
+  <div class="fb-container">
+    <div class="fb-faq-layout">
+      <div class="fb-ask">
+        <h5>Still have questions? Drop us a line.</h5>
+        <form id="fb-ask-form">
+          <div class="fb-field">
+            <label for="fb-ask-name">Name</label>
+            <input id="fb-ask-name" name="customerName" type="text" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-ask-email">Email</label>
+            <input id="fb-ask-email" name="customerEmail" type="email" required>
+          </div>
+          <div class="fb-field">
+            <label for="fb-ask-q">What do you want to know?</label>
+            <textarea id="fb-ask-q" name="productqaQuestion" required></textarea>
+          </div>
+          <button type="submit" class="fb-btn fb-btn--primary">Help me out</button>
+          <p class="fb-form-msg" id="fb-ask-msg">Thanks. This is a demo form and is not sent to Shopify yet.</p>
+        </form>
+      </div>
+
+      <div class="fb-faq-list">
+        <h5>Fabric Banners - FAQ</h5>
+
+        <div class="fb-qa">
+          <p><span>Q:</span> What material are these fabric banners made of?</p>
+          <div class="fb-qa__a"><span>A:</span><div>Our banners are made of durable 7 oz polyester fabric, which is tear-resistant and moisture-resistant for long-lasting use.</div></div>
+          <div class="fb-helpful">Was This Review Helpful?<button type="button">Yes</button><button type="button">No</button></div>
+        </div>
+        <div class="fb-qa">
+          <p><span>Q:</span> What printing method do these banners use?</p>
+          <div class="fb-qa__a"><span>A:</span><div>We use 1440 DPI printing that delivers crisp details and vibrant, true-to-color graphics that are fade resistant.</div></div>
+          <div class="fb-helpful">Was This Review Helpful?<button type="button">Yes</button><button type="button">No</button></div>
+        </div>
+        <div class="fb-qa">
+          <p><span>Q:</span> Is it possible to do double-sided printing for fabric banners?</p>
+          <div class="fb-qa__a"><span>A:</span><div>Yes, we offer both sided printing for fabric banners for a sharp and consistent look that lasts for a long time.</div></div>
+          <div class="fb-helpful">Was This Review Helpful?<button type="button">Yes</button><button type="button">No</button></div>
+        </div>
+        <div class="fb-qa">
+          <p><span>Q:</span> Can I order custom sizes for my fabric banner?</p>
+          <div class="fb-qa__a"><span>A:</span><div>Yes, we offer standard sizes as well as custom dimensions tailored to your specific needs.</div></div>
+          <div class="fb-helpful">Was This Review Helpful?<button type="button">Yes</button><button type="button">No</button></div>
+        </div>
+        <div class="fb-qa">
+          <p><span>Q:</span> Can I customize the design and upload my own artwork?</p>
+          <div class="fb-qa__a"><span>A:</span><div>Yes, you can design the banner using our design templates or upload your own artwork. Either way, our design team is available to assist, plus you'll get a preview before your banner goes into production.</div></div>
+          <div class="fb-helpful">Was This Review Helpful?<button type="button">Yes</button><button type="button">No</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FB FAQ",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,341 @@
+{
+  "sections": {
+    "hub": {
+      "type": "tshirt-hub",
+      "blocks": {
+        "short_sleeve": {
+          "type": "tile",
+          "settings": {
+            "group": "style",
+            "title": "Short Sleeve T-shirts",
+            "link": "shopify://collections/shortsleeve-t-shirts"
+          }
+        },
+        "long_sleeve": {
+          "type": "tile",
+          "settings": {
+            "group": "style",
+            "title": "Long Sleeve T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "tank_tops": {
+          "type": "tile",
+          "settings": {
+            "group": "style",
+            "title": "Tank Tops & Sleeveless",
+            "link": "shopify://collections/tank-tops"
+          }
+        },
+        "premium_tshirts": {
+          "type": "tile",
+          "settings": {
+            "group": "fabric",
+            "title": "Premium T-shirts",
+            "link": "shopify://products/shortsleeve-t-shirts-100-cotton"
+          }
+        },
+        "soft_triblend": {
+          "type": "tile",
+          "settings": {
+            "group": "fabric",
+            "title": "Soft Tri-Blend T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "performance": {
+          "type": "tile",
+          "settings": {
+            "group": "fabric",
+            "title": "Performance Shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "heavyweight": {
+          "type": "tile",
+          "settings": {
+            "group": "fabric",
+            "title": "Heavyweight T-shirts",
+            "link": "shopify://collections/prue-cotton-100"
+          }
+        },
+        "sustainable": {
+          "type": "tile",
+          "settings": {
+            "group": "fabric",
+            "title": "Sustainable T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "unisex": {
+          "type": "tile",
+          "settings": {
+            "group": "fit",
+            "title": "Unisex T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "womens": {
+          "type": "tile",
+          "settings": {
+            "group": "fit",
+            "title": "Women's T-shirts",
+            "link": "shopify://collections/ladies-styles"
+          }
+        },
+        "kids": {
+          "type": "tile",
+          "settings": {
+            "group": "fit",
+            "title": "Kids T-shirts",
+            "link": "shopify://products/youth-t-shirts"
+          }
+        },
+        "tall": {
+          "type": "tile",
+          "settings": {
+            "group": "fit",
+            "title": "Tall T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "no_minimum": {
+          "type": "tile",
+          "settings": {
+            "group": "collection",
+            "title": "No Minimum T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "made_in_usa": {
+          "type": "tile",
+          "settings": {
+            "group": "collection",
+            "title": "Made in the USA T-shirts",
+            "link": "shopify://collections/custom-t-shirts"
+          }
+        },
+        "tie_dye": {
+          "type": "tile",
+          "settings": {
+            "group": "collection",
+            "title": "Tie-Dye T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "new_arrivals": {
+          "type": "tile",
+          "settings": {
+            "group": "collection",
+            "title": "NEW T-shirts",
+            "link": "shopify://collections/new",
+            "badge": "New!"
+          }
+        },
+        "canada": {
+          "type": "tile",
+          "settings": {
+            "group": "collection",
+            "title": "Canada T-shirts",
+            "link": "shopify://collections/t-shirts"
+          }
+        },
+        "featured_color_white": {
+          "type": "featured_color",
+          "settings": {
+            "name": "White",
+            "color": "#f4f4f2",
+            "asset_image": "ci-featured-white.png"
+          }
+        },
+        "featured_color_black": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Black",
+            "color": "#1f1f21",
+            "asset_image": "ci-featured-black.png"
+          }
+        },
+        "featured_color_navy": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Navy",
+            "color": "#1c2c4a",
+            "asset_image": "ci-featured-navy.png"
+          }
+        },
+        "featured_color_royal": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Royal Blue",
+            "color": "#1f63c4",
+            "asset_image": "ci-featured-royal.png"
+          }
+        },
+        "featured_color_lightblue": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Light Blue",
+            "color": "#6f8bc0",
+            "asset_image": "ci-featured-lightblue.png"
+          }
+        },
+        "featured_color_sapphire": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Steel Blue",
+            "color": "#4f7fa6",
+            "asset_image": "ci-featured-sapphire.png"
+          }
+        },
+        "featured_color_grey": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Heather Grey",
+            "color": "#b9bcc0",
+            "asset_image": "ci-featured-grey.png"
+          }
+        },
+        "featured_color_red": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Charcoal",
+            "color": "#6b6d70",
+            "asset_image": "ci-featured-red.png"
+          }
+        },
+        "featured_color_purple": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Slate",
+            "color": "#5c6068",
+            "asset_image": "ci-featured-purple.png"
+          }
+        },
+        "featured_color_natural": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Natural",
+            "color": "#e9e3d3",
+            "asset_image": "ci-featured-natural.png"
+          }
+        },
+        "featured_color_militarygreen": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Military Green",
+            "color": "#6e8a62",
+            "asset_image": "ci-featured-militarygreen.png"
+          }
+        },
+        "featured_color_forest": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Forest Green",
+            "color": "#16391f",
+            "asset_image": "ci-featured-forest.png"
+          }
+        },
+        "featured_color_maroon": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Maroon",
+            "color": "#5a1f3b",
+            "asset_image": "ci-featured-maroon.png"
+          }
+        },
+        "featured_color_daisy": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Daisy Yellow",
+            "color": "#f5cf2e",
+            "asset_image": "ci-featured-daisy.png"
+          }
+        },
+        "featured_color_darkheather": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Light Yellow",
+            "color": "#e9ea8a",
+            "asset_image": "ci-featured-darkheather.png"
+          }
+        },
+        "featured_color_azalea": {
+          "type": "featured_color",
+          "settings": {
+            "name": "Pink",
+            "color": "#f06fc0",
+            "asset_image": "ci-featured-azalea.png"
+          }
+        }
+      },
+      "block_order": [
+        "short_sleeve",
+        "long_sleeve",
+        "tank_tops",
+        "premium_tshirts",
+        "soft_triblend",
+        "performance",
+        "heavyweight",
+        "sustainable",
+        "unisex",
+        "womens",
+        "kids",
+        "tall",
+        "no_minimum",
+        "made_in_usa",
+        "tie_dye",
+        "new_arrivals",
+        "canada",
+        "featured_color_white",
+        "featured_color_black",
+        "featured_color_navy",
+        "featured_color_royal",
+        "featured_color_lightblue",
+        "featured_color_sapphire",
+        "featured_color_grey",
+        "featured_color_red",
+        "featured_color_purple",
+        "featured_color_natural",
+        "featured_color_militarygreen",
+        "featured_color_forest",
+        "featured_color_maroon",
+        "featured_color_daisy",
+        "featured_color_darkheather",
+        "featured_color_azalea"
+      ],
+      "settings": {
+        "page_title": "Custom T-shirts",
+        "promo_heading": "Design custom shirts for your team or event.",
+        "promo_subheading": "High-quality printing, no minimums on select styles, and fast, reliable delivery.",
+        "promo_button": "Shop All T-Shirts",
+        "promo_link": "shopify://collections/t-shirts",
+        "promo_bg": "#c67dbc",
+        "trending_title": "Shop Trending Products",
+        "trending_collection": "t-shirts",
+        "stories_heading": "Advice & Inspiration",
+        "show_experts": true,
+        "experts_title": "Product Experts Available 7 Days a Week",
+        "experts_copy": "Not sure what to buy? We'll point you to the right product!",
+        "experts_phone": "650-339-6766",
+        "experts_chat_label": "Chat With Us",
+        "experts_chat_link": "shopify://pages/contact",
+        "show_seo": true,
+        "show_how_to_order": true,
+        "show_faqs": true,
+        "show_featured": true,
+        "featured_heading": "Featured Products",
+        "featured_product": "shortsleeve-t-shirts",
+        "featured_badge": "Best Seller",
+        "featured_note": "No Minimum",
+        "featured_details_label": "View Details",
+        "featured_design_label": "Start Designing",
+        "featured_rating_count": "1028+",
+        "trending_rating_count": "1028+"
+      }
+    }
+  },
+  "order": [
+    "hub"
+  ]
+}

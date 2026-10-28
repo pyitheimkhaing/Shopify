@@ -1,0 +1,42 @@
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+{{ 'ci-design.css' | asset_url | stylesheet_tag }}
+
+<section class="cid-section cid-promo" {{ section.shopify_attributes }}>
+  <div class="cid-wrap">
+    <div class="cid-promo__card" style="--cid-promo-bg: {{ section.settings.background | default: '#68a8b8' }};">
+      <div class="cid-promo__media">
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', widths: '500, 750, 1000', sizes: '(min-width: 801px) 626px, 100vw', alt: section.settings.heading }}
+        {%- elsif section.settings.asset_image != blank -%}
+          <img src="{{ section.settings.asset_image | asset_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy" width="1000" height="600">
+        {%- endif -%}
+      </div>
+      <div class="cid-promo__body">
+        {%- if section.settings.heading != blank -%}<h2 class="cid-promo__title">{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.text != blank -%}<p class="cid-promo__text">{{ section.settings.text }}</p>{%- endif -%}
+        {%- if section.settings.button != blank -%}
+          <a class="cid-btn" href="{{ section.settings.link | default: '#' }}">
+            {{ section.settings.button }}
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo banner",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "asset_image", "label": "Fallback theme file", "info": "File name in the theme's assets folder, used only when no image is selected above.", "default": "ci-banner.webp" },
+    { "type": "color", "id": "background", "label": "Panel color", "default": "#68a8b8" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "New Arrivals Are Here" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Gear up for the season with fresh picks from the brands you love. From cozy layers to cool accessories, we're always adding more!" },
+    { "type": "text", "id": "button", "label": "Button label", "default": "Shop Now" },
+    { "type": "url", "id": "link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Promo banner" }]
+}
+{% endschema %}

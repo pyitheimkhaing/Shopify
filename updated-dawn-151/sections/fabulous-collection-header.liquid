@@ -1,0 +1,79 @@
+{{ 'fabulous-collection.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'fabulous-collection.js' | asset_url }}" defer="defer"></script>
+
+<div class="fbc-header" data-fbc-header>
+  <div class="fbc-header__bar">
+    <div class="fbc-header__left">
+      <button type="button" class="fbc-icon-button" data-fbc-menu-open aria-label="Open menu" aria-controls="FbcMenu-{{ section.id }}" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <button type="button" class="fbc-icon-button fbc-header__desktop-search" data-fbc-search-open aria-label="Search" aria-controls="FbcSearch-{{ section.id }}" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      </button>
+    </div>
+
+    <a class="fbc-header__brand" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }} home">
+      <img src="{{ 'swiftbay-logo.png' | asset_url }}" alt="SwiftBay Prints" width="1087" height="268" loading="eager">
+    </a>
+
+    <div class="fbc-header__right">
+      <button type="button" class="fbc-icon-button fbc-header__mobile-search" data-fbc-search-open aria-label="Search" aria-controls="FbcSearch-{{ section.id }}" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+      </button>
+      <a class="fbc-icon-button fbc-header__account" href="{{ routes.account_url }}" aria-label="Account">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.2"/><path d="M5.3 20v-2.2a6.7 6.7 0 0 1 13.4 0V20z"/></svg>
+      </a>
+      <a class="fbc-icon-button fbc-header__cart" href="{{ routes.cart_url }}" aria-label="Cart{% if cart.item_count > 0 %}, {{ cart.item_count }} items{% endif %}">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 8h15l-1 12h-13zM8.5 9V6a3.5 3.5 0 0 1 7 0v3"/></svg>
+        {%- if cart.item_count > 0 -%}<span class="fbc-header__cart-count">{{ cart.item_count }}</span>{%- endif -%}
+      </a>
+    </div>
+  </div>
+
+  {%- if section.settings.announcement != blank -%}
+    <div class="fbc-header__announcement">{{ section.settings.announcement | escape }}</div>
+  {%- endif -%}
+
+  <div class="fbc-header__scrim" data-fbc-close hidden></div>
+  <nav class="fbc-header__drawer" id="FbcMenu-{{ section.id }}" aria-label="Main menu" aria-hidden="true" tabindex="-1">
+    <div class="fbc-header__drawer-top"><span>Menu</span><button type="button" class="fbc-icon-button" data-fbc-close aria-label="Close menu">×</button></div>
+    <div class="fbc-header__drawer-links">
+      {%- for link in section.settings.menu.links -%}
+        {%- if link.links != blank -%}
+          <details class="fbc-header__nav-group">
+            <summary>{{ link.title | escape }}<span aria-hidden="true">→</span></summary>
+            <div class="fbc-header__subnav"><a href="{{ link.url }}">Shop all {{ link.title | escape }}</a>{%- for child in link.links -%}<a href="{{ child.url }}">{{ child.title | escape }}</a>{%- endfor -%}</div>
+          </details>
+        {%- else -%}
+          <a class="fbc-header__nav-link" href="{{ link.url }}">{{ link.title | escape }}</a>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+    <div class="fbc-header__drawer-bottom">
+      <a href="{{ routes.account_url }}">Account</a>
+      {%- if section.settings.phone != blank -%}<a href="tel:{{ section.settings.phone | remove: ' ' | remove: '-' }}">{{ section.settings.phone | escape }}</a>{%- endif -%}
+    </div>
+  </nav>
+
+  <div class="fbc-header__search" id="FbcSearch-{{ section.id }}" aria-hidden="true">
+    <form action="{{ routes.search_url }}" method="get" role="search" class="fbc-header__search-form">
+      <label class="visually-hidden" for="FbcSearchInput-{{ section.id }}">Search SwiftBay Prints</label>
+      <input id="FbcSearchInput-{{ section.id }}" name="q" type="search" placeholder="Search" autocomplete="off">
+      <input type="hidden" name="type" value="product">
+      <button type="submit" class="fbc-icon-button" aria-label="Submit search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg></button>
+    </form>
+    <button type="button" class="fbc-icon-button fbc-header__search-close" data-fbc-close aria-label="Close search">×</button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Fabulous header",
+  "settings": [
+    {"type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu"},
+    {"type": "text", "id": "announcement", "label": "Announcement", "default": "Create something personal with SwiftBay Prints"},
+    {"type": "text", "id": "phone", "label": "Menu phone", "default": "650-339-6766"}
+  ],
+  "presets": [{"name": "Fabulous header"}]
+}
+{% endschema %}

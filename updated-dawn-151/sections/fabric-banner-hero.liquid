@@ -1,0 +1,42 @@
+{% comment %} Phase 1 static Fabric Banners page -- loads scoped CSS/JS once. {% endcomment %}
+{{ 'fabric-banners.css' | asset_url | stylesheet_tag }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="{{ 'fabric-banners.js' | asset_url }}" defer></script>
+
+<section class="fb-page fb-hero" id="fabric-banners">
+  <div class="fb-container">
+    <nav aria-label="Breadcrumb">
+      <ol class="fb-crumbs">
+        <li><a href="{{ routes.root_url }}">Home</a></li>
+        <li><a href="{{ routes.root_url }}">Banners</a></li>
+        <li><span class="fb-crumbs__current">{{ page.title | default: 'Fabric Banners' }}</span></li>
+      </ol>
+    </nav>
+    <div class="fb-hero__head">
+      <h1 class="fb-title">{{ page.title | default: 'Fabric Banners' }}</h1>
+      <button type="button" class="fb-rating" data-fb-goto-tab="reviews" aria-label="4.4 out of 5 from 201 reviews">
+        <span class="fb-stars" aria-hidden="true">
+          <span class="is-on">*</span><span class="is-on">*</span><span class="is-on">*</span><span class="is-on">*</span><span>*</span>
+        </span>
+        <strong>4.4</strong>
+        <span class="fb-rating__count">201 reviews</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FB Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Internal note",
+      "default": "Phase 1 static hero"
+    }
+  ]
+}
+{% endschema %}

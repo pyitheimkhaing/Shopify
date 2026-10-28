@@ -1,0 +1,24 @@
+{{ 'ci-base.css' | asset_url | stylesheet_tag }}
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+<section class="section process-section">
+  <div class="page-width">
+    <div class="center-heading"><p class="eyebrow eyebrow-dark">{{ section.settings.eyebrow }}</p><h2>{{ section.settings.heading }}</h2><p>{{ section.settings.text }}</p></div>
+    <div class="process-grid">
+      <div class="process-step"><span class="step-number">01</span><div class="step-line"></div><h3>Design online</h3><p>Choose a product, pick a template, and make it yours in our simple Design Studio.</p></div>
+      <div class="process-step"><span class="step-number">02</span><div class="step-line"></div><h3>Printed with precision</h3><p>We take over with expert printing and quality checks, so your gear looks as good as your idea.</p></div>
+      <div class="process-step"><span class="step-number">03</span><div class="step-line"></div><h3>Shipped to your door</h3><p>No stress, no hassle. We’ll deliver your custom gear right to your doorstep.</p></div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "How it works",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "HOW IT WORKS" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "From blank to brilliant" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Design custom gear online, all hassle-free." }
+  ],
+  "presets": [{ "name": "How it works" }]
+}
+{% endschema %}

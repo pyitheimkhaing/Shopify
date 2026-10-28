@@ -1,0 +1,287 @@
+{% comment %}
+  Renders a megamenu for the header.
+
+  Usage:
+  {% render 'header-mega-menu' %}
+{% endcomment %}
+
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="list-menu--inline_li">
+        {%- if link.links != blank -%}
+          <header-menu class="mega-menu_header_menu_box">
+            <div id="Details-HeaderMenu-{{ forloop.index }}" class="mega-menu mega-menu_new">
+              <a
+                id="HeaderMenu-{{ link.handle }}"
+                href="{{ link.url }}"
+                class="header__menu-item list-menu__item link focus-inset"
+              >
+                <span
+                  {%- if link.child_active %}
+                    class="header__active-menu-item"
+                  {% endif %}
+                >
+                  {{- link.title | escape -}}
+                </span>
+              </a>
+              <div
+                id="MegaMenu-Content-{{ forloop.index }}"
+                class="mega-menu__content color-{{ section.settings.menu_color_scheme }} gradient motion-reduce global-settings-popup"
+                tabindex="-1"
+              >
+                <div class="mega-menu__content_box {{ link.title | downcase | replace: ' ', '-' | replace: '&', '' }}">
+                <ul
+                  class="mega-menu__list mega-menu__list_box {% if link.levels == 1 %} mega-menu__list--condensed{% endif %}{% if childlink.title contains '|' %} mega-menu__list_box{% endif %} {{ link.title | downcase | replace: ' ', '-' | replace: '&', '' }}"
+                  role="list"
+                >
+                  {%- for childlink in link.links -%}
+                     {% if childlink.title contains '|' %}
+                    <li class="mega-menu__list {% if childlink.title contains '|' %} mega-menu__list_new{% endif %} {{ link.title | downcase | replace: ' ', '-' | replace: '&', '' }}">
+                   
+                      {% assign childlink_img_url = childlink.title | split: '|' | last %}
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      style="color: #000;text-decoration: none;"
+                      >
+                      <img src="{{ childlink_img_url }}" alt="mega-menu-image" width="100%" height="auto" style="margin-top: 0px;">
+                        <p class="mega-menu__link_new link link--text-hover" style="margin-top:0px;" >{{ childlink.title | split: '|' | first | strip_html | escape }}</p>
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      {%- endif -%}
+                            {%- else -%}
+                      <a
+                        id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}"
+                        href="{{ childlink.url }}"
+                        class="mega-menu__link mega-menu__link--level-2 link{% if childlink.current %} mega-menu__link--active{% endif %}"
+                        {% if childlink.current %}
+                          aria-current="page"
+                        {% endif %}
+                      >
+                        {{ childlink.title | escape }}
+                      </a>
+                      {%- if childlink.links != blank -%}
+                        <ul class="list-unstyled" role="list">
+                          {%- for grandchildlink in childlink.links -%}
+                            <li>
+                              <a
+                                id="HeaderMenu-{{ link.handle }}-{{ childlink.handle }}-{{ grandchildlink.handle }}"
+                                href="{{ grandchildlink.url }}"
+                                class="mega-menu__link link{% if grandchildlink.current %} mega-menu__link--active{% endif %}"
+                                {% if grandchildlink.current %}
+                                  aria-current="page"
+                                {% endif %}
+                              >
+                                {{ grandchildlink.title | escape }}
+                              </a>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                     
+                              {%- endif -%}
+                    </li> {%- endif -%}
+                  {%- endfor -%}
+                </ul>
+                  {% for block in section.blocks %}
+                  {%- case block.type -%}
+        {%- when 'title' -%}
+                        {%- if block.settings.dropdown_link_title == link.title -%}
+                          <style>
+                            .mega-menu__list_box.{{ link.title | downcase | replace: ' ', '-' | replace: '&', '' }}{
+                              display:none;
+                            }
+                            .mega-menu__content_box.{{ link.title | downcase | replace: ' ', '-' | replace: '&', '' }}{
+                              padding:0;
+                            }
+                          </style>
+                          <div class="header_menu_title_box">
+                          <div class="header_menu_title_li header_menu_title_left">
+                          {%- if block.settings.menu != blank -%}
+                          <ul class="header_menu_title_left_box">
+                            {%- for link in block.settings.menu.links -%}
+                              <li class="header_menu_title_left_box_li">
+                               {%- if link.links != blank -%}
+                    <div class="header_menu_title_left_one">
+                      <summary
+                        class="header_menu_title_left_one_summary"
+                      >
+                        {{ link.title | escape }}
+                        <span class="svg-wrapper">
+                          {{- 'icon-caret.svg' | inline_asset_content -}}
+                        </span>
+                      </summary>
+                      <div
+                        id="link-{{ link.handle | escape }}"
+                        class="header_menu_title_left_two "
+                        tabindex="-1"
+                      >
+                        <div class="header_menu_title_left_two-submenu">
+                          <ul class="header_menu_title_left_three " role="list" tabindex="-1">
+                            {%- for childlink in link.links -%}
+                              <li>
+                                {%- if childlink.links == blank -%}
+                                  <a
+                                    id="HeaderDrawer-{{ link.handle }}-{{ childlink.handle }}"
+                                    href="{{ childlink.url }}"
+                                    class="header_menu_title_left_three_a {% if childlink.current %} menu-drawer__menu-item--active{% endif %}"
+                                    {% if childlink.current %}
+                                      aria-current="page"
+                                    {% endif %}
+                                  >
+                                   {{ childlink.title | split: '|' | first | strip_html | escape }}
+                                  </a>
+                                {%- endif -%}
+                              </li>
+                            {%- endfor -%}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  {%- else -%}
+                                <a
+                                  href="{{ link.url }}"
+                                  class="header_menu_title_left_one_a link link--text list-menu__item list-menu__item--link"
+                                >
+                                  {{ link.title | escape }}
+                                </a>
+                                 {%- endif -%}
+                              </li>
+                            {%- endfor -%}
+                            {% if block.settings.bottom_anchor_one_link != blank or block.settings.bottom_anchor_two_link != blank %}
+                            <li class="bottom-anchor btn-group">
+                               {% if block.settings.bottom_anchor_one_link != blank %}
+                                 <a href="{{ block.settings.bottom_anchor_one_link }}" class="btn btn-outline btn-arrow-gt">{{ block.settings.bottom_anchor_title_one }}</a>
+                                 {% endif %}
+                               {% if block.settings.bottom_anchor_two_link != blank %}
+                                 <a href="{{ block.settings.bottom_anchor_two_link }}" class="btn btn-primary btn-arrow-gt">{{ block.settings.bottom_anchor_title_two }}</a>
+                                 {% endif %}
+                              </li>
+                              {% endif %}
+                          </ul>
+                        {%- endif -%}
+                          </div>
+                     <div class="header_menu_title_li header_menu_title_right mega-menu__link_title_box{% if block.settings.image_link1 != blank %} mega-menu__link_title_two{% endif %}{% if block.settings.image_link2 != blank %} mega-menu__link_title_three{% endif %}">
+                       <div class="header_menu_title_right_box"  >
+                       <a href="{{ block.settings.image_link }}" class="mega-menu__link_title_box_a mega-menu__link link" {% if block.settings.menu == 'blanket' %}style="background-image: url('{{ 'Style 01-01.jpg' | asset_url }}');"{% elsif block.settings.image %}style="background-image: url('{{ block.settings.image | img_url: 'master' }}');"{% endif %}>
+                          <div class="header_menu_title_right_title">
+                          {% if block.settings.name_title != blank %}
+                            <h3 class="name fnt-bld">{{ block.settings.name_title }}</h3>
+                             {% endif %}
+                          {% if block.settings.info_title != blank %}
+                           <p class="info">{{ block.settings.info_title }}</p>
+                           {% endif %}
+                          {% if block.settings.best_sellers != blank %}
+                           <p class="header_menu_title_right_title_icon {{ block.settings.best_sellers | downcase | replace: ' ', '-' }}">{{ block.settings.best_sellers }}</p>
+                           {% endif %}
+                          </div>
+                       </a>
+                       </div>
+                        {%- if block.settings.image_link1 != blank -%}
+                          <div class="header_menu_title_right_box">
+                       <a href="{{ block.settings.image_link1 }}" class="mega-menu__link_title_box_a mega-menu__link link"  {% if block.settings.menu == 'blanket' %}style="background-image: url('{{ 'Style 02-01.jpg' | asset_url }}');"{% elsif block.settings.image1 %}style="background-image: url('{{ block.settings.image1 | img_url: 'master' }}');"{% endif %}>
+                          <div class="header_menu_title_right_title">
+                          {% if block.settings.name_title1 != blank %}
+                            <h3 class="name fnt-bld">{{ block.settings.name_title1 }}</h3>
+                             {% endif %}
+                          {% if block.settings.info_title1 != blank %}
+                           <p class="info">{{ block.settings.info_title1 }}</p>
+                           {% endif %}
+                          {% if block.settings.best_sellers1 != blank %}
+                           <p class="header_menu_title_right_title_icon {{ block.settings.best_sellers1 | downcase | replace: ' ', '-' }}">{{ block.settings.best_sellers1 }}</p>
+                           {% endif %}
+                          </div>
+                       </a> 
+                          </div>{%- endif -%}
+                       {%- if block.settings.image_link2 != blank -%}
+                         <div class="header_menu_title_right_box">
+                       <a href="{{ block.settings.image_link2 }}" class="mega-menu__link_title_box_a mega-menu__link link"  {% if block.settings.menu == 'blanket' %}style="background-image: url('{{ 'Style 03-01.jpg' | asset_url }}');"{% elsif block.settings.image2 %}style="background-image: url('{{ block.settings.image2 | img_url: 'master' }}');"{% endif %}>
+                          <div class="header_menu_title_right_title">
+                          {% if block.settings.name_title2 != blank %}
+                            <h3 class="name fnt-bld">{{ block.settings.name_title2 }}</h3>
+                             {% endif %}
+                          {% if block.settings.info_title2 != blank %}
+                           <p class="info">{{ block.settings.info_title2 }}</p>
+                           {% endif %}
+                          {% if block.settings.best_sellers2 != blank %}
+                           <p class="header_menu_title_right_title_icon {{ block.settings.best_sellers2 | downcase | replace: ' ', '-' }}">{{ block.settings.best_sellers2 }}</p>
+                           {% endif %}
+                          </div>
+                       </a></div>{%- endif -%}
+                     </div>
+                          </div>
+                          {%- endif -%}
+
+                    
+                        {%- endcase -%}{% endfor %}
+                </div>
+              </div>
+            </div>
+          </header-menu>
+        {%- else -%}
+          <a
+            id="HeaderMenu-{{ link.handle }}"
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset mega-menu_header_menu_box"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            <span
+              {%- if link.current %}
+                class="header__active-menu-item"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </span>
+          </a>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const tabContainers = document.querySelectorAll('.tab-container');
+
+  tabContainers.forEach((container) => {
+    const buttons = container.querySelectorAll('.tab-button');
+    const panels = container.querySelectorAll('.tab-panel');
+
+    buttons.forEach((button) => {
+      button.addEventListener('mouseenter', () => {
+        // 移除所有按钮和面板的激活状态
+        buttons.forEach((btn) => btn.classList.remove('active'));
+        panels.forEach((panel) => panel.classList.remove('active'));
+
+        // 激活当前按钮和对应的面板
+        button.classList.add('active');
+        const targetPanel = container.querySelector(`#${button.dataset.tab}`);
+        if (targetPanel) {
+          targetPanel.classList.add('active');
+        }
+      });
+    });
+  });
+});
+</script>

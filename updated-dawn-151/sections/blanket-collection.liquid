@@ -1,0 +1,183 @@
+{{ 'blanket-collection.css' | asset_url | stylesheet_tag }}
+{%- assign fallback_product = all_products['flannel-blanket-1'] -%}
+{%- assign card_count = 0 -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.product != blank or block.settings.title != blank -%}
+    {%- assign card_count = card_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+{%- assign fallback_needed = false -%}
+{%- if card_count == 0 and fallback_product != blank -%}{%- assign card_count = 1 -%}{%- assign fallback_needed = true -%}{%- endif -%}
+<section class="blanket-fabulous-collection" data-blanket-collection>
+  <div class="blanket-collection__trust">{{ section.settings.trust_text | escape }}</div>
+  <div class="blanket-collection__shell">
+    <header class="blanket-collection__hero"><h1>{{ section.settings.heading | escape }}</h1></header>
+    <div class="blanket-collection__toolbar">
+      <button type="button" class="blanket-collection__filter-toggle" data-filter-toggle aria-expanded="false" aria-controls="BlanketSortPanel-{{ section.id }}"><span aria-hidden="true">☷</span> Filter and sort</button>
+      <div class="blanket-collection__filter-overlay" data-filter-close></div>
+      <div class="blanket-collection__sort-panel" id="BlanketSortPanel-{{ section.id }}">
+        <div class="blanket-collection__drawer-header"><span>Filter and sort<small>{{ card_count }} {% if card_count == 1 %}product{% else %}products{% endif %}</small></span><button type="button" data-filter-close aria-label="Close filter and sort">×</button></div>
+        <div class="blanket-collection__sort-field">
+          <label for="BlanketSort-{{ section.id }}">Sort by:</label>
+          <span class="blanket-collection__select">
+            <select id="BlanketSort-{{ section.id }}" data-blanket-sort>
+              <option value="featured">Featured</option>
+              <option value="relevance">Most relevant</option>
+              <option value="best-selling">Best selling</option>
+              <option value="title-ascending">Alphabetically, A-Z</option>
+              <option value="title-descending">Alphabetically, Z-A</option>
+              <option value="price-ascending">Price, low to high</option>
+              <option value="price-descending">Price, high to low</option>
+              <option value="created-ascending">Date, old to new</option>
+              <option value="created-descending">Date, new to old</option>
+            </select><span aria-hidden="true">⌄</span>
+          </span>
+        </div>
+        <div class="blanket-collection__drawer-footer"><button type="button" data-filter-reset>Remove all</button><button type="button" data-filter-close>Apply</button></div>
+      </div>
+      <span class="blanket-collection__count">{{ card_count }} {% if card_count == 1 %}product{% else %}products{% endif %}</span>
+    </div>
+    <div class="blanket-collection__grid" data-blanket-grid>
+      {%- for block in section.blocks -%}
+        {%- assign card_product = block.settings.product -%}
+        {%- assign card_title = block.settings.title | default: card_product.title -%}
+        {%- if card_title != blank -%}
+          {%- assign card_url = card_product.url | default: block.settings.link -%}
+          {%- assign card_image = card_product.featured_media.preview_image -%}
+          {%- assign card_sort_price = block.settings.price_sort_cents | default: 0 -%}
+          {%- capture card_media -%}
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '330, 500, 700, 900', sizes: '(min-width: 990px) 33vw, 50vw', alt: card_title }}
+            {%- elsif block.settings.asset_image != blank -%}
+              <img src="{{ block.settings.asset_image | asset_url }}" alt="{{ card_title | escape }}" width="900" height="900" loading="lazy">
+            {%- elsif card_image != blank -%}
+              {{ card_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '330, 500, 700, 900', sizes: '(min-width: 990px) 33vw, 50vw', alt: card_title }}
+            {%- elsif block.settings.reference_image_url != blank -%}
+              <img src="{{ block.settings.reference_image_url | escape }}" alt="{{ card_title | escape }}" width="900" height="900" loading="lazy">
+            {%- endif -%}
+            {%- if card_product != blank and card_product.compare_at_price_max > card_product.price_min -%}
+              <span class="blanket-collection__badge">Sale</span>
+            {%- elsif block.settings.show_sale_badge -%}
+              <span class="blanket-collection__badge">Sale</span>
+            {%- elsif block.settings.badge_text != blank -%}
+              <span class="blanket-collection__badge">{{ block.settings.badge_text | escape }}</span>
+            {%- endif -%}
+          {%- endcapture -%}
+          <article class="blanket-collection__card" data-title="{{ card_title | escape }}" data-price="{% if card_product != blank %}{{ card_product.price_min }}{% elsif card_sort_price > 0 %}{{ card_sort_price }}{% endif %}" data-date="{% if card_product != blank %}{{ card_product.published_at | date: '%s' }}{% endif %}" data-order="{{ forloop.index }}" {{ block.shopify_attributes }}>
+            {%- if card_url != blank -%}
+              <a class="blanket-collection__image" href="{{ card_url }}" aria-label="{{ card_title | escape }}">{{ card_media }}</a>
+            {%- else -%}
+              <div class="blanket-collection__image">{{ card_media }}</div>
+            {%- endif -%}
+            <div class="blanket-collection__card-info">
+              <h2>{%- if card_url != blank -%}<a href="{{ card_url }}">{{ card_title | escape }}</a>{%- else -%}{{ card_title | escape }}{%- endif -%}</h2>
+              {%- if card_product != blank -%}
+                {%- assign rating = card_product.metafields.reviews.rating.value -%}
+                {%- assign review_count = card_product.metafields.reviews.rating_count.value -%}
+                {%- if rating != blank and review_count != blank and review_count > 0 -%}<div class="blanket-collection__reviews" aria-label="Rated {{ rating.rating }} out of {{ rating.scale_max }} from {{ review_count }} reviews"><span aria-hidden="true">★★★★★</span> <small>({{ review_count }})</small></div>{%- endif -%}
+                {%- assign card_compare_at = card_product.selected_or_first_available_variant.compare_at_price -%}
+                <p class="blanket-collection__price">{%- if card_compare_at > card_product.price_min -%}<s>{{ card_compare_at | money_with_currency }}</s>{%- endif -%}<span>{% if card_product.price_varies %}From {% endif %}{{ card_product.price_min | money_with_currency }}</span></p>
+              {%- elsif block.settings.price_text != blank -%}
+                <p class="blanket-collection__price">{%- if block.settings.compare_at_text != blank -%}<s>{{ block.settings.compare_at_text | escape }}</s>{%- endif -%}<span>{{ block.settings.price_text | escape }}</span></p>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endif -%}
+      {%- endfor -%}
+      {%- if fallback_needed -%}
+        <article class="blanket-collection__card" data-title="{{ fallback_product.title | escape }}" data-price="{{ fallback_product.price_min }}" data-date="{{ fallback_product.published_at | date: '%s' }}" data-order="1">
+          <a class="blanket-collection__image" href="{{ fallback_product.url }}">{%- if fallback_product.featured_media -%}{{ fallback_product.featured_media.preview_image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '330, 500, 700, 900', sizes: '(min-width: 990px) 33vw, 50vw', alt: fallback_product.title }}{%- endif -%}</a>
+          <div class="blanket-collection__card-info"><h2><a href="{{ fallback_product.url }}">{{ fallback_product.title | escape }}</a></h2><p class="blanket-collection__price">{% if fallback_product.price_varies %}From {% endif %}{{ fallback_product.price_min | money_with_currency }}</p></div>
+        </article>
+      {%- endif -%}
+    </div>
+    <details class="blanket-collection__about"><summary>{{ section.settings.seo_heading | escape }}<span aria-hidden="true">⌄</span></summary><div class="rte">{{ section.settings.seo_text }}</div></details>
+  </div>
+</section>
+<script>
+  (() => {
+    const root = document.querySelector('[data-blanket-collection]');
+    if (!root) return;
+    const sort = root.querySelector('[data-blanket-sort]');
+    const grid = root.querySelector('[data-blanket-grid]');
+    const cards = [...grid.children];
+    const filterToggle = root.querySelector('[data-filter-toggle]');
+    const setFilterOpen = (open) => {
+      root.classList.toggle('is-filter-open', open);
+      filterToggle.setAttribute('aria-expanded', String(open));
+    };
+    filterToggle.addEventListener('click', () => setFilterOpen(true));
+    root.querySelectorAll('[data-filter-close]').forEach(button => button.addEventListener('click', () => setFilterOpen(false)));
+    root.querySelector('[data-filter-reset]').addEventListener('click', () => {
+      sort.value = 'featured';
+      sort.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+    sort.addEventListener('change', () => {
+      const key = sort.value;
+      [...cards].sort((a, b) => {
+        if (key === 'title-ascending') return a.dataset.title.localeCompare(b.dataset.title);
+        if (key === 'title-descending') return b.dataset.title.localeCompare(a.dataset.title);
+        if (key === 'price-ascending' || key === 'price-descending') {
+          if (!a.dataset.price) return b.dataset.price ? 1 : Number(a.dataset.order) - Number(b.dataset.order);
+          if (!b.dataset.price) return -1;
+          return key === 'price-ascending'
+            ? Number(a.dataset.price) - Number(b.dataset.price)
+            : Number(b.dataset.price) - Number(a.dataset.price);
+        }
+        if (key === 'created-ascending' || key === 'created-descending') {
+          if (!a.dataset.date) return b.dataset.date ? 1 : Number(a.dataset.order) - Number(b.dataset.order);
+          if (!b.dataset.date) return -1;
+          return key === 'created-ascending'
+            ? Number(a.dataset.date) - Number(b.dataset.date)
+            : Number(b.dataset.date) - Number(a.dataset.date);
+        }
+        // Static card blocks have no reliable sales-count or search-relevance
+        // data, so those modes retain their configured order.
+        return Number(a.dataset.order) - Number(b.dataset.order);
+      }).forEach(card => grid.appendChild(card));
+    });
+  })();
+</script>
+{% schema %}
+{
+  "name":"Blanket collection",
+  "settings":[
+    {"type":"text","id":"heading","label":"Heading","default":"Personalized Blankets for Kids"},
+    {"type":"text","id":"trust_text","label":"Trust message","default":"Thoughtful gifts, made just for them"},
+    {"type":"text","id":"seo_heading","label":"About heading","default":"About Personalized Blankets for Kids"},
+    {"type":"richtext","id":"seo_text","label":"About text","default":"<p>Discover cozy personalized blankets for kids. Choose a design and add your favorite photo to make it their own.</p>"}
+  ],
+  "blocks":[{"type":"product_card","name":"Blanket card","limit":12,"settings":[
+    {"type":"product","id":"product","label":"Product (optional)"},
+    {"type":"text","id":"title","label":"Fallback card title (used without a product)"},
+    {"type":"image_picker","id":"image","label":"SwiftBay replacement image (optional)"},
+    {"type":"text","id":"reference_image_url","label":"Reference image URL (fallback only)"},
+    {"type":"select","id":"asset_image","label":"Existing SwiftBay image","options":[
+      {"value":"1 Photos-01.jpg","label":"1 photo"},
+      {"value":"2 Photos-01.jpg","label":"2 photos"},
+      {"value":"3 Photos-01.jpg","label":"3 photos"},
+      {"value":"4 Photos-01.jpg","label":"4 photos"},
+      {"value":"5 Photos-01.jpg","label":"5 photos"},
+      {"value":"6 Photos-01.jpg","label":"6 photos"},
+      {"value":"7 Photos-01.jpg","label":"7 photos"},
+      {"value":"8 Photos-01.jpg","label":"8 photos"},
+      {"value":"9 Photos-01.jpg","label":"9 photos"},
+      {"value":"Ten Photos-01.jpg","label":"10 photos"},
+      {"value":"Style 01-01.jpg","label":"Style 01"},
+      {"value":"Style 02-01.jpg","label":"Style 02"},
+      {"value":"Style 03-01.jpg","label":"Style 03"},
+      {"value":"Style 04-01.jpg","label":"Style 04"},
+      {"value":"Style 05-01.jpg","label":"Style 05"},
+      {"value":"Style 06-01.jpg","label":"Style 06"},
+      {"value":"Pet-01.jpg","label":"Pet portrait"}
+    ]},
+    {"type":"text","id":"price_text","label":"Displayed price without a product"},
+    {"type":"text","id":"compare_at_text","label":"Displayed compare-at price without a product"},
+    {"type":"number","id":"price_sort_cents","label":"Price for sorting in cents (optional)"},
+    {"type":"checkbox","id":"show_sale_badge","label":"Show Sale badge","default":false},
+    {"type":"text","id":"badge_text","label":"Other badge text"},
+    {"type":"url","id":"link","label":"Card link without a product"}
+  ]}],
+  "presets":[{"name":"Blanket collection"}]
+}
+{% endschema %}

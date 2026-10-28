@@ -1,0 +1,18 @@
+{{ 'ci-base.css' | asset_url | stylesheet_tag }}
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+<section class="section faq-section">
+  <div class="page-width faq-layout">
+    <div><p class="eyebrow eyebrow-dark">NEED TO KNOW</p><h2>Frequently asked questions</h2><p class="faq-intro">Have a question about custom printing? We’re here to make it easy.</p><a class="text-link" href="/pages/faq">Visit the help center <span>→</span></a></div>
+    <div class="faq-list">
+      {% assign questions = 'What’s the difference between screen printing and digital printing?|How do I start designing my own t-shirts?|What apparel options are available?|When will I get my order?' | split: '|' %}
+      {% assign answers = 'Screen printing is ideal for larger orders, while digital printing is perfect for small orders and full-color designs.|Choose an item, select a design template, or jump straight into the Design Studio and upload your own artwork.|We offer t-shirts, hoodies, polos, hats, and more in men’s, women’s, and youth fits.|Digital printing orders typically ship within 1–2 business days. Screen printing takes about 5–7 business days.' | split: '|' %}
+      {% for question in questions %}
+        <details class="faq-item"><summary>{{ question }}<span>+</span></summary><div class="faq-answer">{{ answers[forloop.index0] }}</div></details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "FAQ", "settings": [], "presets": [{ "name": "FAQ" }] }
+{% endschema %}

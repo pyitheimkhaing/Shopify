@@ -1,0 +1,36 @@
+{
+  "sections": {
+    "fabric-banner-product": {
+      "type": "fabric-banner-product",
+      "settings": {}
+    },
+    "fabric-banner-features": {
+      "type": "fabric-banner-features",
+      "settings": {}
+    },
+    "fabric-banner-content": {
+      "type": "fabric-banner-content",
+      "settings": {}
+    },
+    "fabric-banner-specifications": {
+      "type": "fabric-banner-specifications",
+      "settings": {}
+    },
+    "fabric-banner-faq": {
+      "type": "fabric-banner-faq",
+      "settings": {}
+    },
+    "fabric-banner-reviews": {
+      "type": "fabric-banner-reviews",
+      "settings": {}
+    }
+  },
+  "order": [
+    "fabric-banner-product",
+    "fabric-banner-features",
+    "fabric-banner-content",
+    "fabric-banner-specifications",
+    "fabric-banner-faq",
+    "fabric-banner-reviews"
+  ]
+}

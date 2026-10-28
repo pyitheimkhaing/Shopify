@@ -1,0 +1,4 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="promo-banner"><div class="container"><span>{{ section.settings.icon }}</span><p><strong>{{ section.settings.heading }}</strong> {{ section.settings.copy }}</p><a href="{{ section.settings.link }}">{{ section.settings.label }} →</a></div></section>
+{% schema %}{"name":"Promo banner","settings":[{"type":"text","id":"icon","label":"Icon","default":"✦"},{"type":"text","id":"heading","label":"Heading","default":"Order by October 13"},{"type":"text","id":"copy","label":"Copy","default":"for canvas delivery before Halloween. The digital version is ready the same day."},{"type":"text","id":"label","label":"Link label","default":"See delivery dates"},{"type":"url","id":"link","label":"Link"}],"presets":[{"name":"Promo banner"}]}{% endschema %}

@@ -1,0 +1,9 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="fp-section moments">
+  <div class="fp-wrap"><p class="fp-kicker">The moments</p><h2 class="fp-sec">The moment they see <em>their own world</em></h2><p class="fp-secsub">{{ section.settings.copy }}</p></div>
+  {% assign row_a = '1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17' | split: '|' %}
+  {% assign row_b = '1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|17' | split: '|' %}
+  {% for row in (1..2) %}{% if row == 1 %}{% assign row_files = row_a %}{% else %}{% assign row_files = row_b %}{% endif %}<div class="fp-marquee{% if row == 1 %} fp-marquee--reverse{% endif %}"><div class="fp-marquee__track">{% for copy in (1..2) %}<div class="fp-marquee__group" {% if copy == 2 %}aria-hidden="true"{% endif %}>{% for i in row_files %}<div class="fp-moment"><img src="https://fabulousportrait.com/cdn/shop/t/40/assets/fp-wall-{% if row == 1 %}a{% else %}b{% endif %}{{ i }}.webp" alt="" width="400" height="500" loading="lazy"></div>{% endfor %}</div>{% endfor %}</div></div>{% endfor %}
+</section>
+{% schema %}{"name":"Moments","settings":[{"type":"text","id":"heading","label":"Heading","default":"The moment they see their own world"},{"type":"textarea","id":"copy","label":"Copy","default":"Canvases on walls, blankets on couches and very proud faces. This is what their world looks like when it arrives."},{"type":"image_picker","id":"image_1","label":"Feature image"}],"presets":[{"name":"Moments"}]}{% endschema %}

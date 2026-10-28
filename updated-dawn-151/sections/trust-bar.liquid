@@ -1,0 +1,89 @@
+{{ 'customink-exact.css' | asset_url | stylesheet_tag }}
+{{ 'ci-design.css' | asset_url | stylesheet_tag }}
+
+{%- assign items = section.blocks | where: 'type', 'item' -%}
+{%- assign links = section.blocks | where: 'type', 'link' -%}
+<section class="cid-section cid-trust" {{ section.shopify_attributes }}>
+  <div class="cid-wrap">
+    {%- if items.size > 0 -%}
+      <div class="cid-trust__grid">
+        {%- for block in items -%}
+          <div class="cid-trust__item" {{ block.shopify_attributes }}>
+            <svg class="cid-trust__icon" viewBox="0 0 48 48" aria-hidden="true" focusable="false">
+              {%- case block.settings.icon -%}
+                {%- when 'shield' -%}
+                  <path d="M24 6.5 38 11.5v12c0 8.6-5.8 15.6-14 18.5-8.2-2.9-14-9.9-14-18.5v-12L24 6.5Z"/><path d="m17.5 24 5 5 9-10"/>
+                {%- when 'tools' -%}
+                  <path d="M10 19h28v23H10zM15 19V8h18v11M19 13h10M19 26h10M19 32h10M19 38h6"/>
+                {%- when 'products' -%}
+                  <path d="m24 5 4 8 9-2-2 9 8 4-8 4 2 9-9-2-4 8-4-8-9 2 2-9-8-4 8-4-2-9 9 2 4-8Z"/><circle cx="24" cy="24" r="5"/>
+                {%- when 'clock' -%}
+                  <circle cx="24" cy="24" r="17"/><path d="M24 13v11l7 4"/>
+                {%- when 'star' -%}
+                  <path d="m24 6 5.4 11 12.1 1.7-8.8 8.5 2.1 12.1L24 33.6 13.2 39.3l2.1-12.1-8.8-8.5L18.6 17 24 6Z"/>
+                {%- else -%}
+                  <path d="M5 14h25v20H5zM30 21h7l6 7v6H30zM12 39a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm24 0a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM2 19h17M2 24h13"/>
+              {%- endcase -%}
+            </svg>
+            <p class="cid-trust__text">
+              {%- if block.settings.link != blank -%}
+                <a href="{{ block.settings.link }}">{{ block.settings.text }}</a>
+              {%- else -%}
+                {{ block.settings.text }}
+              {%- endif -%}
+            </p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="cid-empty">Trust strip: add "Highlight" blocks.</p>
+    {%- endif -%}
+
+    {%- if links.size > 0 -%}
+      <nav class="cid-quick" aria-label="{{ section.settings.quicklinks_label | escape }}">
+        {%- for block in links -%}
+          <a href="{{ block.settings.url | default: '#' }}" {{ block.shopify_attributes }}>{{ block.settings.label }}</a>
+        {%- endfor -%}
+      </nav>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Trust strip",
+  "settings": [
+    { "type": "text", "id": "quicklinks_label", "label": "Mobile quick links (accessible name)", "default": "Popular links" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Highlight",
+      "settings": [
+        {
+          "type": "select", "id": "icon", "label": "Icon", "default": "shield",
+          "options": [
+            { "value": "shield", "label": "Shield check" },
+            { "value": "tools", "label": "Design tools" },
+            { "value": "products", "label": "Product burst" },
+            { "value": "truck", "label": "Delivery truck" },
+            { "value": "clock", "label": "Clock" },
+            { "value": "star", "label": "Star" }
+          ]
+        },
+        { "type": "text", "id": "text", "label": "Text", "default": "Your highlight" },
+        { "type": "url", "id": "link", "label": "Link (optional)" }
+      ]
+    },
+    {
+      "type": "link",
+      "name": "Mobile quick link",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "default": "Link" },
+        { "type": "url", "id": "url", "label": "URL" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Trust strip" }]
+}
+{% endschema %}

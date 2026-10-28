@@ -1,0 +1,40 @@
+.list-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 1.6rem;
+}
+
+@media only screen and (max-width: 749px) {
+  .list-social {
+    justify-content: center;
+    gap: 3.2rem;
+  }
+}
+
+li.list-social__item span.svg-wrapper {
+    width: 2.8rem;
+    height: 2.8rem;
+}
+.list-social__item .icon {
+  height: 2.8rem;
+  width: 2.8rem;
+}
+
+.list-social__link {
+  align-items: center;
+  display: flex;
+  padding: 0.9rem;
+  color: rgb(var(--color-foreground));
+  border: 2px solid;
+  border-radius: 50%;
+}
+
+.utility-bar .list-social__link {
+  padding: 0 0.8rem;
+  height: 3.8rem;
+}
+
+.list-social__link:hover .icon {
+  transform: scale(1.07);
+}

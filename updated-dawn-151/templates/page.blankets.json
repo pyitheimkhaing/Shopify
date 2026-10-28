@@ -1,0 +1,122 @@
+{
+  "sections": {
+    "main": {
+      "type": "blanket-collection",
+      "settings": {
+        "heading": "Personalized Blankets for Kids",
+        "trust_text": "Thoughtful gifts, made just for them",
+        "seo_heading": "About Personalized Blankets for Kids",
+        "seo_text": "<p>Explore personalized blankets for kids. Choose a blanket, then add your photos using the customization options available on its product page.</p>"
+      },
+      "blocks": {
+        "spiderman": {
+          "type": "product_card",
+          "settings": {
+            "product": "swiftbay-personalized-spiderman-blanket",
+            "title": "1 Photo Personalized Blanket",
+            "asset_image": "1 Photos-01.jpg",
+            "reference_image_url": "https://fabulousportrait.com/cdn/shop/files/boy_holding_spiderman_blanket_in_his_room.webp?v=1765296537&width=360",
+            "price_text": "From $49.50 USD",
+            "compare_at_text": "$60.00 USD",
+            "price_sort_cents": 4950,
+            "show_sale_badge": true,
+            "link": "/products/swiftbay-personalized-spiderman-blanket"
+          }
+        },
+        "unicorn": {
+          "type": "product_card",
+          "settings": {
+            "product": "swiftbay-riding-unicorn-custom-blanket",
+            "title": "2 Photos Collage Blanket",
+            "asset_image": "2 Photos-01.jpg",
+            "reference_image_url": "https://fabulousportrait.com/cdn/shop/files/PersonalizedUnicornBlanketwithfaceandname.webp?v=1730022351&width=360",
+            "price_text": "From $49.50 USD",
+            "compare_at_text": "$60.00 USD",
+            "price_sort_cents": 4950,
+            "show_sale_badge": true,
+            "link": "/products/swiftbay-riding-unicorn-custom-blanket"
+          }
+        },
+        "dinosaur": {
+          "type": "product_card",
+          "settings": {
+            "product": "swiftbay-riding-dinosaur-custom-blanket",
+            "title": "3 Photos Collage Blanket",
+            "asset_image": "3 Photos-01.jpg",
+            "reference_image_url": "https://fabulousportrait.com/cdn/shop/files/personalized_dinosaur_blanket_with_photo_and_name_05dff845-3524-430b-bd6c-33c0997f727b.webp?v=1763000151&width=360",
+            "price_text": "From $49.50 USD",
+            "compare_at_text": "$60.00 USD",
+            "price_sort_cents": 4950,
+            "show_sale_badge": true,
+            "link": "/products/swiftbay-riding-dinosaur-custom-blanket"
+          }
+        },
+        "elsa": {
+          "type": "product_card",
+          "settings": {
+            "product": "swiftbay-princess-elsa-custom-blanket",
+            "title": "Custom Photo Blanket - Style 06",
+            "asset_image": "Style 06-01.jpg",
+            "reference_image_url": "https://fabulousportrait.com/cdn/shop/files/personalizedelsaprincessblanketwithphotoandname.webp?v=1711129787&width=360",
+            "price_text": "From $49.50 USD",
+            "compare_at_text": "$60.00 USD",
+            "price_sort_cents": 4950,
+            "show_sale_badge": true,
+            "link": "/products/swiftbay-princess-elsa-custom-blanket"
+          }
+        },
+        "dino_chaos": {
+          "type": "product_card",
+          "settings": {
+            "product": "swiftbay-dino-chaos-custom-blanket",
+            "title": "Personalized Pet Photo Blanket",
+            "asset_image": "Pet-01.jpg",
+            "reference_image_url": "https://fabulousportrait.com/cdn/shop/files/personalizeddino-chaosblanketwithphotoandname.webp?v=1711119927&width=360",
+            "price_text": "From $49.50 USD",
+            "compare_at_text": "$60.00 USD",
+            "price_sort_cents": 4950,
+            "show_sale_badge": true,
+            "link": "/products/swiftbay-dino-chaos-custom-blanket"
+          }
+        }
+      },
+      "block_order": [
+        "spiderman",
+        "unicorn",
+        "dinosaur",
+        "elsa",
+        "dino_chaos"
+      ]
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "Subscribe to our emails",
+            "heading_size": "h2"
+          }
+        },
+        "form": {
+          "type": "email_form",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "form"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "newsletter"
+  ]
+}

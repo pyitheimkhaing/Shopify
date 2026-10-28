@@ -1,0 +1,287 @@
+{
+  "sections": {
+    "hero": {
+      "type": "fab-hero",
+      "settings": {
+        "primary_link": "/collections/new-worlds-best-sellers-canvas",
+        "secondary_link": "#worlds"
+      }
+    },
+    "seasonal": {
+      "type": "worlds",
+      "settings": {
+        "eyebrow": "Halloween is coming",
+        "heading": "Which Halloween world is theirs?",
+        "copy": "Upload a photo and see them as a witch, a dragon tamer or a friendly vampire before you order. Works for one person, two, or the whole family in one artwork.",
+        "button_label": "See all Halloween portraits",
+        "note": "Order by October 13 for canvas delivery before Halloween. The digital version is ready the same day.",
+        "link": "/collections/halloween"
+      },
+      "blocks": {
+        "witch": {
+          "type": "world",
+          "settings": {
+            "title": "The Witch & Wizard",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_cec0a07f-be03-4e50-bf99-ff3820729d2f.jpg?v=1790172170&width=600",
+            "link": "/products/the-witch-and-wizard"
+          }
+        },
+        "pumpkin": {
+          "type": "world",
+          "settings": {
+            "title": "The Pumpkin Patch",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_2a866532-1561-4fd0-bf5e-1cb32e7b1997.jpg?v=1790173366&width=600",
+            "link": "/products/the-pumpkin-patch"
+          }
+        },
+        "dragon": {
+          "type": "world",
+          "settings": {
+            "title": "The Dragon Tamer",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_ff3ba1a4-13da-4f44-972c-53eb26905f2c.jpg?v=1790172188&width=600",
+            "link": "/products/the-dragon-tamer"
+          }
+        },
+        "vampire": {
+          "type": "world",
+          "settings": {
+            "title": "The Friendly Vampire",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_ff0eae61-ef93-4c10-983a-938135b029ed.jpg?v=1790172202&width=600",
+            "link": "/products/the-friendly-vampire"
+          }
+        }
+      },
+      "block_order": [
+        "witch",
+        "pumpkin",
+        "dragon",
+        "vampire"
+      ]
+    },
+    "new-worlds": {
+      "type": "worlds",
+      "settings": {
+        "eyebrow": "Brand-new worlds",
+        "heading": "Which world is theirs?",
+        "copy": "Every world is finished by hand around your photo. You approve the proof before anything gets printed.",
+        "button_label": "See all 60+ worlds",
+        "note": "Adding a second canvas? It's 20% off. Grandkids come in sets, we know.",
+        "link": "/collections/new-worlds-best-sellers-canvas"
+      },
+      "blocks": {
+        "royal": {
+          "type": "world",
+          "settings": {
+            "title": "The Little Royal",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230&width=600",
+            "link": "/products/the-little-royal"
+          }
+        },
+        "princess": {
+          "type": "world",
+          "settings": {
+            "title": "The Princess",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/princess-ugc-oma.jpg?v=1786220881&width=600",
+            "link": "/products/the-princess"
+          }
+        },
+        "pirate": {
+          "type": "world",
+          "settings": {
+            "title": "The Pirate Captain",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_0db0cc63-f86e-44c0-86b9-60b30f19b904.jpg?v=1784377728&width=600",
+            "link": "/products/the-pirate-captain"
+          }
+        },
+        "mermaid": {
+          "type": "world",
+          "settings": {
+            "title": "The Mermaid",
+            "fallback": "https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_cd7a2ea7-dc89-40b9-997d-e5201bb98cef.jpg?v=1784377674&width=600",
+            "link": "/products/the-mermaid",
+            "review_count": "1"
+          }
+        }
+      },
+      "block_order": [
+        "royal",
+        "princess",
+        "pirate",
+        "mermaid"
+      ]
+    },
+    "how": {
+      "type": "fab-how-it-works",
+      "blocks": {
+        "one": {
+          "type": "step",
+          "settings": {
+            "title": "Upload a photo",
+            "copy": "One clear photo is enough. Our studio checks it fits the world you picked."
+          }
+        },
+        "two": {
+          "type": "step",
+          "settings": {
+            "title": "See the magic in 60 seconds",
+            "copy": "Watch the free preview appear with their real face, eyes and smile. Try as many worlds as you like."
+          }
+        },
+        "three": {
+          "type": "step",
+          "settings": {
+            "title": "You approve, we perfect",
+            "copy": "Our designers finish every detail by hand. Nothing is printed until you say it's perfect, with unlimited free revisions."
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three"
+      ]
+    },
+    "trust": {
+      "type": "reassurance",
+      "blocks": {
+        "one": {
+          "type": "item",
+          "settings": {
+            "title": "You approve the proof",
+            "copy": "No AI surprises. What you approve is what we print."
+          }
+        },
+        "two": {
+          "type": "item",
+          "settings": {
+            "title": "We answer within 24 hours",
+            "copy": "Also when something goes wrong. Especially then."
+          }
+        },
+        "three": {
+          "type": "item",
+          "settings": {
+            "title": "On time or we make it right",
+            "copy": "Clear order deadlines for every occasion."
+          }
+        },
+        "four": {
+          "type": "item",
+          "settings": {
+            "title": "Damaged? Replaced free",
+            "copy": "No discussions, no forms. We just fix it."
+          }
+        }
+      },
+      "block_order": [
+        "one",
+        "two",
+        "three",
+        "four"
+      ]
+    },
+    "moments": {
+      "type": "moments"
+    },
+    "story": {
+      "type": "editorial-card"
+    },
+    "reviews": {
+      "type": "fab-reviews",
+      "blocks": {
+        "karen": {
+          "type": "review",
+          "settings": {
+            "quote": "Bought one for each of our grandkids for Christmas, we were ecstatic when they arrived! Good quality and looks like they are actual astronauts!",
+            "author": "Karen, verified customer"
+          }
+        },
+        "rose": {
+          "type": "review",
+          "settings": {
+            "quote": "So real, my four-year-old granddaughter saw the picture and said: I don't remember meeting that unicorn.",
+            "author": "Rose, verified customer"
+          }
+        },
+        "kathy": {
+          "type": "review",
+          "settings": {
+            "quote": "I let the folks at SwiftBayPrints know and they quickly sent a perfect replacement! I couldn't be happier!",
+            "author": "Kathy, verified customer"
+          }
+        }
+      },
+      "block_order": [
+        "karen",
+        "rose",
+        "kathy"
+      ]
+    },
+    "faq": {
+      "type": "fab-faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Do I get a preview before my order is printed?",
+            "answer": "Yes. Every order gets a free Live Preview when you upload your photo, but that's only a rough idea of the layout, not the final result. Within 24 hours of ordering, our designers manually create your artwork and email you a proof for approval. You can request unlimited revisions before anything goes to print."
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "Is my photo good enough to use?",
+            "answer": "If it follows our photo guide, it's almost certainly good enough. Every photo is also checked by our team before design starts. If it doesn't pass quality control, we'll email you to ask for a better one."
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "How long does the whole ordering process take?",
+            "answer": "Typically 6 to 12 business days in total. You'll get a design proof by email within 24 hours of ordering, and once you approve it, production and shipping take about a week."
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Do you design with adults, babies, and pets too?",
+            "answer": "Absolutely. We create artwork with babies, children, adults, grandparents, and pets. If you can photograph it, our designers can work with it."
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "What if I don't like the design proof?",
+            "answer": "You get unlimited free revisions before anything is printed. Leave a comment on the design approval page, try a different photo, or request a different background. If we still can't get it right, you can cancel free of charge, up until you approve the design."
+          }
+        },
+        "q6": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return or exchange my order?",
+            "answer": "Because every artwork is personalized, we can't accept returns or exchanges. If your product arrives damaged, wrong, or in the incorrect size, contact us within 48 hours of delivery and we'll replace it free of charge."
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6"
+      ]
+    }
+  },
+  "order": [
+    "hero",
+    "seasonal",
+    "new-worlds",
+    "how",
+    "trust",
+    "moments",
+    "story",
+    "reviews",
+    "faq"
+  ]
+}

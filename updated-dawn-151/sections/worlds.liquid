@@ -1,0 +1,21 @@
+{{ 'fab-theme.css' | asset_url | stylesheet_tag }}
+{{ 'fidelity.css' | asset_url | stylesheet_tag }}
+<section class="fp-section worlds" id="worlds">
+  <div class="fp-wrap">
+    <p class="fp-kicker">{{ section.settings.eyebrow }}</p>
+    <h2 class="fp-sec">{{ section.settings.heading | replace: 'theirs?', '<em>theirs</em>?' }}</h2>
+    <p class="fp-secsub">{{ section.settings.copy }}</p>
+    <div class="fp-worlds">
+      {% for block in section.blocks %}
+        <a class="fp-wcard" href="{{ block.settings.link | default: '/products/the-little-royal' }}">
+          {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 600 | image_tag: loading: 'lazy', class: 'fp-wcard__pic', alt: block.settings.title }}{% else %}<img class="fp-wcard__pic" src="{{ block.settings.fallback }}" alt="{{ block.settings.title }}" width="600" height="600" loading="lazy">{% endif %}
+          <div class="fp-wcard__b"><h3>{{ block.settings.title }}</h3><div class="fp-stars">★★★★★{% if block.settings.review_count != blank %} <span>({{ block.settings.review_count }})</span>{% endif %}</div><div class="fp-wcard__price">Canvas from <b>$59.95</b></div></div>
+        </a>
+      {% endfor %}
+    </div>
+    <div class="fp-center"><a class="fp-btn fp-btn--navy" href="{{ section.settings.link | default: '/collections/all' }}">{{ section.settings.button_label }}</a><p class="fp-worlds-note">{{ section.settings.note }}</p></div>
+  </div>
+</section>
+{% schema %}
+{"name":"Worlds grid","settings":[{"type":"text","id":"eyebrow","label":"Eyebrow","default":"Brand-new worlds"},{"type":"text","id":"heading","label":"Heading","default":"Which world is theirs?"},{"type":"textarea","id":"copy","label":"Copy","default":"Every world is finished by hand around your photo. You approve the proof before anything gets printed."},{"type":"text","id":"button_label","label":"Button label","default":"See all 60+ worlds"},{"type":"text","id":"note","label":"Note","default":"Adding a second canvas? It's 20% off. Grandkids come in sets, we know."},{"type":"url","id":"link","label":"View all link"}],"blocks":[{"type":"world","name":"World","settings":[{"type":"text","id":"title","label":"Title","default":"The Dragon Tamer"},{"type":"image_picker","id":"image","label":"Image"},{"type":"text","id":"fallback","label":"Fallback image URL","default":"https://fabulousportrait.com/cdn/shop/files/flhsdk70hssyu0uzpauj_343db9c1-d746-404c-9311-e7807855c982.jpg?v=1784378230&width=600"},{"type":"text","id":"review_count","label":"Review count"},{"type":"url","id":"link","label":"Link"}]}],"presets":[{"name":"Worlds grid","blocks":[{"type":"world"},{"type":"world"},{"type":"world"},{"type":"world"}]}]}
+{% endschema %}

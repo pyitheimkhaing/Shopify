@@ -1,0 +1,85 @@
+{{ 'fabulous-blanket-reviews.css' | asset_url | stylesheet_tag }}
+
+{%- assign rating_total = 0 -%}
+{%- assign demonstration_count = 0 -%}
+{%- for block in section.blocks -%}
+  {%- assign rating_total = rating_total | plus: block.settings.rating -%}
+  {%- if block.settings.demonstration -%}
+    {%- assign demonstration_count = demonstration_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+<section class="fbr" id="FabulousBlanketReviews" aria-label="Customer reviews">
+  <div class="fbr__shell">
+    {%- if section.blocks.size > 0 -%}
+      {%- assign average_rating = rating_total | times: 20.0 | divided_by: section.blocks.size -%}
+      <div class="fbr__toolbar">
+        <div class="fbr__summary" aria-label="{{ section.blocks.size }} {% if demonstration_count > 0 %}example {% endif %}reviews, average {{ rating_total | times: 1.0 | divided_by: section.blocks.size | round: 1 }} out of 5 stars">
+          <span class="fbr__summary-stars" aria-hidden="true"><span>★★★★★</span><span style="width:{{ average_rating }}%">★★★★★</span></span>
+          <span>{{ section.blocks.size }} {% if demonstration_count > 0 %}example {% endif %}{% if section.blocks.size == 1 %}review{% else %}reviews{% endif %}</span>
+        </div>
+        <div class="fbr__actions">
+          {%- if section.settings.submission_url != blank -%}<a class="fbr__action" href="{{ section.settings.submission_url }}">Write a review</a>{%- endif -%}
+          {%- if section.settings.filter_url != blank -%}
+            <a class="fbr__action fbr__action--icon" href="{{ section.settings.filter_url }}" aria-label="Filter reviews">
+              <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/><circle cx="8" cy="6" r="2" fill="#fff"/><circle cx="16" cy="12" r="2" fill="#fff"/><circle cx="10" cy="18" r="2" fill="#fff"/></svg>
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+      {%- if demonstration_count > 0 -%}<p class="fbr__notice">Example reviews for layout preview. Replace these with authorized customer feedback before publishing.</p>{%- endif -%}
+      <div class="fbr__grid">
+        {%- for column in (0..3) -%}
+          <div class="fbr__column">
+            {%- for block in section.blocks -%}
+              {%- assign block_column = forloop.index0 | modulo: 4 -%}
+              {%- if block_column == column -%}
+                <article class="fbr__card" {{ block.shopify_attributes }}>
+                  {%- if block.settings.photo != blank -%}
+                    {{ block.settings.photo | image_url: width: 750 | image_tag: class: 'fbr__photo', loading: 'lazy', widths: '280, 480, 750', alt: block.settings.photo.alt }}
+                  {%- endif -%}
+                  <div class="fbr__card-body">
+                    <div class="fbr__name">{{ block.settings.reviewer_name | escape }}{%- if block.settings.demonstration -%}<span class="fbr__demo">Example</span>{%- endif -%}</div>
+                    {%- if block.settings.review_date != blank -%}<div class="fbr__date">{{ block.settings.review_date | escape }}</div>{%- endif -%}
+                    <div class="fbr__rating" aria-label="{{ block.settings.rating }} out of 5 stars">
+                      {%- for star in (1..5) -%}{%- if star <= block.settings.rating -%}★{%- else -%}☆{%- endif -%}{%- endfor -%}
+                    </div>
+                    {%- if block.settings.review_text != blank -%}<p>{{ block.settings.review_text | escape | newline_to_br }}</p>{%- endif -%}
+                  </div>
+                </article>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- elsif request.design_mode -%}
+      <p class="fbr__empty">Add review blocks to display customer reviews here.</p>
+    {%- endif -%}
+    {%- if request.design_mode and section.settings.submission_url == blank -%}<p class="fbr__editor-note">Write a review is hidden until a working review submission URL is configured.</p>{%- endif -%}
+    {%- if request.design_mode and section.settings.filter_url == blank -%}<p class="fbr__editor-note">The filter icon is hidden until a working review filter URL is configured.</p>{%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fabulous blanket reviews",
+  "settings": [
+    {"type":"paragraph","content":"Use only authorized customer reviews. Example blocks are labeled publicly until their Example content checkbox is turned off."},
+    {"type":"url","id":"submission_url","label":"Review submission URL"},
+    {"type":"paragraph","content":"Set the submission URL only when a review app provides a working submission page or form. Otherwise the button stays hidden."},
+    {"type":"url","id":"filter_url","label":"Review filter URL"},
+    {"type":"paragraph","content":"Set the filter URL only when a review app provides working filter controls. Otherwise the icon stays hidden. Disable this section if an app displays the same reviews."}
+  ],
+  "blocks": [
+    {"type":"review","name":"Review","settings":[
+      {"type":"checkbox","id":"demonstration","label":"Example content","default":true},
+      {"type":"text","id":"reviewer_name","label":"Reviewer name","default":"Example customer"},
+      {"type":"range","id":"rating","label":"Rating","min":1,"max":5,"step":1,"default":5},
+      {"type":"text","id":"review_date","label":"Review date"},
+      {"type":"textarea","id":"review_text","label":"Review text","default":"Example review — replace with authorized customer feedback."},
+      {"type":"image_picker","id":"photo","label":"Review photo"}
+    ]}
+  ],
+  "presets": [{"name":"Fabulous blanket reviews"}]
+}
+{% endschema %}
